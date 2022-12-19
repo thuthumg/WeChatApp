@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lbl_splash_first_text">Text your friends and share moments</string>
+    <string name="lbl_sign_up">Sign Up</string>
+    <string name="lbl_login">Login</string>
+</resources>

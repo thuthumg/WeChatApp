@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WeChatApp</string>
+    <string name="lbl_splash_first_text">Text your friends and share moments</string>
+    <string name="lbl_splash_second_text">End-to-end secured messaging app with Social Elements</string>
+    <string name="lbl_sign_up">Sign Up</string>
+    <string name="lbl_login">Login</string>
+</resources>
