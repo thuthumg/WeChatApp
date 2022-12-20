@@ -18,5 +18,11 @@
 
     </style>
 
+    <style name="TextInputLayout_custom">
 
+        <item name="colorPrimary">@color/custom_color</item>  //Activated color
+        <item name="colorOnSurface">@color/custom_color</item>    //Normal color
+        <item name="colorError">@color/red</item>        //Error color
+
+    </style>
 </resources>

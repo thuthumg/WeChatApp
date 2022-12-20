@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".activities.SignUpActivity">
+
+<com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    app:elevation="0dp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white_dark">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnBackAboutBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_back_arrow_back" />
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+</com.google.android.material.appbar.AppBarLayout>
+
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_medium_2"
+        android:orientation="vertical">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lbl_hi"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_heading_1x"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTitle"
+            android:layout_marginTop="@dimen/margin_medium_2"
+            android:text="@string/lbl_create_a_new_account"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_regular_3x" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_below="@id/tvSubTitle"
+            android:id="@+id/txtInputName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:theme="@style/TextInputLayout_custom"
+            app:endIconMode="clear_text"
+            app:hintTextColor="@android:color/darker_gray">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtName"
+                android:text="Thu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:imeOptions="actionNext"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDateOfBirth"
+            android:layout_marginStart="@dimen/margin_medium_2"
+            android:layout_marginTop="@dimen/margin_medium_2"
+            android:layout_below="@id/txtInputName"
+            android:textColor="@color/whiteDark8"
+            android:text="Date of Birth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_below="@id/tvDateOfBirth"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Spinner
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/margin_medium_2"
+                tools:listitem="@layout/support_simple_spinner_dropdown_item"
+                android:id="@+id/spDay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:spinnerMode="dropdown" />
+            <Spinner
+                android:layout_weight="2"
+                android:layout_marginStart="@dimen/margin_medium_2"
+                tools:listitem="@layout/support_simple_spinner_dropdown_item"
+                android:id="@+id/spMonth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:spinnerMode="dropdown" />
+            <Spinner
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/margin_medium_2"
+                tools:listitem="@layout/support_simple_spinner_dropdown_item"
+                android:id="@+id/spYear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+
+
+
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:layout_below="@id/txtInputName"-->
+<!--                android:id="@+id/btnVerify"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_margin="@dimen/margin_medium_2"-->
+<!--                android:background="@drawable/login_btn_bg"-->
+<!--                android:text="@string/lbl_verify"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="@dimen/text_regular"-->
+<!--                android:textStyle="bold" />-->
+
+    </RelativeLayout>
+</androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

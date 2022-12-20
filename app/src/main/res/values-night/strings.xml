@@ -3,4 +3,14 @@
     <string name="lbl_splash_first_text">Text your friends and share moments</string>
     <string name="lbl_sign_up">Sign Up</string>
     <string name="lbl_login">Login</string>
+    <string name="lbl_welcome">Welcome!</string>
+    <string name="lbl_enter_your_password">Enter your password</string>
+    <string name="lbl_enter_your_phone_number">Enter Your Phone Number</string>
+    <string name="lbl_forget_password">Forget Password?</string>
+    <string name="lbl_hi">Hi !</string>
+    <string name="lbl_create_a_new_account">Create a new account</string>
+    <string name="lbl_get_otp">Get OTP</string>
+    <string name="lbl_resend_code">Resend Code</string>
+    <string name="lbl_don_t_receive_the_otp">Don\'t receive the OTP?</string>
+    <string name="lbl_verify">Verify</string>
 </resources>

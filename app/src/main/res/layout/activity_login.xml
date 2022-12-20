@@ -28,58 +28,114 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:layout_margin="@dimen/margin_medium_2"
-        android:orientation="vertical"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+     <androidx.core.widget.NestedScrollView
+         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+         android:fillViewport="true"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+         <RelativeLayout
+             android:layout_margin="@dimen/margin_medium_2"
+             android:orientation="vertical"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:textStyle="bold"
-            android:text="Welcome!"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_heading_1x"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+             <androidx.appcompat.widget.AppCompatTextView
 
-        <androidx.appcompat.widget.AppCompatTextView
-           android:layout_marginTop="@dimen/margin_medium_2"
-            android:text="Enter your password"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_regular_3x"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+                 android:id="@+id/tvTitle"
+                 android:textStyle="bold"
+                 android:text="@string/lbl_welcome"
+                 android:textColor="@color/text_color"
+                 android:textSize="@dimen/text_heading_1x"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"/>
 
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_gravity="center"
-            android:src="@drawable/login_photo"
-            android:layout_width="200dp"
-            android:layout_height="250dp"/>
+             <androidx.appcompat.widget.AppCompatTextView
+                 android:layout_below="@id/tvTitle"
+                 android:id="@+id/tvSubTitle"
+                 android:layout_marginTop="@dimen/margin_medium_2"
+                 android:text="@string/lbl_enter_your_password"
+                 android:textColor="@color/text_color"
+                 android:textSize="@dimen/text_regular_3x"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"/>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Your Phone Number">
+             <androidx.appcompat.widget.AppCompatImageView
+                android:layout_centerHorizontal="true"
+                 android:id="@+id/ivLoginLogo"
+                 android:layout_width="200dp"
+                 android:layout_height="wrap_content"
+                 android:layout_above="@+id/llTextInputLayout"
+                 android:layout_below="@+id/tvSubTitle"
+                 android:src="@drawable/login_photo" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+             <LinearLayout
+                 android:id="@+id/llTextInputLayout"
+                 android:layout_alignParentBottom="true"
+                 android:orientation="vertical"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+                 <com.google.android.material.textfield.TextInputLayout
+                     app:endIconMode="clear_text"
+                     app:hintTextColor="@android:color/darker_gray"
+                     android:theme="@style/TextInputLayout_custom"
+                     android:id="@+id/txtInputPhoneNumber"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:hint="@string/lbl_enter_your_phone_number">
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Your Phone Number">
+                     <com.google.android.material.textfield.TextInputEditText
+                         android:id="@+id/edtPhoneNo"
+                         android:inputType="number"
+                         android:imeOptions="actionNext"
+                         android:background="@android:color/transparent"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                 </com.google.android.material.textfield.TextInputLayout>
+                 <com.google.android.material.textfield.TextInputLayout
+                     app:endIconMode="clear_text"
+                     app:hintTextColor="@android:color/darker_gray"
+                     android:theme="@style/TextInputLayout_custom"
+                     android:id="@+id/txtInputPassword"
+                     android:layout_marginTop="@dimen/margin_medium_2"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:hint="@string/lbl_enter_your_password">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                     <com.google.android.material.textfield.TextInputEditText
+                         android:id="@+id/edtPassword"
+                         android:inputType="textPassword"
+                         android:imeOptions="actionDone"
+                         android:background="@android:color/transparent"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+                 </com.google.android.material.textfield.TextInputLayout>
+
+                 <androidx.appcompat.widget.AppCompatTextView
+                     android:layout_marginTop="@dimen/margin_medium_2"
+                     android:layout_gravity="end"
+                     android:textSize="@dimen/text_regular"
+                     android:textColor="@color/custom_color"
+                     android:text="@string/lbl_forget_password"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"/>
+                 <androidx.appcompat.widget.AppCompatButton
+                     android:layout_margin="@dimen/margin_medium_2"
+                     android:layout_gravity="center"
+                     android:id="@+id/btnLogin"
+                     android:textStyle="bold"
+                     android:textColor="@color/white"
+                     android:textSize="@dimen/text_regular"
+                     android:textAllCaps="false"
+                     android:background="@drawable/login_btn_bg"
+                     android:text="@string/lbl_login"
+                     android:layout_width="150dp"
+                     android:layout_height="wrap_content"/>
+             </LinearLayout>
+         </RelativeLayout>
+     </androidx.core.widget.NestedScrollView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
