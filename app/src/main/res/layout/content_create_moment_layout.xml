@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="@dimen/margin_medium_2"
+    android:orientation="horizontal"
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+    <LinearLayout
+        android:id="@+id/llProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:padding="@dimen/margin_small"
+            android:src="@drawable/profile_sample" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNameTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:fontFamily="@font/yorkie_demo_bold"
+            android:text="Cherry"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_regular_3x"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <androidx.appcompat.widget.AppCompatEditText
+
+        android:id="@+id/edtDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llProfile"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:background="@drawable/new_moment_edt_bg"
+        android:gravity="top|start"
+        android:hint="What's on your mind"
+        android:inputType="textMultiLine"
+        android:lines="8"
+        android:maxLines="10"
+        android:minLines="6"
+        android:scrollbars="vertical"
+        android:textColor="@color/custom_color"
+        android:textColorHint="@color/hint_color"
+        android:textSize="@dimen/text_regular_2x" />
+
+
+    <FrameLayout
+
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/edtDescription"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_gravity="bottom"
+            tools:itemCount="2"
+            tools:listitem="@layout/view_holder_media_choose_layout"
+            android:id="@+id/rvMediaTypeList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+
+
+</RelativeLayout>

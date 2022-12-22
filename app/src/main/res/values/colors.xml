@@ -16,7 +16,6 @@
 
 
 
-
     <color name="color1">#E5E7FA</color>
     <color name="color2">#F9E8F8</color>
     <color name="color3">#DAF7F3</color>
@@ -67,4 +66,11 @@
 
     <color name="btn_color">#FF007AC8</color>
     <color name="progress_bar_color">#396CE8</color>
+
+    <color name="text_title_color">#113A5D</color>
+    <color name="text_sub_title_color">#73113A5D</color>
+
+    <color name="hint_color">#888888</color>
+    <color name="edit_text_color">#062743</color>
+
 </resources>

@@ -13,29 +13,40 @@
         android:theme="@style/Theme.WeChatApp"
         tools:targetApi="31">
         <activity
-            android:name=".activities.SignUpActivity"
+            android:name=".activities.CreateNewMomentActivity"
             android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:exported="false"
+            android:theme="@style/Theme.WeChatApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activities.OTPVerifyActivity"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.WeChatApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/Theme.WeChatApp">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".activities.SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.WeChatApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

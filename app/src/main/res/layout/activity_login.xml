@@ -18,7 +18,7 @@
             android:background="@color/white_dark">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnBackAboutBook"
+                android:id="@+id/btnLoginBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_back_arrow_back" />
@@ -34,7 +34,10 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent">
          <RelativeLayout
-             android:layout_margin="@dimen/margin_medium_2"
+             android:layout_marginStart="@dimen/margin_large"
+             android:layout_marginEnd="@dimen/margin_large"
+             android:layout_marginTop="@dimen/margin_medium_2"
+             android:layout_marginBottom="@dimen/margin_medium_2"
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
@@ -46,31 +49,34 @@
                  android:textStyle="bold"
                  android:text="@string/lbl_welcome"
                  android:textColor="@color/text_color"
-                 android:textSize="@dimen/text_heading_1x"
+                 android:textSize="@dimen/text_title_size"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"/>
 
              <androidx.appcompat.widget.AppCompatTextView
                  android:layout_below="@id/tvTitle"
                  android:id="@+id/tvSubTitle"
-                 android:layout_marginTop="@dimen/margin_medium_2"
-                 android:text="@string/lbl_enter_your_password"
-                 android:textColor="@color/text_color"
-                 android:textSize="@dimen/text_regular_3x"
+                 android:layout_marginTop="@dimen/margin_medium"
+                 android:text="@string/lbl_login_to_continue"
+                 android:textColor="@color/text_sub_title_color"
+                 android:textSize="@dimen/text_regular_2x"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"/>
 
 
              <androidx.appcompat.widget.AppCompatImageView
-                android:layout_centerHorizontal="true"
+
+                android:layout_marginTop="@dimen/spacing_xxlarge"
+                 android:layout_centerHorizontal="true"
                  android:id="@+id/ivLoginLogo"
                  android:layout_width="200dp"
-                 android:layout_height="wrap_content"
-                 android:layout_above="@+id/llTextInputLayout"
+                 android:layout_height="200dp"
                  android:layout_below="@+id/tvSubTitle"
                  android:src="@drawable/login_photo" />
 
              <LinearLayout
+                 android:layout_below="@id/ivLoginLogo"
+                 android:layout_marginTop="@dimen/spacing_large"
                  android:id="@+id/llTextInputLayout"
                  android:layout_alignParentBottom="true"
                  android:orientation="vertical"
@@ -78,7 +84,7 @@
                  android:layout_height="wrap_content">
                  <com.google.android.material.textfield.TextInputLayout
                      app:endIconMode="clear_text"
-                     app:hintTextColor="@android:color/darker_gray"
+                     app:hintTextColor="@color/hint_color"
                      android:theme="@style/TextInputLayout_custom"
                      android:id="@+id/txtInputPhoneNumber"
                      android:layout_width="match_parent"
@@ -86,7 +92,10 @@
                      android:hint="@string/lbl_enter_your_phone_number">
 
                      <com.google.android.material.textfield.TextInputEditText
+                         android:textColor="@color/edit_text_color"
+                         android:textSize="@dimen/text_regular_2x"
                          android:id="@+id/edtPhoneNo"
+                         tools:text="0912345"
                          android:inputType="number"
                          android:imeOptions="actionNext"
                          android:background="@android:color/transparent"
@@ -96,7 +105,7 @@
                  </com.google.android.material.textfield.TextInputLayout>
                  <com.google.android.material.textfield.TextInputLayout
                      app:endIconMode="clear_text"
-                     app:hintTextColor="@android:color/darker_gray"
+                     app:hintTextColor="@color/hint_color"
                      android:theme="@style/TextInputLayout_custom"
                      android:id="@+id/txtInputPassword"
                      android:layout_marginTop="@dimen/margin_medium_2"
@@ -105,6 +114,9 @@
                      android:hint="@string/lbl_enter_your_password">
 
                      <com.google.android.material.textfield.TextInputEditText
+                         tools:text="09123456"
+                         android:textColor="@color/edit_text_color"
+                         android:textSize="@dimen/text_regular_2x"
                          android:id="@+id/edtPassword"
                          android:inputType="textPassword"
                          android:imeOptions="actionDone"
@@ -115,7 +127,7 @@
                  </com.google.android.material.textfield.TextInputLayout>
 
                  <androidx.appcompat.widget.AppCompatTextView
-                     android:layout_marginTop="@dimen/margin_medium_2"
+                     android:layout_marginTop="@dimen/margin_medium_3"
                      android:layout_gravity="end"
                      android:textSize="@dimen/text_regular"
                      android:textColor="@color/custom_color"
@@ -123,16 +135,18 @@
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"/>
                  <androidx.appcompat.widget.AppCompatButton
-                     android:layout_margin="@dimen/margin_medium_2"
+                     android:enabled="false"
+                     android:layout_marginTop="@dimen/spacing_xlarge"
+                     android:layout_marginBottom="@dimen/spacing_large"
                      android:layout_gravity="center"
                      android:id="@+id/btnLogin"
                      android:textStyle="bold"
                      android:textColor="@color/white"
-                     android:textSize="@dimen/text_regular"
+                     android:textSize="@dimen/text_regular_2x"
                      android:textAllCaps="false"
-                     android:background="@drawable/login_btn_bg"
+                     android:background="@drawable/login_btn_disable_bg"
                      android:text="@string/lbl_login"
-                     android:layout_width="150dp"
+                     android:layout_width="@dimen/btn_width"
                      android:layout_height="wrap_content"/>
              </LinearLayout>
          </RelativeLayout>

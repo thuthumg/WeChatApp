@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".activities.CreateNewMomentActivity">
+
+<com.google.android.material.appbar.AppBarLayout
+    app:elevation="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white_dark">
+
+
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_gravity="start"
+                android:paddingStart="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_medium"
+                android:paddingTop="@dimen/margin_card_medium"
+                android:paddingBottom="@dimen/margin_card_medium"
+                android:id="@+id/btnClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_close_24" />
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/text_heading_1x"
+            android:text="New Moment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:minWidth="0dp"
+            android:paddingStart="@dimen/margin_medium_2"
+            android:paddingEnd="@dimen/margin_medium_2"
+            android:layout_margin="@dimen/margin_medium"
+            android:id="@+id/btnVerify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/login_btn_bg"
+            android:text="Create"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_regular"
+            android:textStyle="bold" />
+
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+</com.google.android.material.appbar.AppBarLayout>
+
+    <include
+        layout="@layout/content_create_moment_layout"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -18,7 +18,7 @@
             android:background="@color/white_dark">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnBackAboutBook"
+                android:id="@+id/btnOTPVerifyPageBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_back_arrow_back" />
@@ -35,9 +35,13 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <RelativeLayout
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium_2"
+            android:layout_marginBottom="@dimen/margin_medium_2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="@dimen/margin_medium_2"
+
             android:orientation="vertical">
 
 
@@ -47,8 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/lbl_hi"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/text_heading_1x"
+                android:textColor="@color/text_title_color"
+                android:textSize="@dimen/text_title_size"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -56,16 +60,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvTitle"
-                android:layout_marginTop="@dimen/margin_medium_2"
+                android:layout_marginTop="@dimen/margin_medium"
                 android:text="@string/lbl_create_a_new_account"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/text_regular_3x" />
+                android:textColor="@color/text_sub_title_color"
+                android:textSize="@dimen/text_regular_2x" />
 
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivLoginLogo"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:layout_above="@+id/llTextInputLayout"
                 android:layout_below="@+id/tvSubTitle"
                 android:layout_centerHorizontal="true"
@@ -84,6 +88,8 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
+                       android:layout_gravity="center_vertical"
+                        android:textColorHint="@color/hint_color"
                         android:id="@+id/txtInputPhoneNumber"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -95,31 +101,35 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edtPhoneNo"
+                            tools:text = "092345667"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/edit_text_color"
+                            android:textSize="@dimen/text_regular_2x"
                             android:background="@android:color/transparent"
-                            android:imeOptions="actionNext"
+                            android:imeOptions="actionDone"
                             android:inputType="number" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <androidx.appcompat.widget.AppCompatButton
-
-                        android:id="@+id/btnLogin"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:id="@+id/btnGetOTP"
+                        android:layout_width="76dp"
+                        android:layout_height="37dp"
                         android:layout_gravity="center_vertical"
                         android:layout_margin="@dimen/margin_medium_2"
-                        android:background="@drawable/login_btn_bg"
+                        android:background="@drawable/login_btn_disable_bg"
                         android:text="@string/lbl_get_otp"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/text_regular"
+                        android:textSize="@dimen/text_small"
                         android:textStyle="bold" />
                 </LinearLayout>
 
                 <in.aabhasjindal.otptextview.OtpTextView
-                    android:id="@+id/otp_view"
+                    android:layout_marginTop="@dimen/margin_medium_3"
+                    android:id="@+id/otpView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -137,6 +147,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_medium_2"
+                    android:layout_marginBottom="@dimen/margin_medium_2"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -157,13 +168,13 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
-
+                    android:enabled="false"
                     android:id="@+id/btnVerify"
-                    android:layout_width="150dp"
+                    android:layout_width="@dimen/btn_width"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/margin_medium_2"
-                    android:background="@drawable/login_btn_bg"
+                    android:background="@drawable/login_btn_disable_bg"
                     android:text="@string/lbl_verify"
                     android:textAllCaps="false"
                     android:textColor="@color/white"

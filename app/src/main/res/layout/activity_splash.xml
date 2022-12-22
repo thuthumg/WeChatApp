@@ -1,90 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.SplashActivity"
+    android:fillViewport="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/margin_medium_3"
-    android:layout_marginEnd="@dimen/margin_medium_3"
-    tools:context=".activities.SplashActivity">
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="125dp"
-        android:layout_height="125dp"
-        android:src="@drawable/wechat_logo"
-        app:layout_constraintBottom_toTopOf="@+id/tvFirstText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvFirstText"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/lbl_splash_first_text"
-        android:textColor="@color/text_color"
-        android:textSize="@dimen/splash_first_text_size"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivLogo" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/spacing_xlarge"
+        android:layout_marginEnd="@dimen/spacing_xlarge">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:gravity="center"
-        android:text="@string/lbl_splash_second_text"
-        android:textSize="@dimen/splash_second_text_size"
-        android:textColor="@color/text_color"
-        android:id="@+id/tvSecondText"
-        app:layout_constraintTop_toBottomOf="@id/tvFirstText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="160dp"
+            android:layout_height="150dp"
+            android:src="@drawable/wechat_logo"
+            app:layout_constraintBottom_toTopOf="@+id/tvFirstText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_marginTop="@dimen/margin_large"
-        app:layout_constraintTop_toBottomOf="@id/tvSecondText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.appcompat.widget.AppCompatButton
 
-            android:layout_marginEnd="@dimen/margin_medium_2"
-            android:layout_marginStart="@dimen/margin_medium_2"
-            android:layout_weight="1"
-            android:id="@+id/btnSignUp"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvFirstText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/lbl_splash_first_text"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/splash_first_text_size"
             android:textStyle="bold"
-            android:textColor="@color/custom_color"
-            android:textSize="@dimen/text_regular"
-            android:textAllCaps="false"
-            android:background="@drawable/sign_up_btn_bg"
-            android:text="@string/lbl_sign_up"
-            android:layout_width="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivLogo" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:text="@string/lbl_splash_second_text"
+            android:textSize="@dimen/splash_second_text_size"
+            android:textColor="@color/text_color"
+            android:id="@+id/tvSecondText"
+            android:fontFamily="@font/yorkie_demo_thin"
+            app:layout_constraintTop_toBottomOf="@id/tvFirstText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_marginStart="@dimen/margin_medium_2"
-            android:layout_marginEnd="@dimen/margin_medium_2"
-            android:layout_weight="1"
-            android:id="@+id/btnLogin"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_regular"
-            android:textAllCaps="false"
-            android:background="@drawable/login_btn_bg"
-            android:text="@string/lbl_login"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llButton"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_xxlarge"
+            app:layout_constraintTop_toBottomOf="@id/tvSecondText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatButton
+
+                android:layout_marginEnd="@dimen/margin_medium_2"
+                android:layout_weight="1"
+                android:id="@+id/btnSignUp"
+                android:textStyle="bold"
+                android:textColor="@color/text_title_color"
+                android:textSize="@dimen/text_regular_2x"
+                android:textAllCaps="false"
+                android:background="@drawable/sign_up_btn_bg"
+                android:text="@string/lbl_sign_up"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_marginStart="@dimen/margin_medium_2"
+                android:layout_weight="1"
+                android:id="@+id/btnLogin"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textAllCaps="false"
+                android:background="@drawable/login_btn_bg"
+                android:text="@string/lbl_login"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
 
 
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
