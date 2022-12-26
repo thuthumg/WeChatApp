@@ -1,82 +1,74 @@
 package com.padcmyanmar.ttm.wechatapp.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract.Profile
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
 import com.padcmyanmar.ttm.wechatapp.R
-import com.padcmyanmar.ttm.wechatapp.adapters.MomentsListAdapter
 import com.padcmyanmar.ttm.wechatapp.fragments.*
+import com.padcmyanmar.ttm.wechatapp.mvp.presenters.MainPresenter
+import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.MainPresenterImpl
+import com.padcmyanmar.ttm.wechatapp.mvp.views.MainView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main_layout.*
-import kotlinx.android.synthetic.main.fragment_moments.*
-import kotlinx.android.synthetic.main.view_holder_moment_item.*
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), MainView {
+
+
+    private lateinit var mPresenter: MainPresenter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setUpPresenter()
+        mPresenter.onUiReady(this, this)
+
         setUpBottomNavUI()
         clickListener()
 
     }
 
+    private fun setUpPresenter() {
+        mPresenter = getPresenter<MainPresenterImpl, MainView>()
+    }
+
     private fun clickListener() {
         mcvCreateMoment.setOnClickListener {
-            startActivity(Intent(this@MainActivity,CreateNewMomentActivity::class.java))
+            mPresenter.onTapCreateMoment()
         }
     }
 
     private fun setUpBottomNavUI() {
+
         val fragment = MomentsFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.flFragment, fragment, fragment.javaClass.simpleName)
-            .commit()
+        createFragmentFunction(fragment)
 
         bottomNavigation.setOnItemSelectedListener {
 
-            when(it.itemId){
+            when (it.itemId) {
                 R.id.action_moment -> {
-                    val fragment = MomentsFragment()
-                    supportFragmentManager.beginTransaction().replace(
-                        R.id.flFragment,fragment,fragment.javaClass.simpleName
-                    ).commit()
-
+                    mPresenter.onTapMomentsFragment()
                     return@setOnItemSelectedListener true
                 }
                 R.id.action_chat -> {
-                    val fragment = ChatFragment()
-                    supportFragmentManager.beginTransaction().replace(
-                        R.id.flFragment,fragment,fragment.javaClass.simpleName
-                    ).commit()
+                    mPresenter.onTapChatFragment()
 
                     return@setOnItemSelectedListener true
                 }
                 R.id.action_contacts -> {
-                    val fragment = ContactsFragment()
-                    supportFragmentManager.beginTransaction().replace(
-                        R.id.flFragment,fragment,fragment.javaClass.simpleName
-                    ).commit()
+                    mPresenter.onTapContactsFragment()
 
                     return@setOnItemSelectedListener true
                 }
                 R.id.action_me -> {
-                    val fragment = ProfileFragment()
-                    supportFragmentManager.beginTransaction().replace(
-                        R.id.flFragment,fragment,fragment.javaClass.simpleName
-                    ).commit()
 
+                    mPresenter.onTapMeFragment()
                     return@setOnItemSelectedListener true
                 }
                 R.id.action_setting -> {
-                    val fragment = SettingFragment()
-                    supportFragmentManager.beginTransaction().replace(
-                        R.id.flFragment,fragment,fragment.javaClass.simpleName
-                    ).commit()
 
+                    mPresenter.onTapSettingFragment()
                     return@setOnItemSelectedListener true
                 }
 
@@ -84,5 +76,43 @@ class MainActivity : BaseActivity() {
             false
 
         }
+    }
+
+    override fun navigateToCreateMoment() {
+        startActivity(Intent(this@MainActivity, CreateNewMomentActivity::class.java))
+
+    }
+
+    override fun navigateToMomentsFragment() {
+        val fragment = MomentsFragment()
+        createFragmentFunction(fragment)
+    }
+
+
+    override fun navigateToChatFragment() {
+        val fragment = ChatFragment()
+        createFragmentFunction(fragment)
+    }
+
+    override fun navigateToContactsFragment() {
+        val fragment = ContactsFragment()
+        createFragmentFunction(fragment)
+    }
+
+    override fun navigateToMeFragment() {
+        val fragment = ProfileFragment()
+        createFragmentFunction(fragment)
+    }
+
+    override fun navigateToSettingFragment() {
+        val fragment = SettingFragment()
+        createFragmentFunction(fragment)
+    }
+
+
+    private fun createFragmentFunction(fragmentParam:Fragment){
+        supportFragmentManager.beginTransaction().replace(
+            R.id.flFragment, fragmentParam, fragmentParam.javaClass.simpleName
+        ).commit()
     }
 }

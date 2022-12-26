@@ -1,17 +1,30 @@
 package com.padcmyanmar.ttm.wechatapp.fragments
 
+import android.app.Activity
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.database.Cursor
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.adapters.MomentsListAdapter
 import kotlinx.android.synthetic.main.fragment_moments.*
 
+
 class MomentsFragment : Fragment() {
     lateinit var mMomentsListAdapter : MomentsListAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +47,5 @@ class MomentsFragment : Fragment() {
             LinearLayoutManager.VERTICAL,false)
         rvMomentsList.isNestedScrollingEnabled = false
     }
-
 
 }

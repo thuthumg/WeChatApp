@@ -18,7 +18,7 @@
             android:background="@color/white_dark">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnBackAboutBook"
+                android:id="@+id/btnSignUpBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_back_arrow_back" />
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:imeOptions="actionNext"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:text="Thu"
                     android:textColor="@color/edit_text_color"
                     android:textSize="@dimen/text_regular_2x" />

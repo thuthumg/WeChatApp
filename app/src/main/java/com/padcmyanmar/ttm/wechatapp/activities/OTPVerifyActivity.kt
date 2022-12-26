@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isEmpty
 import androidx.core.view.isNotEmpty
+import com.google.android.material.snackbar.Snackbar
 
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.OTPVerifyPresenter
@@ -16,16 +18,19 @@ import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.OTPVerifyPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.OTPVerificationView
 import com.padcmyanmar.ttm.wechatapp.utils.OTP_DEMO_ONE_DIGIT
 import com.padcmyanmar.ttm.wechatapp.utils.OTP_DEMO_TWO_DIGIT
+import com.padcmyanmar.ttm.wechatapp.utils.isValidMobile
 
 import kotlinx.android.synthetic.main.activity_otp_verify.*
 import kotlinx.android.synthetic.main.activity_otp_verify.edtPhoneNo
 import kotlinx.android.synthetic.main.activity_otp_verify.txtInputPhoneNumber
-
+import kotlinx.android.synthetic.main.activity_otp_verify.view.*
 
 
 class OTPVerifyActivity : BaseActivity(), OTPVerificationView {
 
     lateinit var mPresenter: OTPVerifyPresenter
+
+    var otpCode :String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +82,12 @@ class OTPVerifyActivity : BaseActivity(), OTPVerificationView {
                         R.drawable.login_btn_bg
                     )
 
+                    btnVerify.isEnabled = true
+                    btnVerify.background = ContextCompat.getDrawable(
+                        this@OTPVerifyActivity,
+                        R.drawable.login_btn_bg
+                    )
+
 
                 }
             }
@@ -91,8 +102,56 @@ class OTPVerifyActivity : BaseActivity(), OTPVerificationView {
     private fun clickListener() {
         // errorButton.setOnClickListener { otpTextView?.showError() }
 
-        btnGetOTP.setOnClickListener {
+//        otpView.addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable) {}
+//            override fun beforeTextChanged(
+//                s: CharSequence, start: Int,
+//                count: Int, after: Int
+//            ) {
+//            }
+//
+//            override fun onTextChanged(
+//                s: CharSequence, start: Int,
+//                before: Int, count: Int
+//            ) {
+//
+//                if(s.length == 4)
+//                {
+//                    Log.d("OTP","check otp $s")
+//                    if(s.isNotEmpty())
+//                    {
+//                        btnVerify.isEnabled = true
+//                        btnVerify.background = ContextCompat.getDrawable(
+//                            this@OTPVerifyActivity,
+//                            R.drawable.login_btn_bg
+//                        )
+//
+//
+//                        btnGetOTP.isEnabled = true
+//                        btnGetOTP.background = ContextCompat.getDrawable(
+//                            this@OTPVerifyActivity,
+//                            R.drawable.login_btn_bg
+//                        )
+//
+//
+//
+//                    }else{
+//
+//                        // Toast.makeText(this@OTPVerifyActivity, "The OTP Code is wrong. ", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//
+//
+//
+//
+//
+//
+//            }
+//        })
 
+
+        btnGetOTP.setOnClickListener {
+            mPresenter.onTapGetOTPCode(edtPhoneNo.text.toString())
         }
 
         btnOTPVerifyPageBack.setOnClickListener {
@@ -100,8 +159,49 @@ class OTPVerifyActivity : BaseActivity(), OTPVerificationView {
         }
 
         btnVerify.setOnClickListener {
-            otpView?.showSuccess()
-            mPresenter.onTapVerify()
+            // otpView?.showSuccess()
+
+
+            if(!isValidMobile(edtPhoneNo.text.toString()))
+            {
+                edtPhoneNo.error = "Your phone number format is wrong."
+                edtPhoneNo.isFocusable = true
+
+            }else if(otpCode == OTP_DEMO_ONE_DIGIT || otpCode  == OTP_DEMO_TWO_DIGIT){
+                val snackbar = Snackbar.make(window.decorView, "The OTP Code is wrong.", Snackbar.LENGTH_LONG)
+                    .setAction("Try again!") {
+                        /*  val snackbar =
+                              Snackbar.make(window.decorView, "The OTP Code is wrong.", Snackbar.LENGTH_LONG)
+                          snackbar.show()*/
+                        otpView.clearFocus()
+                        otpView.isFocusable = true
+                    }
+                // call show() method to
+                // display the snackbar
+                snackbar.show()
+            }
+
+
+//            else if (otpView.text.toString() == OTP_DEMO_ONE_DIGIT || otpView.text.toString()  == OTP_DEMO_TWO_DIGIT)
+//            {
+//                mPresenter.onTapVerify(edtPhoneNo.text.toString(),otpView.text.toString())
+//            }else{
+//                val snackbar = Snackbar.make(window.decorView, "The OTP Code is wrong.", Snackbar.LENGTH_LONG)
+//                    .setAction("Try again!") {
+//                        /*  val snackbar =
+//                              Snackbar.make(window.decorView, "The OTP Code is wrong.", Snackbar.LENGTH_LONG)
+//                          snackbar.show()*/
+//                        otpView.text?.clear()
+//                        otpView.isFocusable = true
+//                    }
+//                // call show() method to
+//                // display the snackbar
+//                snackbar.show()
+//            }
+
+
+
+
         }
     }
 
@@ -114,18 +214,26 @@ class OTPVerifyActivity : BaseActivity(), OTPVerificationView {
 
             override fun onOTPComplete(otp: String) {
                 // Toast.makeText(this@OTPVerifyActivity, "The OTP is $otp", Toast.LENGTH_SHORT).show()
-
-                if(otp == OTP_DEMO_ONE_DIGIT || otp == OTP_DEMO_TWO_DIGIT)
+                 otpCode = otp
+                if(otp.isEmpty())
                 {
                     btnVerify.isEnabled = true
                     btnVerify.background = ContextCompat.getDrawable(
                         this@OTPVerifyActivity,
                         R.drawable.login_btn_bg
                     )
-                }else{
-                    otpView?.showError()
-                    Toast.makeText(this@OTPVerifyActivity, "The OTP Code is wrong. ", Toast.LENGTH_SHORT).show()
                 }
+//                if(otp == OTP_DEMO_ONE_DIGIT || otp == OTP_DEMO_TWO_DIGIT)
+//                {
+//                    btnVerify.isEnabled = true
+//                    btnVerify.background = ContextCompat.getDrawable(
+//                        this@OTPVerifyActivity,
+//                        R.drawable.login_btn_bg
+//                    )
+//                }else{
+//                    otpView?.showError()
+//                    Toast.makeText(this@OTPVerifyActivity, "The OTP Code is wrong. ", Toast.LENGTH_SHORT).show()
+//                }
 
             }
         }

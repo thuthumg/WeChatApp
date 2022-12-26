@@ -42,7 +42,7 @@ class SplashActivity : BaseActivity(),SplashView {
     }
 
     override fun navigateToSignUpScreen() {
-        startActivity(Intent(this@SplashActivity,SignUpActivity::class.java))
+        startActivity(Intent(this@SplashActivity,OTPVerifyActivity::class.java))
 
     }
 

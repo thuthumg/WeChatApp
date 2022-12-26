@@ -1,11 +1,11 @@
 package com.padcmyanmar.ttm.wechatapp.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.viewholders.MomentsListViewHolder
+import kotlinx.android.synthetic.main.view_holder_moment_item.view.*
 
 class MomentsListAdapter : RecyclerView.Adapter<MomentsListViewHolder>() {
 
@@ -19,6 +19,9 @@ class MomentsListAdapter : RecyclerView.Adapter<MomentsListViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MomentsListViewHolder, position: Int) {
+
+        holder.bindData(position)
+
       // if(mData.isNotEmpty()){
           // holder.bindData(mData[position])
       // }

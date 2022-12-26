@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.LoginPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.LoginPresenterImpl
@@ -24,7 +26,13 @@ class LoginActivity : BaseActivity(), LoginView {
         mPresenter.onUiReady(this,this)
         setUpUI()
         clickListener()
-
+//        val options = PhoneAuthOptions.newBuilder(auth)
+//            .setPhoneNumber(phoneNumber)       // Phone number to verify
+//            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+//            .setActivity(this)                 // Activity (for callback binding)
+//            .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
+//            .build()
+//        PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
     private fun setUpUI() {

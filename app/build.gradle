@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -73,7 +74,16 @@ dependencies {
    // implementation 'com.github.criminact:OTPView:1.0.1'
   //  implementation 'com.github.mukeshsolanki:android-otpview-pinview:3.0.0'
     implementation 'com.github.aabhasr1:OtpView:v1.1.2'
-    testImplementation 'junit:junit:4.13.2'
+
+    //firebase
+    implementation platform('com.google.firebase:firebase-bom:31.1.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+
+
+
+testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 }

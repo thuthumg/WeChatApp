@@ -11,6 +11,7 @@
     android:layout_height="108dp">
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivSelectedImage"
         android:layout_gravity="center"
         android:padding="@dimen/margin_medium"
         android:scaleType="centerCrop"

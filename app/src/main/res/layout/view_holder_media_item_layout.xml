@@ -3,12 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mcvSelectedImage"
     android:layout_margin="@dimen/margin_medium"
     app:cardCornerRadius="20dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivSelectedImage"
         android:scaleType="centerCrop"
         android:src="@drawable/flower_logo"
         android:layout_width="108dp"

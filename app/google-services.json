@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "76565697834",
+    "project_id": "wechatapp-e0922",
+    "storage_bucket": "wechatapp-e0922.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:76565697834:android:ae73bfab7a984892693a53",
+        "android_client_info": {
+          "package_name": "com.padcmyanmar.ttm.wechatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "76565697834-15a8bhio5v0popr7llnc4obko1u69v06.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcFHn1CCOa1-E_9NLEJLdcp7mG6xAzcYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "76565697834-15a8bhio5v0popr7llnc4obko1u69v06.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

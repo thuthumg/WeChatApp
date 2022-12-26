@@ -4,9 +4,10 @@ import com.padcmyanmar.ttm.wechatapp.mvp.views.OTPVerificationView
 
 interface OTPVerifyPresenter:BasePresenter<OTPVerificationView> {
 
-    fun onTapGetOTPCode()
 
-    fun onTapVerify()
+    fun onTapGetOTPCode(phoneNumber: String)
+
+    fun onTapVerify(phoneNumber: String,otpCode:String)
 
     fun onTapBackFunction()
 }
