@@ -5,5 +5,5 @@ class UserVO (
     var dateOfBirth : String?= "",
     var genderType:String? = "",
     var password : String? = "",
-var phoneNumber:String?
+    var phoneNumber:String? = ""
 )

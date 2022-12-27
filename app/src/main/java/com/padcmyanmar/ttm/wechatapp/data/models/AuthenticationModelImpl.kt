@@ -1,25 +1,28 @@
 package com.padcmyanmar.ttm.wechatapp.data.models
 
+import android.app.Activity
 import com.padcmyanmar.ttm.wechatapp.network.auth.AuthManager
+import com.padcmyanmar.ttm.wechatapp.network.auth.PhoneAuth
 import com.padcmyanmar.ttm.wechatapp.network.auth.PhoneAuthActivity
 
 object AuthenticationModelImpl : AuthenticationModel {
-    override var mAuthManager: AuthManager = PhoneAuthActivity
+    override var mAuthManager: AuthManager = PhoneAuth
 
 
-    override fun getOTP(phoneNumber: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+    override fun getOTP(context: Activity, phoneNumber: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
 
-        mAuthManager.getOTP(phoneNumber,onSuccess,onFailure)
+        mAuthManager.getOTP(context,phoneNumber,onSuccess,onFailure)
     }
 
     override fun verifyOTP(
+        context: Activity,
         phoneNumber: String,
         otpCode: String,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
     ) {
 
-        mAuthManager.verifyOTP(phoneNumber,otpCode, onSuccess = {
+        mAuthManager.verifyOTP(context , phoneNumber,otpCode, onSuccess = {
             onSuccess
         },
         onFailure = {

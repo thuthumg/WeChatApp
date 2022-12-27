@@ -151,7 +151,7 @@ class OTPVerifyActivity : BaseActivity(), OTPVerificationView {
 
 
         btnGetOTP.setOnClickListener {
-            mPresenter.onTapGetOTPCode(edtPhoneNo.text.toString())
+            mPresenter.onTapGetOTPCode(this,edtPhoneNo.text.toString())
         }
 
         btnOTPVerifyPageBack.setOnClickListener {

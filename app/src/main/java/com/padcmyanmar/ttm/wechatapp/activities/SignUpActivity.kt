@@ -1,6 +1,7 @@
 package com.padcmyanmar.ttm.wechatapp.activities
 
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 
 import com.padcmyanmar.ttm.wechatapp.R
@@ -41,14 +43,34 @@ class SignUpActivity : BaseActivity(), SignUpView {
     var paramYear = ""
     var genderType = ""
 
+    var phoneNumber = ""
     lateinit var mPresenter: SignUpPresenter
 
+    companion object{
+        private const val  BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER"
+
+
+        fun newIntent(context: Context, phoneNum:String):Intent{
+            val intent = Intent(context, SignUpActivity::class.java)
+            intent.putExtra(BUNDLE_PHONE_NUMBER, phoneNum)
+            return intent
+        }
+    }
+
+    private fun getIntentParam() {
+
+        phoneNumber = intent?.getStringExtra(BUNDLE_PHONE_NUMBER).toString()
+
+
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
         setUpPresenter()
         mPresenter.onUiReady(this, this)
+        getIntentParam()
 
         setUpSpinner()
         setUpCheckBox()
@@ -56,7 +78,106 @@ class SignUpActivity : BaseActivity(), SignUpView {
         clickListener()
 
     }
+    private fun setUpPresenter() {
+        mPresenter = getPresenter<SignUpPresenterImpl, SignUpView>()
+    }
 
+    private fun setUpSpinner() {
+
+        val dayAdapter = ArrayAdapter(
+            this,
+            R.layout.spinner_item_selected, callDayDataList(0, 0)
+        )
+
+        dayAdapter.setDropDownViewResource(R.layout.spinner_item_selected)
+
+        val monthAdapter = ArrayAdapter(
+            this,
+            R.layout.spinner_item_selected, monthsDataList
+        )
+        monthAdapter.setDropDownViewResource(R.layout.spinner_item_selected)
+
+        val yearAdapter = ArrayAdapter(
+            this,
+            R.layout.spinner_item_selected, callYearDataList()
+        )
+        monthAdapter.setDropDownViewResource(R.layout.spinner_item_selected)
+
+
+
+        spDay.adapter = dayAdapter
+        spDay.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                // Toast.makeText(this@SignUpActivity, parent.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show()
+                paramDay = parent.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
+
+        spMonth.adapter = monthAdapter
+        spMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                // Toast.makeText(this@SignUpActivity, parent.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show()
+                paramMonth =  position.toString()//parent.getItemAtPosition(position).toString()
+                selectedMonth = position
+                callDayDataList(selectedMonth, selectedYear)
+
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
+
+
+        spYear.adapter = yearAdapter
+        spYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                // Toast.makeText(this@SignUpActivity, parent.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show()
+                paramYear = parent.getItemAtPosition(position).toString()
+                selectedYear = if (position == 0) 0 else
+                    parent.getItemAtPosition(position).toString().toInt()
+
+                callDayDataList(selectedMonth, selectedYear)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
+
+
+    }
+    private fun setUpCheckBox() {
+
+        val styledText =
+            "<font color='#888888' size='12px'>Agree To </font> <font color='#062743' size='12px'> Term And Service</font>."
+//        textView.setText(Html.fromHtml(styledText), TextView.BufferType.SPANNABLE)
+        checkboxTermAndService.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(styledText, Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            Html.fromHtml(styledText)
+        }
+    }
     private fun setUpEditTextAndButton() {
         btnSignUp.isEnabled = false
         btnSignUp.background = ContextCompat.getDrawable(this, R.drawable.login_btn_disable_bg)
@@ -125,11 +246,6 @@ class SignUpActivity : BaseActivity(), SignUpView {
         })
 
     }
-
-    private fun setUpPresenter() {
-        mPresenter = getPresenter<SignUpPresenterImpl, SignUpView>()
-    }
-
     private fun clickListener() {
 
 
@@ -170,117 +286,49 @@ class SignUpActivity : BaseActivity(), SignUpView {
             onBackPressed()
         }
         btnSignUp.setOnClickListener {
+           /* Log.d(
+                "SignUp", "$paramDay / $paramMonth / $paramYear  \n $genderType " +
+                        "\n ${edtName.text.toString()}  \n ${checkboxTermAndService.isChecked}"
 
-            if (edtName.text.toString().isNotEmpty() &&
-                edtPassword.text.toString().isNotEmpty()
-            ) {
+            )*/
 
-                mPresenter.onTapSignUp()
-            } else {
-                showError("Please fill the name and password.")
+            var paramDate = "$paramYear-$paramMonth-$paramDay"
+
+
+            if(edtName.text.toString().isEmpty())
+            {
+                showError("Please fill the name.")
             }
+            else if(paramDate.isEmpty())
+            {
+                showError("Please fill the date of birth. ")
+            }
+            else if(genderType.isEmpty())
+            {
+                showError("Please fill the gender.")
+            }
+            else if(edtPassword.text.toString().isEmpty()){
+                showError("Please fill the password ")
 
+            }else{
+//                mPresenter.onTapSignUp(
+//                    name = edtName.text.toString(),
+//                    dateOfBirth = "$paramDate",
+//                    gender = genderType,
+//                    password = edtPassword.text.toString(),
+//                    phoneNo = phoneNumber,
+//                    onSuccess = {
+//                        showError("$it")
+//                    },
+//                    onFailure = {
+//                        showError("$it")
+//                    }
+//                )
+            }
 
         }
     }
 
-    private fun setUpCheckBox() {
-
-        val styledText =
-            "<font color='#888888' size='12px'>Agree To </font> <font color='#062743' size='12px'> Term And Service</font>."
-//        textView.setText(Html.fromHtml(styledText), TextView.BufferType.SPANNABLE)
-        checkboxTermAndService.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Html.fromHtml(styledText, Html.FROM_HTML_MODE_COMPACT)
-        } else {
-            Html.fromHtml(styledText)
-        }
-    }
-
-    private fun setUpSpinner() {
-
-        val dayAdapter = ArrayAdapter(
-            this,
-            R.layout.spinner_item_selected, callDayDataList(0, 0)
-        )
-
-        dayAdapter.setDropDownViewResource(R.layout.spinner_item_selected)
-
-        val monthAdapter = ArrayAdapter(
-            this,
-            R.layout.spinner_item_selected, monthsDataList
-        )
-        monthAdapter.setDropDownViewResource(R.layout.spinner_item_selected)
-
-        val yearAdapter = ArrayAdapter(
-            this,
-            R.layout.spinner_item_selected, callYearDataList()
-        )
-        monthAdapter.setDropDownViewResource(R.layout.spinner_item_selected)
-
-
-
-        spDay.adapter = dayAdapter
-        spDay.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                // Toast.makeText(this@SignUpActivity, parent.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show()
-                paramDay = parent.getItemAtPosition(position).toString()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-
-            }
-        }
-
-        spMonth.adapter = monthAdapter
-        spMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                // Toast.makeText(this@SignUpActivity, parent.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show()
-                paramMonth = parent.getItemAtPosition(position).toString()
-                selectedMonth = position
-                callDayDataList(selectedMonth, selectedYear)
-
-
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-
-            }
-        }
-
-
-        spYear.adapter = yearAdapter
-        spYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                // Toast.makeText(this@SignUpActivity, parent.getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show()
-                paramYear = parent.getItemAtPosition(position).toString()
-                selectedYear = if (position == 0) 0 else
-                    parent.getItemAtPosition(position).toString().toInt()
-
-                callDayDataList(selectedMonth, selectedYear)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-
-            }
-        }
-
-
-    }
 
     private fun callYearDataList(): ArrayList<String> {
         for (year in s downTo 1900) {
@@ -324,13 +372,8 @@ class SignUpActivity : BaseActivity(), SignUpView {
     }
 
     override fun signUpFunction() {
-
-        Log.d(
-            "SignUp", "$paramDay / $paramMonth / $paramYear  \n $genderType " +
-                    "\n ${edtName.text.toString()}  \n ${checkboxTermAndService.isChecked}"
-        )
-
-        startActivity(Intent(this@SignUpActivity, MainActivity::class.java))
+        startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
     }
+
 
 }
