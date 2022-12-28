@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.activity_login.btnLogin
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : BaseActivity(),SplashView {
-
     private lateinit var mPresenter: SplashPresenter
 
 

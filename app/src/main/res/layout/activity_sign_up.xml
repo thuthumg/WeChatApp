@@ -86,7 +86,7 @@
                     android:background="@android:color/transparent"
                     android:imeOptions="actionNext"
                     android:inputType="text"
-                    android:text="Thu"
+                    tools:text="Thu"
                     android:textColor="@color/edit_text_color"
                     android:textSize="@dimen/text_regular_2x" />
 
@@ -246,7 +246,7 @@
                     android:background="@android:color/transparent"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
-                    android:text="12345"
+                    tools:text="12345"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/text_regular_2x" />
 

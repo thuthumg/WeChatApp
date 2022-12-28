@@ -286,11 +286,11 @@ class SignUpActivity : BaseActivity(), SignUpView {
             onBackPressed()
         }
         btnSignUp.setOnClickListener {
-           /* Log.d(
-                "SignUp", "$paramDay / $paramMonth / $paramYear  \n $genderType " +
-                        "\n ${edtName.text.toString()}  \n ${checkboxTermAndService.isChecked}"
+            /* Log.d(
+                 "SignUp", "$paramDay / $paramMonth / $paramYear  \n $genderType " +
+                         "\n ${edtName.text.toString()}  \n ${checkboxTermAndService.isChecked}"
 
-            )*/
+             )*/
 
             var paramDate = "$paramYear-$paramMonth-$paramDay"
 
@@ -311,19 +311,19 @@ class SignUpActivity : BaseActivity(), SignUpView {
                 showError("Please fill the password ")
 
             }else{
-//                mPresenter.onTapSignUp(
-//                    name = edtName.text.toString(),
-//                    dateOfBirth = "$paramDate",
-//                    gender = genderType,
-//                    password = edtPassword.text.toString(),
-//                    phoneNo = phoneNumber,
-//                    onSuccess = {
-//                        showError("$it")
-//                    },
-//                    onFailure = {
-//                        showError("$it")
-//                    }
-//                )
+                mPresenter.onTapSignUp(
+                    name = edtName.text.toString(),
+                    dateOfBirth = "$paramDate",
+                    gender = genderType,
+                    password = edtPassword.text.toString(),
+                    phoneNo = phoneNumber,
+                    onSuccess = {
+                        showError("$it")
+                    },
+                    onFailure = {
+                        showError("$it")
+                    }
+                )
             }
 
         }

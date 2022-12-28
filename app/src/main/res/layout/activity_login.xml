@@ -96,7 +96,7 @@
                          android:textSize="@dimen/text_regular_2x"
                          android:id="@+id/edtPhoneNo"
                          tools:text="0912345"
-                         android:inputType="number"
+                         android:inputType="phone"
                          android:imeOptions="actionNext"
                          android:background="@android:color/transparent"
                          android:layout_width="match_parent"

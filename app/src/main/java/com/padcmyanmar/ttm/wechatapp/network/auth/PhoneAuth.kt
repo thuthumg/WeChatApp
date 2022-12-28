@@ -101,9 +101,11 @@ object PhoneAuth: AuthManager {
                     if (e is FirebaseAuthInvalidCredentialsException) {
                         // Invalid request
                         Log.d("TAG", "onVerificationFailed: ${e.toString()}")
+                        onFailure(e.toString())
                     } else if (e is FirebaseTooManyRequestsException) {
                         // The SMS quota for the project has been exceeded
                         Log.d("TAG", "onVerificationFailed: ${e.toString()}")
+                        onFailure(e.toString())
                     }
                     //  mProgressBar.visibility = View.VISIBLE
                     // Show a message and update the UI
@@ -123,6 +125,7 @@ object PhoneAuth: AuthManager {
                     //  intent.putExtra("phoneNumber" , number)
                     //  startActivity(intent)
                     //   mProgressBar.visibility = View.INVISIBLE
+                    onFailure("$verificationId ,  $token ")
                 }
             }) // OnVerificationStateChangedCallbacks
             .build()

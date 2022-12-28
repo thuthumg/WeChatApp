@@ -3,7 +3,6 @@ package com.padcmyanmar.ttm.wechatapp.data.models
 import android.app.Activity
 import com.padcmyanmar.ttm.wechatapp.network.auth.AuthManager
 import com.padcmyanmar.ttm.wechatapp.network.auth.PhoneAuth
-import com.padcmyanmar.ttm.wechatapp.network.auth.PhoneAuthActivity
 
 object AuthenticationModelImpl : AuthenticationModel {
     override var mAuthManager: AuthManager = PhoneAuth
@@ -25,8 +24,8 @@ object AuthenticationModelImpl : AuthenticationModel {
         mAuthManager.verifyOTP(context , phoneNumber,otpCode, onSuccess = {
             onSuccess
         },
-        onFailure = {
-            onFailure(it)
-        })
+            onFailure = {
+                onFailure(it)
+            })
     }
 }

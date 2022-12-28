@@ -101,11 +101,19 @@ class LoginActivity : BaseActivity(), LoginView {
         btnLogin.setOnClickListener {
 
             if(edtPhoneNo.text.toString().isNotEmpty() &&
-                    edtPassword.text.toString().isNotEmpty())
+                edtPassword.text.toString().isNotEmpty())
 
             {
                 mPresenter.onTapLogin(this,edtPhoneNo.text.toString(),
-                edtPassword.text.toString())
+                    edtPassword.text.toString(),
+                    onSuccess = {
+                        showError(it)
+                        Thread.sleep(2000)
+                        mPresenter.goToMainPage()
+                    }
+                ) {
+                    showError(it)
+                }
             }
             else{
                 showError("Please fill the Phone No and Password.")
@@ -122,12 +130,13 @@ class LoginActivity : BaseActivity(), LoginView {
         mPresenter = getPresenter<LoginPresenterImpl, LoginView>()
     }
 
-    override fun loginFunction(phoneNo: String, password: String) {
-        startActivity(Intent(this@LoginActivity,OTPVerifyActivity::class.java))
+    override fun loginFunction() {
+        startActivity(Intent(this@LoginActivity,MainActivity::class.java))
 
     }
 
     override fun navigateToBackFunction() {
         onBackPressed()
     }
+
 }

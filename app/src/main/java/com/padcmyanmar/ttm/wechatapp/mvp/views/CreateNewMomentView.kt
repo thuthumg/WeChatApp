@@ -7,4 +7,5 @@ interface CreateNewMomentView:BaseView {
 
     fun closeFunction()
 
+
 }

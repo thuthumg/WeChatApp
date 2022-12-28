@@ -11,7 +11,6 @@ import com.padcmyanmar.ttm.wechatapp.mvp.views.OTPVerificationView
 
 class OTPVerifyPresenterImpl:OTPVerifyPresenter, AbstractBasePresenter<OTPVerificationView>() {
 
-
     private val mAuthenticationModel: AuthenticationModel = AuthenticationModelImpl
 
     override fun onTapGetOTPCode(context: Activity, phoneNumber: String) {
