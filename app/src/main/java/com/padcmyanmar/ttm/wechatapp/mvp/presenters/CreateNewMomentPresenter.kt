@@ -12,10 +12,16 @@ interface CreateNewMomentPresenter : BasePresenter<CreateNewMomentView>, MediaTy
     fun onTapClose()
 
    // fun onTapCreate(image: Bitmap, onSuccess: (returnUrlString: String?) -> Unit)
-    fun onTapCreate(imagesList: ArrayList<String>,description:String, onSuccess: (message: String) -> Unit,
-                    onFailure:(message:String)-> Unit)
+
 
     fun uploadFileCreate(fileUri: Uri, onSuccess: (returnUrlString: String?) -> Unit)
 
 
+    fun onTapCreate(
+        imagesList: ArrayList<String>,
+        likedIdList: ArrayList<String>,
+        description: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
 }

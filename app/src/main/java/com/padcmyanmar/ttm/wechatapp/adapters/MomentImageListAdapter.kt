@@ -1,5 +1,6 @@
 package com.padcmyanmar.ttm.wechatapp.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +10,7 @@ import kotlinx.android.synthetic.main.view_holder_image_item.view.*
 
 class MomentImageListAdapter(var paramPosition: Int) : RecyclerView.Adapter<MomentImageListViewHolder>() {
 
-  //  private var mData: List<ImageVO> = listOf()
+    private var mData: ArrayList<String> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MomentImageListViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -21,7 +22,7 @@ class MomentImageListAdapter(var paramPosition: Int) : RecyclerView.Adapter<Mome
     override fun onBindViewHolder(holder: MomentImageListViewHolder, position: Int) {
 
 
-        if(paramPosition == 0)
+     /*   if(paramPosition == 0)
         {
 
             val layoutParams: ViewGroup.LayoutParams = holder.itemView.mcvImage.layoutParams
@@ -31,19 +32,19 @@ class MomentImageListAdapter(var paramPosition: Int) : RecyclerView.Adapter<Mome
             val layoutParams: ViewGroup.LayoutParams = holder.itemView.mcvImage.layoutParams
             layoutParams.width = 300
             holder.itemView.mcvImage.layoutParams = layoutParams
-        }
-//       if(mData.isNotEmpty()){
-//           holder.bindData(mData[position])
-//       }
+        }*/
+       if(mData.isNotEmpty()){
+           holder.bindData(mData[position])
+       }
     }
 
     override fun getItemCount(): Int {
-        return 5 //mData.count()
+        return mData.count()
     }
 
-//    @SuppressLint("NotifyDataSetChanged")
-//    fun setNewData(data: List<ImageVO>){
-//        mData = data
-//        notifyDataSetChanged()
-//    }
+    @SuppressLint("NotifyDataSetChanged")
+    fun setNewData(data:ArrayList<String>){
+        mData = data
+        notifyDataSetChanged()
+    }
 }

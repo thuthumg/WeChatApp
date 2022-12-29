@@ -1,5 +1,6 @@
 package com.padcmyanmar.ttm.wechatapp.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,15 +16,33 @@ class MainActivity : BaseActivity(), MainView {
 
 
     private lateinit var mPresenter: MainPresenter
+    private var phoneNumber:String? = ""
+    private var userName:String? = ""
+    companion object{
+        private const val  BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER"
+        private const val  BUNDLE_USER_NAME = "BUNDLE_USER_NAME"
+
+        fun newIntent(context: Context, phoneNum:String, userName:String):Intent{
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(BUNDLE_PHONE_NUMBER, phoneNum)
+            intent.putExtra(BUNDLE_USER_NAME, userName)
+            return intent
+        }
+    }
+    private fun getIntentParam() {
+
+        phoneNumber = intent?.getStringExtra(BUNDLE_PHONE_NUMBER).toString()
+        userName = intent?.getStringExtra(BUNDLE_USER_NAME).toString()
 
 
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setUpPresenter()
         mPresenter.onUiReady(this, this)
-
+        getIntentParam()
         setUpBottomNavUI()
         clickListener()
 
@@ -79,7 +98,14 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     override fun navigateToCreateMoment() {
-        startActivity(Intent(this@MainActivity, CreateNewMomentActivity::class.java))
+        startActivity(phoneNumber?.let {phoneNumber->
+            userName?.let {userName->
+                CreateNewMomentActivity.newIntent(this@MainActivity,
+                    phoneNum = phoneNumber,
+                    userName = userName
+                )
+            }
+        })
 
     }
 

@@ -3,6 +3,7 @@ package com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.padcmyanmar.ttm.wechatapp.data.models.WeChatAppModelImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.AbstractBasePresenter
@@ -19,11 +20,15 @@ class CreateNewMomentPresenterImpl:CreateNewMomentPresenter,
         mView.navigateToChoosePhotoAndVideo()
     }
 
-    override fun onTapCreate (imagesList: ArrayList<String>,description:String,
+    override fun onTapCreate (imagesList: ArrayList<String>,
+                              likedIdList:ArrayList<String>,
+                              description:String,
                               onSuccess: (message: String) -> Unit,
                               onFailure:(message:String)-> Unit) {
         // mView.createFunction()
-        mWeChatAppModel.addMoment(imagesList,description,
+        mWeChatAppModel.addMoment(imgList = imagesList,
+            likeIdList = likedIdList,
+            description = description,
             onSuccess = {
             onSuccess(it)
         },
@@ -38,6 +43,7 @@ class CreateNewMomentPresenterImpl:CreateNewMomentPresenter,
 
     override fun uploadFileCreate(fileUri: Uri, onSuccess: (returnUrlString: String?) -> Unit) {
         mWeChatAppModel.uploadImageAndVideoFile(fileUri,  onSuccess = {
+            Log.d("CreateNewMoment","check image link at upload function 1= $it")
             onSuccess(it)
         })
     }

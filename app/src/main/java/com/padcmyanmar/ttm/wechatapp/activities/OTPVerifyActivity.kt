@@ -24,7 +24,6 @@ import com.padcmyanmar.ttm.wechatapp.utils.isValidMobile
 import kotlinx.android.synthetic.main.activity_otp_verify.*
 import kotlinx.android.synthetic.main.activity_otp_verify.edtPhoneNo
 import kotlinx.android.synthetic.main.activity_otp_verify.txtInputPhoneNumber
-import kotlinx.android.synthetic.main.activity_otp_verify.view.*
 
 
 class OTPVerifyActivity : BaseActivity(), OTPVerificationView {

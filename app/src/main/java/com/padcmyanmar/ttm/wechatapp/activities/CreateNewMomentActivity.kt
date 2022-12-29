@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -29,6 +30,7 @@ import kotlinx.android.synthetic.main.activity_create_new_moment.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.content_create_moment_layout.*
 import kotlinx.android.synthetic.main.fragment_moments.*
+import kotlinx.android.synthetic.main.view_holder_media_item_layout.view.*
 import java.io.File
 
 class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
@@ -39,9 +41,31 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
     var imagesEncodedList: ArrayList<Uri>? = arrayListOf()
     var imagesUrlList: ArrayList<String>? = arrayListOf()
 
+    private var phoneNumber:String? = ""
+    private var userName:String? = ""
+
+    private fun getIntentParam() {
+
+        phoneNumber = intent?.getStringExtra(BUNDLE_PHONE_NUMBER).toString()
+        userName = intent?.getStringExtra(BUNDLE_USER_NAME).toString()
+
+
+    }
+
+
+
     companion object {
         var PICK_IMAGE_OR_VIDEO_REQUEST = 100
 
+        private const val  BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER"
+        private const val  BUNDLE_USER_NAME = "BUNDLE_USER_NAME"
+
+        fun newIntent(context: Context, phoneNum:String, userName:String):Intent{
+            val intent = Intent(context, CreateNewMomentActivity::class.java)
+            intent.putExtra(BUNDLE_PHONE_NUMBER, phoneNum)
+            intent.putExtra(BUNDLE_USER_NAME, userName)
+            return intent
+        }
 
         fun Context.getFileExtension(uri: Uri): String? = when (uri.scheme) {
             // get file extension
@@ -78,9 +102,18 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
         setContentView(R.layout.activity_create_new_moment)
 
         setUpPresenter()
+        getIntentParam()
+
+        setUpNameUI()
         setUpDescriptionText()
         setUpMediaDataAdapter()
         clickListener()
+
+        mPresenter.onUiReady(this,this)
+    }
+
+    private fun setUpNameUI() {
+       tvNameTitle.text = userName
     }
 
     private fun setUpDescriptionText() {
@@ -119,88 +152,67 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
     private fun clickListener() {
 
         btnCreate.setOnClickListener {
+            pbLoading.visibility = View.VISIBLE
             var count = 0
             if(edtDescription.text.toString().isNotEmpty() || (imagesEncodedList?.size!! >= 1))
             {
-                var bitmap: Bitmap? = null
-                //to upload photo video
-                for (imageUri in imagesEncodedList!!)
-                {
-                    //  val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(imageUri))
-                    mPresenter.uploadFileCreate(imageUri, onSuccess = {
-                        it?.let { it1 -> imagesUrlList?.add(it1)
+              //  var bitmap: Bitmap? = null
 
-                        }
-                    })
-
-
-                    /*  if(getFileExtension(imageUri) == ".jpg" ||
-                          getFileExtension(imageUri) == ".png" ||
-                          getFileExtension(imageUri) == ".jpeg")
-
-                      {
-                          if (Build.VERSION.SDK_INT >= 29) {
-
-                              contentResolver?.let {
-                                  val source: ImageDecoder.Source =
-                                      ImageDecoder.createSource(it, imageUri)
-                                  // pbLoading.visibility = View.VISIBLE
-                                  bitmap = ImageDecoder.decodeBitmap(source)
-                                  /*  mPresenter.onPhotoTaken(bitmap, onSuccess = {
-                                        mImageUrl = it
-                                        // pbLoading.visibility = View.GONE
-                                    })*/
-
-                              }
-
-
-                          } else {
-                              // pbLoading.visibility = View.VISIBLE
-                              bitmap = MediaStore.Images.Media.getBitmap(
-                                  applicationContext?.contentResolver, imageUri
-                              )
-                              /* mPresenter.onPhotoTaken(bitmap, onSuccess = {
-                                   mImageUrl = it
-                                   // pbLoading.visibility = View.GONE
-                               })*/
-
-                          }
-                          bitmap?.let { it1 ->
-                              mPresenter.onTapCreate(it1, onSuccess = {
-                                  it?.let { it1 -> imagesUrlList?.add(it1)
-
-                                  }
-                              })
-                          }
-                      }else{
-                          mPresenter.onTapVideoCreate(imageUri, onSuccess = {
-                              it?.let { it1 -> imagesUrlList?.add(it1)
-
-                              }
-                          })
-                      }*/
-
-
-
-                    count +=1
-                }
-
-                if(count == (imagesEncodedList?.size?.minus(1)))
+                if(imagesEncodedList?.size == 0)
                 {
 
-                    imagesUrlList?.let { imgList ->
                         mPresenter.onTapCreate(
-                            imgList,edtDescription.text.toString(), onSuccess = {
+                            arrayListOf(), arrayListOf(), edtDescription.text.toString(), onSuccess = {
+                                Log.d("CreateNewMoment","success moment")
+                                pbLoading.visibility = View.GONE
                                 finish()
                             },
                             onFailure = {
                                 showError(it)
+                                pbLoading.visibility = View.GONE
                             })
+
+
+                }else{
+                    //to upload photo video
+                    for (imageUri in imagesEncodedList!!)
+                    {
+                        //  val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(imageUri))
+                        mPresenter.uploadFileCreate(imageUri, onSuccess = {
+                            it?.let { it1 ->
+                                Log.d("CreateNewMoment","check image link at upload function= $it1")
+                                imagesUrlList?.add(it1)
+                                count +=1
+
+                                if(count == (imagesEncodedList?.size))
+                                {
+
+                                    imagesUrlList?.let { imgList ->
+                                        Log.d("CreateNewMoment","check image link = $imgList")
+                                        mPresenter.onTapCreate(
+                                            imgList,
+                                            arrayListOf(),edtDescription.text.toString(), onSuccess = {
+                                                Log.d("CreateNewMoment","success moment")
+                                                pbLoading.visibility = View.GONE
+                                                finish()
+                                            },
+                                            onFailure = {e ->
+                                                pbLoading.visibility = View.GONE
+                                                showError(e)
+                                            })
+                                    }
+                                }
+                            }
+                        })
+
                     }
                 }
 
+
+
             }else{
                 showError("Please fill the name and password.")
+                pbLoading.visibility = View.GONE
             }
 
 
@@ -250,8 +262,23 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
                     cursor?.moveToFirst()
                     val columnIndex: Int? = cursor?.getColumnIndex(filePathColumn[0])
                     imageEncoded = cursor?.getString(columnIndex!!)
-                    mImageUri?.let { imagesEncodedList?.add(it) }
+                    mImageUri?.let {
+                        imagesEncodedList?.add(it)
+
+                       /* mPresenter.uploadFileCreate(it, onSuccess = {
+                            it?.let { it1 ->
+                                Log.d("CreateNewMoment","check image link at upload function= $it1")
+                                imagesUrlList?.add(it1)
+
+                            }
+                        })*/
+                    }
                     mMediaTypeDataAdapter.setNewData(imagesEncodedList!!)
+
+
+
+
+
                     cursor?.close()
                 } else {
                     if (data.clipData != null) {
@@ -262,6 +289,15 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
                             val uri = item.uri
                             //  mArrayUri.add(uri)
                             imagesEncodedList!!.add(uri)
+
+                           /* mPresenter.uploadFileCreate(uri, onSuccess = {
+                                it?.let { it1 ->
+                                    Log.d("CreateNewMoment","check image link at upload function= $it1")
+                                    imagesUrlList?.add(it1)
+
+                                }
+                            })*/
+
                             // Get the cursor
                             val cursor: Cursor? =
                                 contentResolver

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import com.padcmyanmar.ttm.wechatapp.activities.LoginActivity
 import com.padcmyanmar.ttm.wechatapp.data.models.WeChatAppModelImpl
+import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.AbstractBasePresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.LoginPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.views.LoginView
@@ -16,21 +17,23 @@ class LoginPresenterImpl:LoginPresenter,AbstractBasePresenter<LoginView>() {
         loginActivity: LoginActivity,
         phoneNo: String,
         password: String,
-        onSuccess: (String) -> Unit,
+        onSuccess: (String,UserVO) -> Unit,
         onFailure: (String) -> Unit
     ) {
 
-        mWeChatAppModel.getUsers(
+        mWeChatAppModel.getUser(
             phoneNo = phoneNo,
             password = password,
             onSuccess = {
-                var checkSuccessFlag = false
-                for(userData in it)
+
+                onSuccess("Login Successfully.",it)
+               /* var checkSuccessFlag = false
+                outerLoop@  for(userData in it)
                 {
                     if(phoneNo == userData.phoneNumber && password == userData.password)
                     {
                         checkSuccessFlag = true
-                        break
+                        break@outerLoop
                     }else{
                         checkSuccessFlag = false
                     }
@@ -43,7 +46,7 @@ class LoginPresenterImpl:LoginPresenter,AbstractBasePresenter<LoginView>() {
                 }
                 else{
                     onSuccess("Login Fail")
-                }
+                }*/
 
             },
             onFailure = {
@@ -56,8 +59,8 @@ class LoginPresenterImpl:LoginPresenter,AbstractBasePresenter<LoginView>() {
     override fun onTapBackFunction() {
         mView.navigateToBackFunction()
     }
-    override fun goToMainPage() {
-        mView.loginFunction()
+    override fun goToMainPage(userVO: UserVO) {
+        mView.loginFunction(userVO)
     }
     override fun onUiReady(context: Context, owner: LifecycleOwner) {
 

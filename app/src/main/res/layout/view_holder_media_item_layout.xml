@@ -10,11 +10,27 @@
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatImageView
+
         android:id="@+id/ivSelectedImage"
         android:scaleType="centerCrop"
         android:src="@drawable/flower_logo"
         android:layout_width="108dp"
         android:layout_height="108dp"/>
+
+
+    <FrameLayout
+        android:background="#4DFFFFFF"
+        android:visibility="gone"
+        android:id="@+id/flSelectedVideo"
+        android:layout_width="108dp"
+        android:layout_height="108dp">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_play_circle_outline_24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
+
 
     <!--    165 340-->
 

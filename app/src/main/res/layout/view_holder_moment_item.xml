@@ -39,15 +39,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/yorkie_demo_bold"
-                    android:text="Cherry"
+                    tools:text="Cherry"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/text_regular_2x"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvPostedTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="15 min ago"
+                    tools:text="15 min ago"
                     android:textColor="#999999"
                     android:textSize="@dimen/text_small" />
             </LinearLayout>
@@ -63,11 +64,12 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
             android:fontFamily="@font/yorkie_demo_thin"
-            android:text="A machine resembling a human being and able to replicate certain human movements and functions automatically"
+            tools:text="A machine resembling a human being and able to replicate certain human movements and functions automatically"
             android:textColor="#113A5D"
             android:textSize="@dimen/text_regular_2x" />
 

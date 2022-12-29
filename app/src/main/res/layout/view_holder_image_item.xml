@@ -10,11 +10,12 @@
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivMomentPhoto"
         android:scaleType="centerCrop"
         android:src="@drawable/sample_bg_photo"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="wrap_content"/>
 
-<!--    165 340-->
+<!-- 200   165 340-->
 
 </com.google.android.material.card.MaterialCardView>

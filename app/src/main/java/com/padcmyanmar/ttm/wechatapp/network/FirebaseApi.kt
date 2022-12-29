@@ -2,6 +2,7 @@ package com.padcmyanmar.ttm.wechatapp.network
 
 import android.graphics.Bitmap
 import android.net.Uri
+import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 
 interface FirebaseApi {
@@ -16,18 +17,18 @@ interface FirebaseApi {
     )
 
 
-    fun getUsers(
+    fun getUser(
         phoneNum:String,
         password: String,
-        onSuccess: (usersList: List<UserVO>) -> Unit,
+        onSuccess: (usersVO: UserVO) -> Unit,
         onFailure: (message: String) -> Unit
     )
-    fun addMoment(
-    imgList: ArrayList<String>,
-    description: String,
-    onSuccess: (message: String) -> Unit,
-    onFailure: (message: String) -> Unit
-    )
+//    fun addMoment(
+//    imgList: ArrayList<String>,
+//    description: String,
+//    onSuccess: (message: String) -> Unit,
+//    onFailure: (message: String) -> Unit
+//    )
 
 //    fun addMoment(
 //        name: String,
@@ -46,4 +47,16 @@ interface FirebaseApi {
         onSuccess: (returnUrlString: String?) -> Unit
     )
 
+    fun getMomentData(
+        onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
+
+    fun addMoment(
+        imgList: ArrayList<String>,
+        likedId: ArrayList<String>,
+        description: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
 }

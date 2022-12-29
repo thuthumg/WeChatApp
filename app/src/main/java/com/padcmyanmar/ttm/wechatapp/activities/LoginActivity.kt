@@ -4,10 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.core.content.ContextCompat
-import com.google.firebase.auth.PhoneAuthOptions
-import com.google.firebase.auth.PhoneAuthProvider
+import androidx.core.content.ContextCompat.startActivity
 import com.padcmyanmar.ttm.wechatapp.R
+import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.LoginPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.LoginPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.LoginView
@@ -23,35 +24,27 @@ class LoginActivity : BaseActivity(), LoginView {
         setContentView(R.layout.activity_login)
 
         setUpPresenter()
-        mPresenter.onUiReady(this,this)
+        mPresenter.onUiReady(this, this)
+
         setUpUI()
         clickListener()
-//        val options = PhoneAuthOptions.newBuilder(auth)
-//            .setPhoneNumber(phoneNumber)       // Phone number to verify
-//            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-//            .setActivity(this)                 // Activity (for callback binding)
-//            .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
-//            .build()
-//        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
+
+    private fun setUpPresenter() {
+
+        mPresenter = getPresenter<LoginPresenterImpl, LoginView>()
     }
 
     private fun setUpUI() {
         btnLogin.isEnabled = false
         btnLogin.background = ContextCompat.getDrawable(this, R.drawable.login_btn_disable_bg)
 
-        txtInputPhoneNumber.setEndIconOnClickListener {
+        clearIconClickListener()
+        editTextClickListener()
 
-            edtPhoneNo.setText("")
-            btnLogin.isEnabled = false
-            btnLogin.background = ContextCompat.getDrawable(this, R.drawable.login_btn_disable_bg)
-        }
+    }
 
-        txtInputPassword.setEndIconOnClickListener {
-            edtPassword.setText("")
-            btnLogin.isEnabled = false
-            btnLogin.background = ContextCompat.getDrawable(this, R.drawable.login_btn_disable_bg)
-        }
-
+    private fun editTextClickListener() {
         edtPhoneNo.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(
@@ -86,36 +79,58 @@ class LoginActivity : BaseActivity(), LoginView {
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                if (s.isNotEmpty() && edtPhoneNo.text.toString().isNotEmpty())
-                {
+                if (s.isNotEmpty() && edtPhoneNo.text.toString().isNotEmpty()) {
                     btnLogin.isEnabled = true
-                    btnLogin.background = ContextCompat.getDrawable(this@LoginActivity,
-                        R.drawable.login_btn_bg)
+                    btnLogin.background = ContextCompat.getDrawable(
+                        this@LoginActivity,
+                        R.drawable.login_btn_bg
+                    )
                 }
 
             }
         })
     }
 
+    private fun clearIconClickListener() {
+        txtInputPhoneNumber.setEndIconOnClickListener {
+            edtPhoneNo.setText("")
+            btnLogin.isEnabled = false
+            btnLogin.background = ContextCompat.getDrawable(this, R.drawable.login_btn_disable_bg)
+        }
+
+        txtInputPassword.setEndIconOnClickListener {
+            edtPassword.setText("")
+            btnLogin.isEnabled = false
+            btnLogin.background = ContextCompat.getDrawable(this, R.drawable.login_btn_disable_bg)
+        }
+
+    }
+
     private fun clickListener() {
+
+
         btnLogin.setOnClickListener {
 
-            if(edtPhoneNo.text.toString().isNotEmpty() &&
-                edtPassword.text.toString().isNotEmpty())
-
-            {
-                mPresenter.onTapLogin(this,edtPhoneNo.text.toString(),
+            pbLoading.visibility = View.VISIBLE
+            if (edtPhoneNo.text.toString().isNotEmpty() &&
+                edtPassword.text.toString().isNotEmpty()
+            ) {
+                mPresenter.onTapLogin(this, edtPhoneNo.text.toString(),
                     edtPassword.text.toString(),
-                    onSuccess = {
+                    onSuccess = { msg, userVO ->
+
+                            pbLoading.visibility = View.GONE
+                            showError(msg)
+                            mPresenter.goToMainPage(userVO)
+                            finish()
+
+
+                    }, onFailure = {
+                        pbLoading.visibility = View.GONE
                         showError(it)
-                        Thread.sleep(2000)
-                        mPresenter.goToMainPage()
-                    }
-                ) {
-                    showError(it)
-                }
-            }
-            else{
+                    })
+
+            } else {
                 showError("Please fill the Phone No and Password.")
             }
         }
@@ -125,13 +140,14 @@ class LoginActivity : BaseActivity(), LoginView {
         }
     }
 
-    private fun setUpPresenter() {
 
-        mPresenter = getPresenter<LoginPresenterImpl, LoginView>()
-    }
-
-    override fun loginFunction() {
-        startActivity(Intent(this@LoginActivity,MainActivity::class.java))
+    override fun loginFunction(userVO: UserVO) {
+        startActivity(
+            MainActivity.newIntent(
+                this@LoginActivity,
+                userVO.phoneNumber.toString(), userVO.name.toString()
+            )
+        )
 
     }
 

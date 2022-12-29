@@ -2,13 +2,19 @@ package com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls
 
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
+import com.padcmyanmar.ttm.wechatapp.data.models.WeChatAppModelImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.AbstractBasePresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.MainPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.views.MainView
 
 class MainPresenterImpl : MainPresenter, AbstractBasePresenter<MainView>() {
+
+
+
+
+
     override fun onTapCreateMoment() {
-       mView.navigateToCreateMoment()
+        mView.navigateToCreateMoment()
     }
 
     override fun onTapMomentsFragment() {
@@ -32,6 +38,7 @@ class MainPresenterImpl : MainPresenter, AbstractBasePresenter<MainView>() {
     }
 
     override fun onUiReady(context: Context, owner: LifecycleOwner) {
+
 
     }
 }

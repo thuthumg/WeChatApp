@@ -1,6 +1,5 @@
 package com.padcmyanmar.ttm.wechatapp.network
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
@@ -14,13 +13,14 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
-import com.padcmyanmar.ttm.wechatapp.network.CloudFirestoreFirebaseApiImpl.storage
 import java.io.ByteArrayOutputStream
-import java.time.Instant
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
+import java.sql.Time
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
@@ -39,6 +39,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
 
 
    var mUserVO:UserVO = UserVO()
+
 
     private val storage: FirebaseStorage = FirebaseStorage.getInstance()
     private val storageReference: StorageReference = storage.reference
@@ -75,10 +76,10 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
             }
     }
 
-    override fun getUsers(
+    override fun getUser(
         phoneNum: String,
         password: String,
-        onSuccess: (usersList: List<UserVO>) -> Unit,
+        onSuccess: (userVO: UserVO) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
         val usersList: MutableList<UserVO> = arrayListOf()
@@ -112,7 +113,8 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                         "server"
                    // Log.d(TAG, "Data fetched from $source")
                 }
-                onSuccess(usersList)
+                onSuccess(mUserVO)
+
             }
        /* db.collection("users")
             .get()
@@ -140,6 +142,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
 
     override fun addMoment(
         imgList: ArrayList<String>,
+        likedId:ArrayList<String>,
         description: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
@@ -150,12 +153,18 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
 //            .withZone(ZoneOffset.UTC)
 //            .format(Instant.now())
         val currentTimestamp = System.currentTimeMillis()
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        val postedTime: String = dateFormat.format(Date())
+
         val momentMap : HashMap<String,Any> = hashMapOf(
             "name" to mUserVO.name.toString(),
             "description" to description,
-            "timestamp" to currentTimestamp.toString(),
+            "timestamp" to postedTime,
             "phoneNum" to mUserVO.phoneNumber.toString(),
-            "photoOrVideoUrlLink" to imgList
+            "photoOrVideoUrlLink" to imgList,
+            "likedId" to likedId
+           // "timestampField" to currentTimestamp
         )
 
         db.collection("moments")
@@ -163,9 +172,12 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
             .set(momentMap)
             .addOnSuccessListener {
                 Log.d("Success","Successfully added moment")
+                onSuccess("Successfully added moment")
+
             }
             .addOnFailureListener {
                 Log.d("Failure","Failed to add moment")
+                onFailure(it.message.toString())
             }
     }
 
@@ -221,7 +233,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                  phoneNum = momentVO.phoneNumber ?: "",
                  photoOrVideoLink = imageUrl ?: ""
              )*/
-
+            Log.d("CreateNewMoment","check image link at upload function 2= $returnUrlString")
             onSuccess(returnUrlString)
 
         }
@@ -229,6 +241,68 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
 
 
 
+   override fun getMomentData(
+        onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+         var mMomentsList:ArrayList<MomentVO> = arrayListOf()
+        db.firestoreSettings = settings
+        db.collection("moments").addSnapshotListener(MetadataChanges.INCLUDE) { querySnapshot, e ->
+                if (e != null) {
+                    //   Log.w(TAG, "Listen error", e)
+                    onFailure(e.message ?: " Please check connection ")
+                    return@addSnapshotListener
+                }
 
+                for (change in querySnapshot!!.documentChanges) {
+                    if (change.type == DocumentChange.Type.ADDED) {
+                        Log.d("cloud", "check data: ${change.document.data}")
+
+
+                        var momentVO = MomentVO()
+                        momentVO.id =  change.document.id
+                        momentVO.name = change.document.data["name"] as String
+                        momentVO.description = change.document.data["description"] as String
+                        momentVO.phoneNumber = change.document.data["phoneNum"] as String
+                        momentVO.photoOrVideoUrlLink = change.document.data["photoOrVideoUrlLink"] as ArrayList<String>
+                        momentVO.timestamp = change.document.data["timestamp"] as String
+                        momentVO.likedId = change.document.data["likedId"] as ArrayList<String>
+                       // momentVO.timestampField = change.document.data["timestampField"] as Long
+
+                        mMomentsList.add(momentVO)
+                    }
+
+                    val source = if (querySnapshot.metadata.isFromCache)
+                        "local cache"
+                    else
+                        "server"
+                    // Log.d(TAG, "Data fetched from $source")
+                }
+                onSuccess(mMomentsList)
+
+            }
+        /* db.collection("users")
+             .get()
+             .addOnSuccessListener{result->
+                 val usersList: MutableList<UserVO> = arrayListOf()
+
+                 for (document in result)
+                 {
+                     val data = document.data
+                     var userData = UserVO()
+                     userData.name = data["name"] as String
+                     userData.dateOfBirth = data["dateOfBirth"] as String
+                     userData.genderType = data["genderType"] as String
+                     userData.password = data["password"] as String
+                     userData.phoneNumber = data["phoneNumber"] as String
+                     usersList.add(userData)
+                 }
+
+                 onSuccess(usersList)
+             }
+             .addOnFailureListener {
+                 onFailure(it.message ?: " Please check connection ")
+             }*/
+    }
 
 }

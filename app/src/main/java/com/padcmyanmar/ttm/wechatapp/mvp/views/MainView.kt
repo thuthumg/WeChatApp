@@ -1,5 +1,7 @@
 package com.padcmyanmar.ttm.wechatapp.mvp.views
 
+import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
+
 interface MainView:BaseView {
 
     fun navigateToCreateMoment()
@@ -8,5 +10,6 @@ interface MainView:BaseView {
     fun navigateToContactsFragment()
     fun navigateToMeFragment()
     fun navigateToSettingFragment()
+
 
 }
