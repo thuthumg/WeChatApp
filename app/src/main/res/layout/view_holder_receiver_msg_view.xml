@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_margin="@dimen/margin_medium"
+    android:layout_height="wrap_content">
+        <LinearLayout
+            android:padding="@dimen/margin_medium"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <FrameLayout
+                android:id="@+id/flChatProfilePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:src="@drawable/profile_sample"
+                    android:id="@+id/ivActiveChat"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
+
+
+                <ImageView
+                    android:id="@+id/ivDot"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center|end"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginTop="@dimen/margin_medium_2"
+                    app:srcCompat="@drawable/active_status_green_bg" />
+            </FrameLayout>
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_medium"
+
+                app:cardBackgroundColor="@color/whiteDark1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:padding="@dimen/margin_medium"
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:textSize="@dimen/text_regular"
+                        android:textColor="@color/text_color"
+                        android:text="What is your name?"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:id="@+id/ivSendTime"
+                        android:textSize="@dimen/text_smaller"
+                        android:textColor="@color/hint_color"
+                        android:text="12:00AM"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+
+</LinearLayout>

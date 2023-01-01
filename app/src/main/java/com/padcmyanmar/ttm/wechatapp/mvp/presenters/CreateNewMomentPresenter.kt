@@ -1,7 +1,7 @@
 package com.padcmyanmar.ttm.wechatapp.mvp.presenters
 
-import android.graphics.Bitmap
 import android.net.Uri
+import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.delegates.MediaTypeDataDelegate
 import com.padcmyanmar.ttm.wechatapp.mvp.views.CreateNewMomentView
 
@@ -18,7 +18,7 @@ interface CreateNewMomentPresenter : BasePresenter<CreateNewMomentView>, MediaTy
 
 
     fun onTapCreate(
-        imagesList: ArrayList<String>,
+        imagesList: ArrayList<MediaDataVO>,
         likedIdList: ArrayList<String>,
         description: String,
         onSuccess: (message: String) -> Unit,

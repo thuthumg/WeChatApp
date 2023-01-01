@@ -1,14 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".fragments.ChatFragment">
+
+<com.google.android.material.appbar.AppBarLayout
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.ChatFragment">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Chat Fragment" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white_dark">
 
-</FrameLayout>
+        <TextView
+            android:textStyle="bold"
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/text_heading_1x"
+            android:text="Chats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:clickable="true"
+            android:id="@+id/mcvCreateMoment"
+            android:layout_marginEnd="@dimen/margin_medium"
+            app:cardCornerRadius="@dimen/margin_medium"
+            app:cardBackgroundColor="@color/custom_color"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:paddingStart="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_medium"
+                android:paddingTop="@dimen/margin_card_medium"
+                android:paddingBottom="@dimen/margin_card_medium"
+                android:id="@+id/btnBackAboutBook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_search_24" />
+        </com.google.android.material.card.MaterialCardView>
+
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+</com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:textSize="@dimen/text_regular"
+            android:textColor="#80113A5D"
+            android:layout_margin="@dimen/margin_medium"
+            android:text="Active Now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:clipToPadding="true"
+            android:id="@+id/rvActiveChatsList"
+            tools:itemCount="3"
+            tools:listitem="@layout/view_holder_active_chat_list"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:clipToPadding="true"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:id="@+id/rvChatsList"
+            tools:listitem="@layout/view_holder_active_chat_list"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

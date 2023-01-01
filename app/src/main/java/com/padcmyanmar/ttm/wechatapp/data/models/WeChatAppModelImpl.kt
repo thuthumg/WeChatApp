@@ -2,6 +2,7 @@ package com.padcmyanmar.ttm.wechatapp.data.models
 
 import android.graphics.Bitmap
 import android.net.Uri
+import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.network.CloudFirestoreFirebaseApiImpl
@@ -47,12 +48,12 @@ object WeChatAppModelImpl: WeChatAppModel  {
     }
 
 
-    override fun uploadPhoto(image: Bitmap, onSuccess: (returnUrlString: String?) -> Unit){
-        mFirebaseApi.uploadImageUserVO(
-            image = image,
-            onSuccess = onSuccess
-        )
-    }
+//    override fun uploadPhoto(image: Bitmap, onSuccess: (returnUrlString: String?) -> Unit){
+//        mFirebaseApi.uploadImageUserVO(
+//            image = image,
+//            onSuccess = onSuccess
+//        )
+//    }
     override fun uploadImageAndVideoFile(fileUri: Uri, onSuccess: (returnUrlString: String?) -> Unit){
         mFirebaseApi.uploadImageAndVideoFile(
             fileUri = fileUri,
@@ -63,7 +64,7 @@ object WeChatAppModelImpl: WeChatAppModel  {
     }
 
     override fun addMoment(
-        imgList: ArrayList<String>,
+        imgList: ArrayList<MediaDataVO>,
         likeIdList:ArrayList<String>,
         description: String,
         onSuccess: (message: String) -> Unit,
@@ -75,10 +76,10 @@ object WeChatAppModelImpl: WeChatAppModel  {
             description = description,
             onSuccess = {
                         onSuccess(it)
-            },
-            onFailure= {
-                onFailure(it)
-            })
+            }
+        ) {
+            onFailure(it)
+        }
     }
 
 
@@ -94,5 +95,21 @@ object WeChatAppModelImpl: WeChatAppModel  {
                 onFailure(it)
             })
     }
+
+    override fun editMoment(
+        momentVO:MomentVO,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+        mFirebaseApi.editMoment(
+            momentVO,
+            onSuccess = {
+                onSuccess(it)
+            }
+        ) {
+            onFailure(it)
+        }
+    }
+
 
 }

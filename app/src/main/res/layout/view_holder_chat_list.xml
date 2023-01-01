@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:clickable="true"
+    android:id="@+id/cvChatItem"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    android:background="@color/white"
+    app:cardElevation="2dp"
+    android:layout_marginBottom="@dimen/margin_medium"
+    android:layout_marginStart="@dimen/margin_medium"
+    android:layout_marginEnd="@dimen/margin_medium"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_margin="@dimen/margin_medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <FrameLayout
+            android:id="@+id/flChatProfilePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:src="@drawable/profile_sample"
+                android:id="@+id/ivActiveChat"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
+
+
+            <ImageView
+                android:id="@+id/ivDot"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center|end"
+                android:layout_marginEnd="2dp"
+                android:layout_marginTop="@dimen/margin_medium_2"
+                app:srcCompat="@drawable/active_status_green_bg" />
+        </FrameLayout>
+        <LinearLayout
+           android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:id="@+id/llMsgInfo"
+            android:layout_toEndOf="@id/flChatProfilePhoto"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="@dimen/text_regular_2x"
+                android:textColor="@color/text_title_color"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="User1"
+                android:id="@+id/tvChatUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:textColor="@color/hint_color"
+                android:textSize="@dimen/text_regular"
+                android:text="You: Hi"
+                android:id="@+id/tvChatMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textColor="@color/text_title_color"
+                android:textSize="@dimen/text_small"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="12/12/2022"
+                android:id="@+id/tvChatDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <ImageView
+
+                android:id="@+id/tvChatIcon"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

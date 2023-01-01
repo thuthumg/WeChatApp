@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mcvImage"
-
-
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginEnd="@dimen/margin_medium"
     app:cardCornerRadius="@dimen/margin_medium"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatImageView
+
         android:id="@+id/ivMomentPhoto"
         android:scaleType="centerCrop"
-        android:src="@drawable/sample_bg_photo"
+        tools:src="@drawable/sample_bg_photo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="250dp"/>
 
-<!-- 200   165 340-->
+
+    <FrameLayout
+        android:id="@+id/flVideo"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="#4DFFFFFF"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatImageView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_play_circle_outline_24" />
+    </FrameLayout>
 
 </com.google.android.material.card.MaterialCardView>

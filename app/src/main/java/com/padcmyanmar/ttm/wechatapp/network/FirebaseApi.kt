@@ -2,6 +2,7 @@ package com.padcmyanmar.ttm.wechatapp.network
 
 import android.graphics.Bitmap
 import android.net.Uri
+import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 
@@ -23,25 +24,11 @@ interface FirebaseApi {
         onSuccess: (usersVO: UserVO) -> Unit,
         onFailure: (message: String) -> Unit
     )
-//    fun addMoment(
-//    imgList: ArrayList<String>,
-//    description: String,
-//    onSuccess: (message: String) -> Unit,
-//    onFailure: (message: String) -> Unit
-//    )
 
-//    fun addMoment(
-//        name: String,
-//        description: String,
-//        timestamp: String,
-//        phoneNum: String,
-//        photoOrVideoLink: String
+//    fun uploadImageUserVO(
+//        image: Bitmap,
+//        onSuccess: (returnUrlString: String?) -> Unit
 //    )
-
-    fun uploadImageUserVO(
-        image: Bitmap,
-        onSuccess: (returnUrlString: String?) -> Unit
-    )
     fun uploadImageAndVideoFile(
         fileUri: Uri,
         onSuccess: (returnUrlString: String?) -> Unit
@@ -53,9 +40,15 @@ interface FirebaseApi {
     )
 
     fun addMoment(
-        imgList: ArrayList<String>,
+        imgList: ArrayList<MediaDataVO>,
         likedId: ArrayList<String>,
         description: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
+
+    fun editMoment(
+        momentVO: MomentVO,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     )

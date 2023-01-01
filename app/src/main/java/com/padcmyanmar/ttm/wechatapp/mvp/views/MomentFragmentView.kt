@@ -6,5 +6,5 @@ interface MomentFragmentView:BaseView {
 
     fun showMomentData(momentList:ArrayList<MomentVO>)
 
-    fun favouriteFunction(id: String?, likeUserPhoneNumber:String?)
+    fun favouriteFunction(momentVO: MomentVO)
 }

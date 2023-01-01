@@ -1,6 +1,7 @@
 package com.padcmyanmar.ttm.wechatapp.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,20 +9,22 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.padcmyanmar.ttm.wechatapp.R
+import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_PHONE_NUMBER
 import com.padcmyanmar.ttm.wechatapp.adapters.MomentsListAdapter
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.MomentFragmentPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.MomentFragmentPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.MomentFragmentView
+import com.padcmyanmar.ttm.wechatapp.utils.checkItem
+import kotlinx.android.synthetic.main.content_create_moment_layout.*
 import kotlinx.android.synthetic.main.fragment_moments.*
-import kotlin.collections.ArrayList
 
 
-class MomentsFragment : Fragment(),MomentFragmentView {
-    lateinit var mMomentsListAdapter : MomentsListAdapter
+class MomentsFragment : Fragment(), MomentFragmentView {
+    lateinit var mMomentsListAdapter: MomentsListAdapter
 
     private lateinit var mPresenter: MomentFragmentPresenter
-
+    var loginUserPhoneNumber: String? = ""
 
     var mMomentsList: ArrayList<MomentVO> = arrayListOf()
 
@@ -30,6 +33,8 @@ class MomentsFragment : Fragment(),MomentFragmentView {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        loginUserPhoneNumber = arguments?.getString(BUNDLE_PHONE_NUMBER)
+
         return inflater.inflate(R.layout.fragment_moments, container, false)
     }
 
@@ -37,9 +42,8 @@ class MomentsFragment : Fragment(),MomentFragmentView {
         super.onViewCreated(view, savedInstanceState)
         setUpPresenter()
         setUpMomentsList()
-        context?.let { mPresenter.onUiReady(it,this) }
+        context?.let { mPresenter.onUiReady(it, this) }
     }
-
 
 
     private fun setUpPresenter() {
@@ -48,10 +52,13 @@ class MomentsFragment : Fragment(),MomentFragmentView {
     }
 
     private fun setUpMomentsList() {
-        mMomentsListAdapter = MomentsListAdapter(mPresenter)
+        mMomentsListAdapter =
+            MomentsListAdapter(mPresenter, loginUserPhoneNo = loginUserPhoneNumber)
         rvMomentsList.adapter = mMomentsListAdapter
-        rvMomentsList.layoutManager = LinearLayoutManager(context,
-            LinearLayoutManager.VERTICAL,false)
+        rvMomentsList.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.VERTICAL, false
+        )
         rvMomentsList.isNestedScrollingEnabled = false
     }
 
@@ -60,41 +67,104 @@ class MomentsFragment : Fragment(),MomentFragmentView {
         mMomentsListAdapter.setNewData(momentList.reversed())
     }
 
-    override fun favouriteFunction(id: String?,likeUserPhoneNumber:String?) {
-        for (momentData in mMomentsList.reversed())
-        {
-           if(momentData.id == id)
-           {
+    override fun favouriteFunction(momentVOParam: MomentVO) {
 
-              var arr =  momentData.likedId
-              val key = likeUserPhoneNumber
+        //  outerLoop@for (momentItem in mMomentsList.reversed())
+        // {
+        // if(momentItem.id == momentVOParam.id)
+        //  {
+        var arr = momentVOParam.likedId
+        val key = loginUserPhoneNumber
 
-              var checkDataExistOrNot: Boolean? =  arr?.let { key?.let { it1 -> checkItem(it, it1) } }
+        var checkDataExistOrNot: Boolean? = arr?.let { key?.let { it1 -> checkItem(it, it1) } }
 
-               if(checkDataExistOrNot == true)
-               {
-                   momentData.likedId?.remove(likeUserPhoneNumber)
-               }else{
-                   momentData.likedId?.add(likeUserPhoneNumber!!)
-               }
-                break
-           }
+        if (checkDataExistOrNot == true) {
+
+            momentVOParam.likedId?.remove(loginUserPhoneNumber)
+            mPresenter.onTapEditMoment(
+                momentVOParam,
+                onSuccess = {
+                    mMomentsListAdapter.setNewData(mMomentsList.reversed())
+                },
+                onFailure = { e ->
+                    pbLoading.visibility = View.GONE
+                    showError(e)
+                }
+            )
+
+            /*if(loginUserPhoneNumber == momentData.phoneNumber)
+            {
+                momentData.likedId?.remove(momentVOParam.phoneNumber)
+                momentData.id?.let {
+                    mPresenter.onTapEditMoment(
+                        momentData,
+                        onSuccess = {
+
+                        }
+                    ) { e ->
+                        pbLoading.visibility = View.GONE
+                        showError(e)
+                    }
+                }
+            }*/
+
+        } else {
+
+            loginUserPhoneNumber?.let {
+
+                momentVOParam.likedId?.add(it)
+            }
+            mPresenter.onTapEditMoment(
+                momentVOParam,
+                onSuccess = {
+
+                    mMomentsListAdapter.setNewData(mMomentsList.reversed())
+                },
+                onFailure = { e ->
+                    pbLoading.visibility = View.GONE
+                    showError(e)
+                }
+            )
+
+            /* loginUserPhoneNumber?.let { momentData.likedId?.add(it) }
+            /* momentData.id?.let {
+                 mPresenter.onTapEditMoment(
+                     it,
+                     momentData.photoOrVideoUrlLink ?: arrayListOf(),
+                     momentData.likedId ?: arrayListOf(),
+                     momentData.description.toString(),
+
+                     onSuccess = {
+
+                     },
+                     onFailure = { e ->
+                         pbLoading.visibility = View.GONE
+                         showError(e)
+                     }
+                 )
+             }*/
+             momentData.id?.let {
+                 mPresenter.onTapEditMoment(
+                     momentData,
+                     onSuccess = {
+
+                     }
+                 ) { e ->
+                     pbLoading.visibility = View.GONE
+                     showError(e)
+                 }
+             }*/
         }
 
-        mMomentsListAdapter.setNewData(mMomentsList.reversed())
+        //      break@outerLoop
+        //  }
+        // }
 
-            }
-
-    override fun showError(error: String) {
 
     }
 
-//    private fun <T> isPresent(arr: Array<String>, target: T): Boolean {
-//        return target in arr
-//    }
+    override fun showError(error: String) {
 
-    fun checkItem(arr: ArrayList<String>, item: String): Boolean {
-        return arr.indexOf(item) != -1
     }
 
 }

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_alignBottom="@id/llActionAndSendMsg"
+        android:id="@+id/nsChatDetailMsgList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChatDetailList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:itemCount="4"
+            tools:listitem="@layout/view_holder_chat_detail_list" />
+    </androidx.core.widget.NestedScrollView>
+
+
+    <LinearLayout
+
+        android:id="@+id/llActionAndSendMsg"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:padding="@dimen/margin_card_medium"
+            android:background="@color/white"
+            android:elevation="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toStartOf="@id/ivSendMessage"
+                android:background="@drawable/edit_text_chat_msg_bg"
+                android:hint="Type a message....." />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:scaleType="centerCrop"
+                android:layout_centerVertical="true"
+                android:id="@+id/ivSendMessage"
+                android:layout_alignParentEnd="true"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@drawable/ic_send"/>
+        </RelativeLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+
+            android:padding="@dimen/margin_card_medium"
+            app:elevation="3dp"
+            android:id="@+id/bottomNavigationChat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white_full"
+            app:itemIconTint="@color/bnv_tab_item_foreground"
+            app:itemTextColor="@color/bnv_tab_item_foreground"
+            app:menu="@menu/bottom_navigation_menu_for_chat_detail" />
+
+        <FrameLayout
+            android:id="@+id/flFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="?attr/actionBarSize"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
+</RelativeLayout>

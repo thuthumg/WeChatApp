@@ -1,6 +1,7 @@
 package com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.padcmyanmar.ttm.wechatapp.activities.LoginActivity
 import com.padcmyanmar.ttm.wechatapp.data.models.WeChatAppModelImpl
@@ -25,34 +26,11 @@ class LoginPresenterImpl:LoginPresenter,AbstractBasePresenter<LoginView>() {
             phoneNo = phoneNo,
             password = password,
             onSuccess = {
-
-                onSuccess("Login Successfully.",it)
-               /* var checkSuccessFlag = false
-                outerLoop@  for(userData in it)
-                {
-                    if(phoneNo == userData.phoneNumber && password == userData.password)
-                    {
-                        checkSuccessFlag = true
-                        break@outerLoop
-                    }else{
-                        checkSuccessFlag = false
-                    }
-                }
-
-                if(checkSuccessFlag)
-                {
-                    onSuccess("Login Successfully.")
-
-                }
-                else{
-                    onSuccess("Login Fail")
-                }*/
-
-            },
-            onFailure = {
+                onSuccess("Login Successfully.", it)
+            }, onFailure = {
                 onFailure(it)
-            }
-        )
+            })
+
 
     }
 

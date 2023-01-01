@@ -1,0 +1,96 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ChatDetailActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <androidx.appcompat.widget.Toolbar
+
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white_dark">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:paddingStart="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_medium"
+                android:paddingTop="@dimen/margin_card_medium"
+                android:paddingBottom="@dimen/margin_card_medium"
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_back_arrow_back" />
+
+            <FrameLayout
+                android:id="@+id/flChatProfilePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:src="@drawable/profile_sample"
+                    android:id="@+id/ivActiveChat"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"/>
+
+
+                <ImageView
+                    android:id="@+id/ivDot"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center|end"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginTop="@dimen/margin_medium_2"
+                    app:srcCompat="@drawable/active_status_green_bg" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:id="@+id/tvTitle"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_title_color"
+                    android:textSize="@dimen/text_regular"
+                    android:text="Ace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_marginStart="@dimen/margin_medium"
+                    android:id="@+id/tvActiveStatus"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_sub_title_color"
+                    android:textSize="@dimen/text_regular"
+                    android:text="Online"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_gravity="end"
+                android:paddingStart="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_medium"
+                android:paddingTop="@dimen/margin_card_medium"
+                android:paddingBottom="@dimen/margin_card_medium"
+                android:id="@+id/ivSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_more_vert_24" />
+
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <include
+        layout="@layout/content_chat_detail_layout"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

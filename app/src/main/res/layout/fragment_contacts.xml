@@ -1,14 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".fragments.ContactsFragment">
+
+<com.google.android.material.appbar.AppBarLayout
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.ContactsFragment">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Contact Fragment" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white_dark">
 
-</FrameLayout>
+        <TextView
+            android:textStyle="bold"
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/text_heading_1x"
+            android:text="Contacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+
+            android:textStyle="bold"
+            android:textColor="@color/hint_color"
+            android:textSize="@dimen/text_small"
+            android:text="(6)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:clickable="true"
+            android:id="@+id/mcvEditProfile"
+            android:layout_marginEnd="@dimen/margin_medium"
+            app:cardCornerRadius="@dimen/margin_medium"
+            app:cardBackgroundColor="@color/custom_color"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:paddingStart="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_medium"
+                android:paddingTop="@dimen/margin_card_medium"
+                android:paddingBottom="@dimen/margin_card_medium"
+                android:id="@+id/btnBackAboutBook"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                app:srcCompat="@drawable/ic_baseline_person_add_alt_1_24" />
+        </com.google.android.material.card.MaterialCardView>
+
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+</com.google.android.material.appbar.AppBarLayout>
+
+<LinearLayout
+    android:layout_margin="@dimen/margin_medium_3"
+    android:orientation="vertical"
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:drawableEnd="@drawable/contact_search_edit_text_bg"
+        android:hint="Search"
+        android:background="@drawable/contact_search_edit_text_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

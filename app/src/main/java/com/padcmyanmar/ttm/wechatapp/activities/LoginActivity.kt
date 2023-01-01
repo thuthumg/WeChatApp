@@ -120,7 +120,7 @@ class LoginActivity : BaseActivity(), LoginView {
                     onSuccess = { msg, userVO ->
 
                             pbLoading.visibility = View.GONE
-                            showError(msg)
+                           // showError(msg)
                             mPresenter.goToMainPage(userVO)
                             finish()
 

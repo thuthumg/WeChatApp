@@ -126,3 +126,7 @@ fun covertTimeToText(dataDate: String?): String? {
     }
     return convTime
 }
+
+fun checkItem(arr: ArrayList<String>, item: String): Boolean {
+    return arr.indexOf(item) != -1
+}

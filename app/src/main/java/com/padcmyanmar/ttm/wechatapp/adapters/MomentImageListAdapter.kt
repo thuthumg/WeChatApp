@@ -5,12 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.padcmyanmar.ttm.wechatapp.R
+import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.viewholders.MomentImageListViewHolder
 import kotlinx.android.synthetic.main.view_holder_image_item.view.*
 
-class MomentImageListAdapter(var paramPosition: Int) : RecyclerView.Adapter<MomentImageListViewHolder>() {
+class MomentImageListAdapter() : RecyclerView.Adapter<MomentImageListViewHolder>() {
 
-    private var mData: ArrayList<String> = arrayListOf()
+    private var mData: ArrayList<MediaDataVO> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MomentImageListViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -22,19 +23,21 @@ class MomentImageListAdapter(var paramPosition: Int) : RecyclerView.Adapter<Mome
     override fun onBindViewHolder(holder: MomentImageListViewHolder, position: Int) {
 
 
-     /*   if(paramPosition == 0)
-        {
+       // if(paramPosition == 0)
+//        if(mData.count() == 1)
+//        {
+//
+//            val layoutParams: ViewGroup.LayoutParams = holder.itemView.mcvImage.layoutParams
+//            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+//            holder.itemView.mcvImage.layoutParams = layoutParams
+//        }else{
+//            val layoutParams: ViewGroup.LayoutParams = holder.itemView.mcvImage.layoutParams
+//            layoutParams.width = 300
+//            holder.itemView.mcvImage.layoutParams = layoutParams
+//        }
 
-            val layoutParams: ViewGroup.LayoutParams = holder.itemView.mcvImage.layoutParams
-            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-            holder.itemView.mcvImage.layoutParams = layoutParams
-        }else{
-            val layoutParams: ViewGroup.LayoutParams = holder.itemView.mcvImage.layoutParams
-            layoutParams.width = 300
-            holder.itemView.mcvImage.layoutParams = layoutParams
-        }*/
        if(mData.isNotEmpty()){
-           holder.bindData(mData[position])
+           holder.bindData(mData[position],mData.count())
        }
     }
 
@@ -43,7 +46,7 @@ class MomentImageListAdapter(var paramPosition: Int) : RecyclerView.Adapter<Mome
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setNewData(data:ArrayList<String>){
+    fun setNewData(data:ArrayList<MediaDataVO>){
         mData = data
         notifyDataSetChanged()
     }

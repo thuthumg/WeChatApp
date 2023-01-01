@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.MetadataChanges
 
 import com.google.firebase.firestore.ktx.firestore
@@ -13,11 +14,10 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import java.io.ByteArrayOutputStream
-import java.sql.Time
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -26,7 +26,6 @@ import kotlin.collections.HashMap
 
 object CloudFirestoreFirebaseApiImpl : FirebaseApi{
     // [START get_firestore_instance]
-
     private var db = Firebase.firestore
     // [END get_firestore_instance]
 
@@ -62,7 +61,6 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
             "password" to password,
             "phoneNumber" to phoneNum
         )
-       Log.d("cloud ","check phone number $phoneNum")
         db.collection("users")
             .document(phoneNum)
             .set(userMap)
@@ -82,78 +80,78 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         onSuccess: (userVO: UserVO) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
-        val usersList: MutableList<UserVO> = arrayListOf()
+        Log.d("cloudFirestore", "getUser function $phoneNum")
+      //  val usersList: MutableList<UserVO> = arrayListOf()
         db.firestoreSettings = settings
-        db.collection("users").whereEqualTo("phoneNumber", phoneNum).whereEqualTo("password",password)
-            .addSnapshotListener(MetadataChanges.INCLUDE) { querySnapshot, e ->
-                if (e != null) {
-                 //   Log.w(TAG, "Listen error", e)
-                    onFailure(e.message ?: " Please check connection ")
-                    return@addSnapshotListener
-                }
 
-                for (change in querySnapshot!!.documentChanges) {
-                    if (change.type == DocumentChange.Type.ADDED) {
-                        Log.d("cloud", "check data: ${change.document.data}")
+        db.collection("users")
 
+            .addSnapshotListener { value, error ->
 
-                        var userData = UserVO()
-                        userData.name = change.document.data["name"] as String
-                        userData.dateOfBirth = change.document.data["dateOfBirth"] as String
-                        userData.genderType = change.document.data["genderType"] as String
-                        userData.password = change.document.data["password"] as String
-                        userData.phoneNumber = change.document.data["phoneNumber"] as String
-                        mUserVO = userData
-                        usersList.add(userData)
+                error?.let {
+                    onFailure(it.message ?: "Please check connection")
+                }?: run {
+                   var checkFlag = false
+                    var userData = UserVO()
+                    val result : List<DocumentSnapshot> = value?.documents ?: arrayListOf()
+                    outerLoop@for(document : DocumentSnapshot in result)
+                    {
+                        val data = document.data
+                        if(data?.get("phoneNumber") == phoneNum && data?.get("password") == password)
+                        {
+
+                            userData.name = data["name"] as String
+                            userData.dateOfBirth = data["dateOfBirth"] as String
+                            userData.genderType = data["genderType"] as String
+                            userData.password = data["password"] as String
+                            userData.phoneNumber = data["phoneNumber"] as String
+                            mUserVO = userData
+                            checkFlag = true
+
+                            break@outerLoop
+                        }else{
+                            checkFlag = false
+                        }
+
                     }
 
-                    val source = if (querySnapshot.metadata.isFromCache)
-                        "local cache"
-                    else
-                        "server"
-                   // Log.d(TAG, "Data fetched from $source")
-                }
-                onSuccess(mUserVO)
+                    if(checkFlag)
+                    {
+                        onSuccess(userData)
+                    }else{
+                        onFailure("Login Failed.")
+                    }
 
-            }
-       /* db.collection("users")
-            .get()
-            .addOnSuccessListener{result->
-                val usersList: MutableList<UserVO> = arrayListOf()
+//                    val source = if (value?.metadata?.isFromCache == true)
+//                    {
+//                        "local cache"
+//
+//                    }
+//                    else
+//                    {
+//                        "server"
+//                    }
 
-                for (document in result)
-                {
-                    val data = document.data
-                    var userData = UserVO()
-                    userData.name = data["name"] as String
-                    userData.dateOfBirth = data["dateOfBirth"] as String
-                    userData.genderType = data["genderType"] as String
-                    userData.password = data["password"] as String
-                    userData.phoneNumber = data["phoneNumber"] as String
-                    usersList.add(userData)
+
                 }
 
-                onSuccess(usersList)
+
+
+
             }
-            .addOnFailureListener {
-                onFailure(it.message ?: " Please check connection ")
-            }*/
+
+
     }
 
     override fun addMoment(
-        imgList: ArrayList<String>,
+        imgList: ArrayList<MediaDataVO>,
         likedId:ArrayList<String>,
         description: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     )
     {
-//        DateTimeFormatter
-//            .ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
-//            .withZone(ZoneOffset.UTC)
-//            .format(Instant.now())
         val currentTimestamp = System.currentTimeMillis()
-
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
         val postedTime: String = dateFormat.format(Date())
 
@@ -164,7 +162,6 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
             "phoneNum" to mUserVO.phoneNumber.toString(),
             "photoOrVideoUrlLink" to imgList,
             "likedId" to likedId
-           // "timestampField" to currentTimestamp
         )
 
         db.collection("moments")
@@ -180,8 +177,58 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                 onFailure(it.message.toString())
             }
     }
+    override fun editMoment(
+        momentVO: MomentVO,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
+    {
 
-    override fun uploadImageUserVO(image: Bitmap, onSuccess: (returnUrlString: String?) -> Unit) {
+        var urlData: ArrayList<MediaDataVO>? = momentVO.photoOrVideoUrlLink //as ArrayList<HashMap<String,String>>
+        var mediaDataList:ArrayList<MediaDataVO> = arrayListOf()
+        if (urlData != null) {
+            for(mediaUrlData in urlData)
+            {
+                // mediaDataList.add(MediaDataVO(mediaUrlData["mediaType"],mediaUrlData["mediaDataLink"]))
+                mediaDataList.add(MediaDataVO(mediaUrlData.mediaType,mediaUrlData.mediaDataLink))
+            }
+        }
+
+
+        var likedData = momentVO.likedId as ArrayList<String>
+        var likedDataList:ArrayList<String> = arrayListOf()
+        for(likeData in likedData)
+        {
+
+            likedDataList.add(likeData)
+        }
+
+
+        val momentMap : HashMap<String,Any> = hashMapOf(
+            "name" to momentVO.name.toString(),
+            "description" to momentVO.description.toString(),
+            "timestamp" to momentVO.timestamp.toString(),
+            "phoneNum" to momentVO.phoneNumber.toString(),
+            "photoOrVideoUrlLink" to mediaDataList,
+            "likedId" to likedDataList
+        )
+
+        momentVO.id?.let {
+            db.collection("moments")
+                .document(it)
+                .set(momentMap)
+                .addOnSuccessListener {
+                    Log.d("Success","Successfully edited moment")
+                    onSuccess("Successfully added moment")
+
+                }
+                .addOnFailureListener {
+                    Log.d("Failure","Failed to edit moment")
+                    onFailure(it.message.toString())
+                }
+        }
+    }
+   /* override fun uploadImageUserVO(image: Bitmap, onSuccess: (returnUrlString: String?) -> Unit) {
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100,baos)
         val data: ByteArray = baos.toByteArray()
@@ -198,18 +245,10 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         }.addOnCompleteListener { task->
             val imageUrl : String? = task.result?.toString()
             returnUrlString = imageUrl
-           /* addMoment(
-                name = momentVO.name ?: "",
-                description = momentVO.description ?: "",
-                timestamp = momentVO.timestamp ?: "",
-                phoneNum = momentVO.phoneNumber ?: "",
-                photoOrVideoLink = imageUrl ?: ""
-            )*/
-
             onSuccess(returnUrlString)
 
         }
-    }
+    }*/
 
     override fun uploadImageAndVideoFile(fileUri: Uri, onSuccess: (returnUrlString: String?) -> Unit) {
       //  val videoRef: StorageReference = storageReference.child("videos/${UUID.randomUUID()}")
@@ -226,13 +265,6 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         }.addOnCompleteListener { task->
             val imageUrl : String? = task.result?.toString()
             returnUrlString = imageUrl
-            /* addMoment(
-                 name = momentVO.name ?: "",
-                 description = momentVO.description ?: "",
-                 timestamp = momentVO.timestamp ?: "",
-                 phoneNum = momentVO.phoneNumber ?: "",
-                 photoOrVideoLink = imageUrl ?: ""
-             )*/
             Log.d("CreateNewMoment","check image link at upload function 2= $returnUrlString")
             onSuccess(returnUrlString)
 
@@ -256,18 +288,22 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
 
                 for (change in querySnapshot!!.documentChanges) {
                     if (change.type == DocumentChange.Type.ADDED) {
-                        Log.d("cloud", "check data: ${change.document.data}")
-
 
                         var momentVO = MomentVO()
                         momentVO.id =  change.document.id
                         momentVO.name = change.document.data["name"] as String
                         momentVO.description = change.document.data["description"] as String
                         momentVO.phoneNumber = change.document.data["phoneNum"] as String
-                        momentVO.photoOrVideoUrlLink = change.document.data["photoOrVideoUrlLink"] as ArrayList<String>
+                        var urlData = change.document.data["photoOrVideoUrlLink"] as ArrayList<HashMap<String,String>>
+                        var mediaDataList:ArrayList<MediaDataVO> = arrayListOf()
+                        for(mediaUrlData in urlData)
+                        {
+                            mediaDataList.add(MediaDataVO(mediaUrlData["mediaType"],mediaUrlData["mediaDataLink"]))
+                        }
+
+                        momentVO.photoOrVideoUrlLink = mediaDataList
                         momentVO.timestamp = change.document.data["timestamp"] as String
                         momentVO.likedId = change.document.data["likedId"] as ArrayList<String>
-                       // momentVO.timestampField = change.document.data["timestampField"] as Long
 
                         mMomentsList.add(momentVO)
                     }

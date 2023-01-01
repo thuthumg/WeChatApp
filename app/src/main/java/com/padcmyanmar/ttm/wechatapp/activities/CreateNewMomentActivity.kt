@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,11 +20,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.adapters.MediaTypeDataAdapter
-import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
+import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.CreateNewMomentPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.CreateNewMomentPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.CreateNewMomentView
+import com.padcmyanmar.ttm.wechatapp.utils.getFileExtensionFunc
 import kotlinx.android.synthetic.main.activity_create_new_moment.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.content_create_moment_layout.*
@@ -39,7 +39,8 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
 
     var imageEncoded: String? = null
     var imagesEncodedList: ArrayList<Uri>? = arrayListOf()
-    var imagesUrlList: ArrayList<String>? = arrayListOf()
+   // var imagesUrlList: ArrayList<String>? = arrayListOf()
+    var imagesUrlList: ArrayList<MediaDataVO>? = arrayListOf()
 
     private var phoneNumber:String? = ""
     private var userName:String? = ""
@@ -152,11 +153,10 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
     private fun clickListener() {
 
         btnCreate.setOnClickListener {
-            pbLoading.visibility = View.VISIBLE
             var count = 0
-            if(edtDescription.text.toString().isNotEmpty() || (imagesEncodedList?.size!! >= 1))
-            {
-              //  var bitmap: Bitmap? = null
+            pbLoading.visibility = View.VISIBLE
+            hideKeyboard(this)
+
 
                 if(imagesEncodedList?.size == 0)
                 {
@@ -166,11 +166,11 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
                                 Log.d("CreateNewMoment","success moment")
                                 pbLoading.visibility = View.GONE
                                 finish()
-                            },
-                            onFailure = {
-                                showError(it)
-                                pbLoading.visibility = View.GONE
-                            })
+                            }
+                        ) {
+                            showError(it)
+                            pbLoading.visibility = View.GONE
+                        }
 
 
                 }else{
@@ -180,26 +180,31 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
                         //  val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(imageUri))
                         mPresenter.uploadFileCreate(imageUri, onSuccess = {
                             it?.let { it1 ->
-                                Log.d("CreateNewMoment","check image link at upload function= $it1")
-                                imagesUrlList?.add(it1)
+                               // Log.d("CreateNewMoment","check image link at upload function= $it1")
+                                var mediaDataVO = MediaDataVO()
+                                mediaDataVO.mediaDataLink = it1
+                                mediaDataVO.mediaType = getFileExtensionFunc(this,imageUri)
+                                imagesUrlList?.add(mediaDataVO)
                                 count +=1
 
                                 if(count == (imagesEncodedList?.size))
                                 {
 
                                     imagesUrlList?.let { imgList ->
-                                        Log.d("CreateNewMoment","check image link = $imgList")
+                                      //  Log.d("CreateNewMoment","check image link = $imgList")
+
+
                                         mPresenter.onTapCreate(
                                             imgList,
                                             arrayListOf(),edtDescription.text.toString(), onSuccess = {
                                                 Log.d("CreateNewMoment","success moment")
                                                 pbLoading.visibility = View.GONE
                                                 finish()
-                                            },
-                                            onFailure = {e ->
-                                                pbLoading.visibility = View.GONE
-                                                showError(e)
-                                            })
+                                            }
+                                        ) { e ->
+                                            pbLoading.visibility = View.GONE
+                                            showError(e)
+                                        }
                                     }
                                 }
                             }
@@ -207,14 +212,6 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
 
                     }
                 }
-
-
-
-            }else{
-                showError("Please fill the name and password.")
-                pbLoading.visibility = View.GONE
-            }
-
 
         }
         btnClose.setOnClickListener {
@@ -248,6 +245,12 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
         try {
             // When an Image is picked
             if (requestCode == PICK_IMAGE_OR_VIDEO_REQUEST && resultCode == RESULT_OK && null != data) {
+                btnCreate.isEnabled = true
+                btnCreate.background = ContextCompat.getDrawable(
+                    this@CreateNewMomentActivity,
+                    R.drawable.login_btn_bg
+                )
+
                 // Get the Image from data
                 val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
                 if (data.data != null) {

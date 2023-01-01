@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_gallery"
+        android:icon="@drawable/ic_gallery"
+        android:title=""
+        />
+    <item
+        android:id="@+id/action_camera"
+        android:icon="@drawable/camera"
+        android:title=""
+        />
+
+    <item
+        android:id="@+id/action_gif"
+        android:icon="@drawable/gif"
+        android:title=""
+        />
+
+    <item
+        android:id="@+id/action_location"
+        android:icon="@drawable/placeholder"
+        android:title=""
+        />
+
+    <item
+        android:id="@+id/action_voice"
+        android:icon="@drawable/microphone"
+        android:title=""
+        />
+</menu>

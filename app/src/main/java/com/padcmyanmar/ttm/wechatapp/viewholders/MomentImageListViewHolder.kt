@@ -1,27 +1,54 @@
 package com.padcmyanmar.ttm.wechatapp.viewholders
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.utils.loadBitMapFromUri
 import com.padcmyanmar.ttm.wechatapp.utils.scaleToRatio
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.view_holder_image_item.view.*
-import kotlinx.android.synthetic.main.view_holder_media_item_layout.view.*
 
 class MomentImageListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
    init{
    }
 
-    fun bindData(data:String){
+    fun bindData(data: MediaDataVO, arrayCount: Int){
+
+        var imageUri = data.mediaDataLink?.toUri()
+
+        Log.d("momentimage","${data.mediaType}")
+
+        if(data.mediaType == "jpg" ||
+            data.mediaType == "png" ||
+            data.mediaType == "jpeg") {
+            itemView.flVideo.visibility = View.GONE
 
 
 
-        var imageUri = data.toUri()
+        }
+        else{
+            itemView.flVideo.visibility = View.VISIBLE
+
+          /*  Glide
+                .with(itemView.context)
+                .asBitmap()
+                .load(imageUri)
+                .into(itemView.ivMomentVideo)*/
+//
+//
+//
+//            Glide.with(itemView.context).load(imageUri).thumbnail(0.1f)
+//                .into(itemView.ivMomentVideo)
+
+
+
+        }
         imageUri?.let { image->
             Observable.just(image)
                 .map { it.loadBitMapFromUri(itemView.context) }
@@ -33,35 +60,30 @@ class MomentImageListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
                     val w: Int = it.width
                     val h: Int = it.height
 
-
-                    if(w > h)
+                    if(arrayCount == 1)
                     {
-                        itemView.ivMomentPhoto.layoutParams.width = 400
-                        itemView.ivMomentPhoto.layoutParams.height = 300
+                        itemView.mcvImage.layoutParams.width =  ViewGroup.LayoutParams.MATCH_PARENT
+
                     }else{
-                        itemView.ivMomentPhoto.layoutParams.width = 350
-                        itemView.ivMomentPhoto.layoutParams.height = 400
+                        if(w > h)
+                        {
+                            itemView.mcvImage.layoutParams.width =  ViewGroup.LayoutParams.MATCH_PARENT
+                            //   itemView.mcvImage.layoutParams.height = 300
+                        }else{
+                            itemView.mcvImage.layoutParams.width = 350
+                            // itemView.mcvImage.layoutParams.height = 500
+                        }
                     }
+
+
 
                     itemView.ivMomentPhoto.setImageBitmap(it)
                 }
 
+
+
+
         }
 
-//        Glide.with(itemView.context)
-//            .load(data)
-//            .into(itemView.ivMomentPhoto)
-
-//        if(paramPosition == 0)
-//        {
-//
-//            val layoutParams: ViewGroup.LayoutParams = holder.itemView.mcvImage.layoutParams
-//            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-//            holder.itemView.mcvImage.layoutParams = layoutParams
-//        }else{
-//            val layoutParams: ViewGroup.LayoutParams = holder.itemView.mcvImage.layoutParams
-//            layoutParams.width = 300
-//            holder.itemView.mcvImage.layoutParams = layoutParams
-//        }
     }
 }

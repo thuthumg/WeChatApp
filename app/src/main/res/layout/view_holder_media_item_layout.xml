@@ -9,6 +9,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
+
+
     <androidx.appcompat.widget.AppCompatImageView
 
         android:id="@+id/ivSelectedImage"
@@ -16,8 +18,6 @@
         android:src="@drawable/flower_logo"
         android:layout_width="108dp"
         android:layout_height="108dp"/>
-
-
     <FrameLayout
         android:background="#4DFFFFFF"
         android:visibility="gone"
@@ -30,7 +30,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </FrameLayout>
-
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:layout_marginTop="@dimen/margin_medium"-->
+<!--        android:layout_marginEnd="@dimen/margin_medium"-->
+<!--        android:layout_gravity="end"-->
+<!--        android:id="@+id/ivClose"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:src="@drawable/close"-->
+<!--        android:layout_width="24dp"-->
+<!--        android:layout_height="24dp"/>-->
 
     <!--    165 340-->
 
