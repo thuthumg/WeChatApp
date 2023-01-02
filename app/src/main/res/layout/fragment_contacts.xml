@@ -60,18 +60,59 @@ tools:context=".fragments.ContactsFragment">
 </com.google.android.material.appbar.AppBarLayout>
 
 <LinearLayout
-    android:layout_margin="@dimen/margin_medium_3"
+    android:layout_margin="@dimen/margin_medium_2"
     android:orientation="vertical"
     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:drawableEnd="@drawable/contact_search_edit_text_bg"
+        android:drawableStart="@drawable/ic_baseline_search_24_blue"
+        android:drawableEnd="@drawable/ic_baseline_close_24"
         android:hint="Search"
         android:background="@drawable/contact_search_edit_text_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_marginTop="@dimen/margin_medium_2"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_regular"
+        android:textColor="@color/text_title_color"
+        android:text="Groups(5)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:clickable="true"
+        android:layout_marginEnd="@dimen/margin_medium"
+        app:cardCornerRadius="@dimen/margin_medium"
+        app:cardBackgroundColor="@color/custom_color"
+        android:layout_width="100dp"
+        android:layout_height="100dp">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                app:srcCompat="@drawable/ic_baseline_group_add_24" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:textSize="@dimen/text_regular_2x"
+                android:textColor="@color/white"
+                android:text="Add New"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+
+
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
 
 
