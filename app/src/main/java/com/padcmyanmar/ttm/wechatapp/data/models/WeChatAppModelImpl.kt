@@ -1,16 +1,17 @@
 package com.padcmyanmar.ttm.wechatapp.data.models
 
-import android.graphics.Bitmap
 import android.net.Uri
 import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.network.CloudFirestoreFirebaseApiImpl
 import com.padcmyanmar.ttm.wechatapp.network.FirebaseApi
+import com.padcmyanmar.ttm.wechatapp.network.RealtimeDatabaseFirebaseApiImpl
 
 object WeChatAppModelImpl: WeChatAppModel  {
     override var mFirebaseApi: FirebaseApi = CloudFirestoreFirebaseApiImpl
 
+    override var mFirebaseRealTimeApi: FirebaseApi = RealtimeDatabaseFirebaseApiImpl
 
     override fun addUser(
         name: String,
@@ -18,6 +19,7 @@ object WeChatAppModelImpl: WeChatAppModel  {
         gender: String,
         password: String,
         phoneNo: String,
+        userId:String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
@@ -26,6 +28,7 @@ object WeChatAppModelImpl: WeChatAppModel  {
             gender =  gender,
             password = password,
             phoneNum = phoneNo,
+            userId = userId,
             onSuccess,
             onFailure)
     }
@@ -109,6 +112,66 @@ object WeChatAppModelImpl: WeChatAppModel  {
         ) {
             onFailure(it)
         }
+    }
+
+    override fun addContacts(
+        userId: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+       mFirebaseApi.addContacts(userId = userId,
+       onSuccess = {
+           onSuccess(it)
+       },
+       onFailure = {
+           onFailure(it)
+       })
+    }
+
+    override fun getContacts(
+        onSuccess: (contactsList: ArrayList<UserVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+        mFirebaseApi.getContacts(
+            onSuccess = {
+                onSuccess(it)
+            },
+            onFailure = {
+                onFailure(it)
+            }
+        )
+    }
+
+    override fun editUser(userName: String, dateOfBirth: String, genderType: String,
+                             onSuccess: (message: String) -> Unit,
+                             onFailure: (message: String) -> Unit) {
+        mFirebaseApi.editUser(userName,dateOfBirth,genderType, onSuccess = {
+            onSuccess(it)
+        }, onFailure = {
+            onFailure(it)
+        })
+
+    }
+
+    override fun sendMessage( senderId: String,
+                              receiverId: String,
+                              msg: String,
+                              senderName: String,
+                              onSuccess: (message: String) -> Unit,
+                              onFailure: (message: String) -> Unit
+    ) {
+        mFirebaseRealTimeApi.sendMessage(
+            senderId =  senderId,
+            receiverId = receiverId,
+            msg =  msg,
+            senderName = senderName,
+            onSuccess = {
+                onSuccess(it)
+            },
+            onFailure = {
+                onFailure(it)
+            }
+        )
     }
 
 

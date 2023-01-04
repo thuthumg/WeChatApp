@@ -10,7 +10,9 @@ interface SignUpPresenter:BasePresenter<SignUpView>  {
         gender: String,
         password: String,
         phoneNo: String,
-        onSuccess: (message:String)-> Unit,
-        onFailure:(message:String)-> Unit
+        userId: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+
     )
 }

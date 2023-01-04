@@ -73,4 +73,6 @@
     <color name="hint_color">#888888</color>
     <color name="edit_text_color">#062743</color>
 
+    <color name="contact_page_bg">#5DEEEEEE</color>
+
 </resources>

@@ -1,6 +1,7 @@
 package com.padcmyanmar.ttm.wechatapp.data.vos
 
-class UserVO (
+class UserVO(
+    var id:String? = "",
     var name:String? = "",
     var dateOfBirth : String?= "",
     var genderType:String? = "",

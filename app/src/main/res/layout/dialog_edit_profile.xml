@@ -52,7 +52,7 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spDay"
+            android:id="@+id/spDayEdit"
             style="@style/Widget.AppCompat.Spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
             tools:listitem="@layout/support_simple_spinner_dropdown_item" />
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spMonth"
+            android:id="@+id/spMonthEdit"
 
             style="@style/Widget.AppCompat.Spinner"
             android:layout_width="0dp"
@@ -84,7 +84,7 @@
             tools:listitem="@layout/support_simple_spinner_dropdown_item" />
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spYear"
+            android:id="@+id/spYearEdit"
             style="@style/Widget.AppCompat.Spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
 
     <RadioGroup
         android:layout_marginBottom="@dimen/margin_medium_3"
-        android:id="@+id/rbGenderGroup"
+        android:id="@+id/rbGenderGroupEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvGender"
@@ -126,7 +126,7 @@
         android:paddingEnd="@dimen/margin_medium">
 
         <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/rbMale"
+            android:id="@+id/rbMaleEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
@@ -139,7 +139,7 @@
             app:buttonTint="@color/text_color" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/rbFemale"
+            android:id="@+id/rbFemaleEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
@@ -151,7 +151,7 @@
             app:buttonTint="@color/text_color" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/rbOther"
+            android:id="@+id/rbOtherEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
@@ -164,7 +164,7 @@
     </RadioGroup>
 
     <LinearLayout
-
+        android:layout_marginBottom="@dimen/margin_medium_3"
         android:layout_marginEnd="@dimen/margin_medium_3"
         android:layout_marginStart="@dimen/margin_medium_3"
         android:id="@+id/llButton"
@@ -173,7 +173,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.appcompat.widget.AppCompatButton
-
             android:layout_marginEnd="@dimen/margin_medium_2"
             android:layout_weight="1"
             android:id="@+id/btnCancel"

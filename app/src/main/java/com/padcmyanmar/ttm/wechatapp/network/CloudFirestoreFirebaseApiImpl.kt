@@ -1,6 +1,6 @@
 package com.padcmyanmar.ttm.wechatapp.network
 
-import android.graphics.Bitmap
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
 import com.google.android.gms.tasks.Task
@@ -17,7 +17,7 @@ import com.google.firebase.storage.UploadTask
 import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
-import java.io.ByteArrayOutputStream
+import com.padcmyanmar.ttm.wechatapp.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -26,6 +26,7 @@ import kotlin.collections.HashMap
 
 object CloudFirestoreFirebaseApiImpl : FirebaseApi{
     // [START get_firestore_instance]
+    @SuppressLint("StaticFieldLeak")
     private var db = Firebase.firestore
     // [END get_firestore_instance]
 
@@ -50,19 +51,21 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         gender: String,
         password: String,
         phoneNum: String,
-        onSuccess: (message:String)->Unit,
-        onFailure: (message:String) -> Unit
+        userId: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
     ) {
 
         val userMap: HashMap<String,Any> = hashMapOf(
-            "name" to name,
-            "dateOfBirth" to dateOfBirth,
-            "genderType" to gender,
-            "password" to password,
-            "phoneNumber" to phoneNum
+            DOCUMENT_FIELD_NAME to name,
+            DOCUMENT_FIELD_DATE_OF_BIRTH to dateOfBirth,
+            DOCUMENT_FIELD_GENDER_TYPE to gender,
+            DOCUMENT_FIELD_PASSWORD to password,
+            DOCUMENT_FIELD_PHONE_NUM to phoneNum,
+            DOCUMENT_FIELD_UID to userId
         )
-        db.collection("users")
-            .document(phoneNum)
+        db.collection(USER_COLLECTION)
+            .document(userId)
             .set(userMap)
             .addOnSuccessListener {
                 Log.d("Success","Successfully added user data")
@@ -84,10 +87,8 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
       //  val usersList: MutableList<UserVO> = arrayListOf()
         db.firestoreSettings = settings
 
-        db.collection("users")
-
+        db.collection(USER_COLLECTION)
             .addSnapshotListener { value, error ->
-
                 error?.let {
                     onFailure(it.message ?: "Please check connection")
                 }?: run {
@@ -97,14 +98,16 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                     outerLoop@for(document : DocumentSnapshot in result)
                     {
                         val data = document.data
-                        if(data?.get("phoneNumber") == phoneNum && data?.get("password") == password)
+                        if(data?.get(DOCUMENT_FIELD_PHONE_NUM) == phoneNum && data?.get(
+                                DOCUMENT_FIELD_PASSWORD) == password)
                         {
 
-                            userData.name = data["name"] as String
-                            userData.dateOfBirth = data["dateOfBirth"] as String
-                            userData.genderType = data["genderType"] as String
-                            userData.password = data["password"] as String
-                            userData.phoneNumber = data["phoneNumber"] as String
+                            userData.name = data[DOCUMENT_FIELD_NAME] as String
+                            userData.dateOfBirth = data[DOCUMENT_FIELD_DATE_OF_BIRTH] as String
+                            userData.genderType = data[DOCUMENT_FIELD_GENDER_TYPE] as String
+                            userData.password = data[DOCUMENT_FIELD_PASSWORD] as String
+                            userData.phoneNumber = data[DOCUMENT_FIELD_PHONE_NUM] as String
+                            userData.id = data[DOCUMENT_FIELD_UID] as String
                             mUserVO = userData
                             checkFlag = true
 
@@ -164,7 +167,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
             "likedId" to likedId
         )
 
-        db.collection("moments")
+        db.collection(MOMENTS_COLLECTION)
             .document(currentTimestamp.toString())
             .set(momentMap)
             .addOnSuccessListener {
@@ -214,7 +217,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         )
 
         momentVO.id?.let {
-            db.collection("moments")
+            db.collection(MOMENTS_COLLECTION)
                 .document(it)
                 .set(momentMap)
                 .addOnSuccessListener {
@@ -228,27 +231,234 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                 }
         }
     }
-   /* override fun uploadImageUserVO(image: Bitmap, onSuccess: (returnUrlString: String?) -> Unit) {
-        val baos = ByteArrayOutputStream()
-        image.compress(Bitmap.CompressFormat.JPEG, 100,baos)
-        val data: ByteArray = baos.toByteArray()
 
-        val imageRef: StorageReference = storageReference.child("images/${UUID.randomUUID()}")
-        val uploadTask: UploadTask = imageRef.putBytes(data)
-        uploadTask.addOnFailureListener{
+    override fun addContacts(
+        userId: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
 
-        }.addOnSuccessListener {
+       // Log.d("cloudFirestore", "getUser function $phoneNum")
+        //  val usersList: MutableList<UserVO> = arrayListOf()
+        db.firestoreSettings = settings
+
+        db.collection(USER_COLLECTION)
+            .document(userId)
+            .addSnapshotListener { value, error ->
+                error?.let {
+                    onFailure(it.message ?: "Please check connection")
+                }?: run {
+                    val result : DocumentSnapshot? = value
+                    Log.d("CloudFirebase","check scan qr data " +
+                            "scan user = ${result?.data?.get("name")}" +
+                            "---- current user = ${mUserVO.id}")
+
+                    var contactVO = UserVO()
+
+                    contactVO.name =result?.data?.get(DOCUMENT_FIELD_NAME) as String
+                    contactVO.dateOfBirth = result?.data?.get(DOCUMENT_FIELD_DATE_OF_BIRTH) as String
+                    contactVO.genderType = result?.data?.get(DOCUMENT_FIELD_GENDER_TYPE) as String
+                    contactVO.phoneNumber = result?.data?.get(DOCUMENT_FIELD_PHONE_NUM) as String
+                    contactVO.id = result?.data?.get(DOCUMENT_FIELD_UID) as String
+                    mUserVO.id?.let {qrcode->
+
+                        db.collection("users")
+                            .document(qrcode)
+                            .collection("contacts")
+                            .document(userId)
+                            .set(contactVO)
+                            .addOnSuccessListener {
+                                Log.d("Success","Successfully updated moment")
+                               // onSuccess("Successfully updated moment")
+
+                                var currentUserVO = UserVO()
+                                currentUserVO.name = mUserVO.name
+                                currentUserVO.dateOfBirth =  mUserVO.dateOfBirth
+                                currentUserVO.genderType =  mUserVO.genderType
+                                currentUserVO.phoneNumber =  mUserVO.phoneNumber
+                                currentUserVO.id =  mUserVO.id
+                                db.collection("users")
+                                    .document(userId)
+                                    .collection("contacts")
+                                    .document(qrcode)
+                                    .set(currentUserVO)
+                                    .addOnSuccessListener {
+                                        Log.d("Success","Successfully updated moment")
+                                        onSuccess("Successfully updated moment")
+
+                                    }
+                                    .addOnFailureListener {e->
+                                        Log.d("Failure","Failed to update moment")
+                                        onFailure(e.message.toString())
+                                    }
+
+
+                            }
+                            .addOnFailureListener {e->
+                                Log.d("Failure","Failed to update moment")
+                                onFailure(e.message.toString())
+                            }
+
+
+
+                    }
+
+                   /* var checkFlag = false
+                    var userData = UserVO()
+                    val result : List<DocumentSnapshot> = value?.documents ?: arrayListOf()
+                    outerLoop@for(document : DocumentSnapshot in result)
+                    {
+                        val data = document.data
+                        if(data?.get("phoneNumber") == phoneNum && data?.get("password") == password)
+                        {
+
+                            userData.name = data["name"] as String
+                            userData.dateOfBirth = data["dateOfBirth"] as String
+                            userData.genderType = data["genderType"] as String
+                            userData.password = data["password"] as String
+                            userData.phoneNumber = data["phoneNumber"] as String
+                            userData.qrCode = data["qr_code"] as String
+                            mUserVO = userData
+                            checkFlag = true
+
+                            break@outerLoop
+                        }else{
+                            checkFlag = false
+                        }
+
+                    }
+
+                    if(checkFlag)
+                    {
+                        onSuccess(userData)
+                    }else{
+                        onFailure("Login Failed.")
+                    }*/
+                }
+
+
+
+
+            }
+    }
+
+    override fun getContacts(
+        onSuccess: (contactsList: ArrayList<UserVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+
+        var mContactsList:ArrayList<UserVO> = arrayListOf()
+        db.firestoreSettings = settings
+        mUserVO.id?.let { userid->
+            db.collection(USER_COLLECTION)
+                .document(userid)
+                .collection(CONTACTS_COLLECTION)
+                .addSnapshotListener(MetadataChanges.INCLUDE) { querySnapshot, e ->
+
+                    Log.d("cloudfirestore","before check get contacts list ${querySnapshot!!.documentChanges.size}")
+
+
+                    if (e != null) {
+                    //   Log.w(TAG, "Listen error", e)
+                    onFailure(e.message ?: " Please check connection ")
+                    return@addSnapshotListener
+                }
+
+                for (change in querySnapshot!!.documentChanges) {
+                    if (change.type == DocumentChange.Type.ADDED) {
+                        Log.d("cloudfirestore","check get contacts list ${change.document.data["name"]}")
+                        var contactUserVO = UserVO()
+                        contactUserVO.name = change.document.data[DOCUMENT_FIELD_NAME] as String
+                        contactUserVO.phoneNumber =  change.document.data[DOCUMENT_FIELD_PHONE_NUM] as String
+                        contactUserVO.genderType =  change.document.data[DOCUMENT_FIELD_GENDER_TYPE] as String
+                        contactUserVO.dateOfBirth =  change.document.data[DOCUMENT_FIELD_DATE_OF_BIRTH] as String
+                        contactUserVO.id =  change.document.data[DOCUMENT_FIELD_UID] as String
+                        mContactsList.add(contactUserVO)
+                    /*var userVO = UserVO()
+                        momentVO.id =  change.document.id
+                        momentVO.name = change.document.data["name"] as String
+                        momentVO.description = change.document.data["description"] as String
+                        momentVO.phoneNumber = change.document.data["phoneNum"] as String
+                        var urlData = change.document.data["photoOrVideoUrlLink"] as ArrayList<HashMap<String,String>>
+                        var mediaDataList:ArrayList<MediaDataVO> = arrayListOf()
+                        for(mediaUrlData in urlData)
+                        {
+                            mediaDataList.add(MediaDataVO(mediaUrlData["mediaType"],mediaUrlData["mediaDataLink"]))
+                        }
+
+                        momentVO.photoOrVideoUrlLink = mediaDataList
+                        momentVO.timestamp = change.document.data["timestamp"] as String
+                        momentVO.likedId = change.document.data["likedId"] as ArrayList<String>
+
+                        mMomentsList.add(momentVO)*/
+                    }
+
+                }
+                     onSuccess(mContactsList)
+
+            }
         }
 
-        val urlTask: Task<Uri> = uploadTask.continueWithTask {
-            return@continueWithTask imageRef.downloadUrl
-        }.addOnCompleteListener { task->
-            val imageUrl : String? = task.result?.toString()
-            returnUrlString = imageUrl
-            onSuccess(returnUrlString)
+    }
 
-        }
-    }*/
+    override fun editUser(userName: String, dateOfBirth: String, genderType: String,
+    onSuccess: (message: String) -> Unit,
+    onFailure: (message: String) -> Unit) {
+        val editUserDataMap : HashMap<String,Any> = hashMapOf(
+           DOCUMENT_FIELD_NAME to userName,
+           DOCUMENT_FIELD_DATE_OF_BIRTH to dateOfBirth,
+            DOCUMENT_FIELD_GENDER_TYPE to genderType,
+            DOCUMENT_FIELD_PASSWORD to mUserVO.password.toString(),
+            DOCUMENT_FIELD_PHONE_NUM to mUserVO.phoneNumber.toString(),
+            DOCUMENT_FIELD_UID to mUserVO.id.toString()
+        )
+
+        db.collection(USER_COLLECTION)
+            .document(mUserVO.id.toString())
+            .set(editUserDataMap)
+            .addOnSuccessListener {
+                Log.d("Success","Successfully added user data")
+                onSuccess("Saved Successfully")
+            }
+            .addOnFailureListener {
+                Log.d("Failure","Failed to add user data")
+                onFailure("Save Failed")
+            }
+    }
+
+    override fun sendMessage(
+        senderId: String,
+        receiverId: String,
+        msg: String,
+        senderName: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+
+    }
+
+
+    /* override fun uploadImageUserVO(image: Bitmap, onSuccess: (returnUrlString: String?) -> Unit) {
+         val baos = ByteArrayOutputStream()
+         image.compress(Bitmap.CompressFormat.JPEG, 100,baos)
+         val data: ByteArray = baos.toByteArray()
+
+         val imageRef: StorageReference = storageReference.child("images/${UUID.randomUUID()}")
+         val uploadTask: UploadTask = imageRef.putBytes(data)
+         uploadTask.addOnFailureListener{
+
+         }.addOnSuccessListener {
+         }
+
+         val urlTask: Task<Uri> = uploadTask.continueWithTask {
+             return@continueWithTask imageRef.downloadUrl
+         }.addOnCompleteListener { task->
+             val imageUrl : String? = task.result?.toString()
+             returnUrlString = imageUrl
+             onSuccess(returnUrlString)
+
+         }
+     }*/
 
     override fun uploadImageAndVideoFile(fileUri: Uri, onSuccess: (returnUrlString: String?) -> Unit) {
       //  val videoRef: StorageReference = storageReference.child("videos/${UUID.randomUUID()}")
@@ -279,7 +489,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
     ) {
          var mMomentsList:ArrayList<MomentVO> = arrayListOf()
         db.firestoreSettings = settings
-        db.collection("moments").addSnapshotListener(MetadataChanges.INCLUDE) { querySnapshot, e ->
+        db.collection(MOMENTS_COLLECTION).addSnapshotListener(MetadataChanges.INCLUDE) { querySnapshot, e ->
                 if (e != null) {
                     //   Log.w(TAG, "Listen error", e)
                     onFailure(e.message ?: " Please check connection ")

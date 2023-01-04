@@ -18,7 +18,7 @@ interface AuthenticationModel {
         context: Activity,
         phoneNumber: String,
         otpCode: String,
-        onSuccess: () -> Unit,
+        onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit
     )
 }

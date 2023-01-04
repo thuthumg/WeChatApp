@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace 'com.padcmyanmar.ttm.wechatapp'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.padcmyanmar.ttm.wechatapp"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -40,7 +40,7 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -75,8 +75,8 @@ dependencies {
 
 
     //otp view
-   // implementation 'com.github.criminact:OTPView:1.0.1'
-  //  implementation 'com.github.mukeshsolanki:android-otpview-pinview:3.0.0'
+    // implementation 'com.github.criminact:OTPView:1.0.1'
+    //  implementation 'com.github.mukeshsolanki:android-otpview-pinview:3.0.0'
     implementation 'com.github.aabhasr1:OtpView:v1.1.2'
 
     //firebase
@@ -84,14 +84,20 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-storage'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
 
+    // implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
+    implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
+    // implementation 'androidmads.library.qrgenerator:QRGenerator:1.0.3'
+    implementation 'com.github.androidmads:QRGenerator:1.0.1'
+    // implementation 'com.github.kenglxn.QRGen:android:2.3.0'
 
 
-testImplementation 'junit:junit:4.13.2'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 }

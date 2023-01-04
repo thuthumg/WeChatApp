@@ -8,11 +8,10 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
+
 import androidx.core.content.ContextCompat
 
 import com.padcmyanmar.ttm.wechatapp.R
@@ -44,15 +43,18 @@ class SignUpActivity : BaseActivity(), SignUpView {
     var genderType = ""
 
     var phoneNumber = ""
+    var userId = ""
     lateinit var mPresenter: SignUpPresenter
 
     companion object{
         private const val  BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER"
+        private const val  BUNDLE_USER_ID = "BUNDLE_USER_ID"
 
 
-        fun newIntent(context: Context, phoneNum:String):Intent{
+        fun newIntent(context: Context, phoneNum: String, userIdParam: String):Intent{
             val intent = Intent(context, SignUpActivity::class.java)
             intent.putExtra(BUNDLE_PHONE_NUMBER, phoneNum)
+            intent.putExtra(BUNDLE_USER_ID,userIdParam)
             return intent
         }
     }
@@ -60,7 +62,7 @@ class SignUpActivity : BaseActivity(), SignUpView {
     private fun getIntentParam() {
 
         phoneNumber = intent?.getStringExtra(BUNDLE_PHONE_NUMBER).toString()
-
+        userId = intent?.getStringExtra(BUNDLE_USER_ID).toString()
 
 
     }
@@ -105,8 +107,8 @@ class SignUpActivity : BaseActivity(), SignUpView {
 
 
 
-        spDay.adapter = dayAdapter
-        spDay.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        spDayEdit.adapter = dayAdapter
+        spDayEdit.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
                 view: View,
@@ -122,8 +124,8 @@ class SignUpActivity : BaseActivity(), SignUpView {
             }
         }
 
-        spMonth.adapter = monthAdapter
-        spMonth.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        spMonthEdit.adapter = monthAdapter
+        spMonthEdit.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
                 view: View,
@@ -144,8 +146,8 @@ class SignUpActivity : BaseActivity(), SignUpView {
         }
 
 
-        spYear.adapter = yearAdapter
-        spYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        spYearEdit.adapter = yearAdapter
+        spYearEdit.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
                 view: View,
@@ -317,13 +319,13 @@ class SignUpActivity : BaseActivity(), SignUpView {
                     gender = genderType,
                     password = edtPassword.text.toString(),
                     phoneNo = phoneNumber,
+                    userId = userId,
                     onSuccess = {
                         showError("$it")
-                    },
-                    onFailure = {
-                        showError("$it")
                     }
-                )
+                ) {
+                    showError("$it")
+                }
             }
 
         }

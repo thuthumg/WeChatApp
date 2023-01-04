@@ -17,8 +17,9 @@ class SignUpPresenterImpl:SignUpPresenter, AbstractBasePresenter<SignUpView>() {
         gender: String,
         password: String,
         phoneNo: String,
-        onSuccess: (message:String)-> Unit,
-        onFailure:(message:String)-> Unit
+        userId: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
     ) {
         mWeChatModel.addUser(
             name,
@@ -26,6 +27,7 @@ class SignUpPresenterImpl:SignUpPresenter, AbstractBasePresenter<SignUpView>() {
             gender,
             password,
             phoneNo,
+            userId,
             onSuccess = {
                 onSuccess(it)
                 mView.signUpFunction()

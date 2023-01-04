@@ -7,13 +7,15 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.padcmyanmar.ttm.wechatapp.R
+import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.fragments.*
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.MainPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.MainPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.MainView
-import kotlinx.android.synthetic.main.activity_chat_detail.*
+import com.padcmyanmar.ttm.wechatapp.network.auth.PhoneAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main_layout.*
+
 
 class MainActivity : BaseActivity(), MainView {
 
@@ -21,16 +23,33 @@ class MainActivity : BaseActivity(), MainView {
     private lateinit var mPresenter: MainPresenter
     private var phoneNumber:String? = ""
     private var userName:String? = ""
-
+    private var dateOfBirth:String? = ""
+    private var gender:String? = ""
+    private var qrCode:String? = ""
+    private var REQUEST_CODE_QR_SCAN = 101
+    lateinit var userVO:UserVO
     companion object{
        const val  BUNDLE_PHONE_NUMBER = "BUNDLE_PHONE_NUMBER"
-        private const val  BUNDLE_USER_NAME = "BUNDLE_USER_NAME"
+        const val  BUNDLE_USER_NAME = "BUNDLE_USER_NAME"
+        const val  BUNDLE_DATE_OF_BIRTH = "BUNDLE_DATE_OF_BIRTH"
+        const val  BUNDLE_GENDER_TYPE = "BUNDLE_GENDER_TYPE"
+        const val  BUNDLE_QR_CODE = "BUNDLE_QR_CODE"
 
 
-        fun newIntent(context: Context, phoneNum:String, userName:String):Intent{
+        fun newIntent(
+            context: Context,
+            phoneNum: String,
+            userName: String,
+            dateOfBirth: String,
+            gender: String,
+            qrCode: String?
+        ):Intent{
             val intent = Intent(context, MainActivity::class.java)
             intent.putExtra(BUNDLE_PHONE_NUMBER, phoneNum)
             intent.putExtra(BUNDLE_USER_NAME, userName)
+            intent.putExtra(BUNDLE_DATE_OF_BIRTH, dateOfBirth)
+            intent.putExtra(BUNDLE_GENDER_TYPE, gender)
+            intent.putExtra(BUNDLE_QR_CODE, qrCode)
             return intent
         }
     }
@@ -38,8 +57,11 @@ class MainActivity : BaseActivity(), MainView {
 
         phoneNumber = intent?.getStringExtra(BUNDLE_PHONE_NUMBER).toString()
         userName = intent?.getStringExtra(BUNDLE_USER_NAME).toString()
+        dateOfBirth = intent?.getStringExtra(BUNDLE_DATE_OF_BIRTH).toString()
+        gender = intent?.getStringExtra(BUNDLE_GENDER_TYPE).toString()
+        qrCode = intent?.getStringExtra(BUNDLE_QR_CODE).toString()
 
-
+        Log.d("mainactivity","from main qrcode $qrCode")
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,6 +179,13 @@ class MainActivity : BaseActivity(), MainView {
 
         val bundle = Bundle()
         bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber)
+        bundle.putString(BUNDLE_USER_NAME, userName)
+        bundle.putString(BUNDLE_DATE_OF_BIRTH, dateOfBirth)
+        bundle.putString(BUNDLE_GENDER_TYPE, gender)
+        bundle.putString(BUNDLE_QR_CODE, qrCode)
+
+
+
 
         val fragment = ProfileFragment()
         fragment.arguments = bundle
@@ -179,4 +208,6 @@ class MainActivity : BaseActivity(), MainView {
             R.id.flFragment, fragmentParam, fragmentParam.javaClass.simpleName
         ).commit()
     }
+
+
 }

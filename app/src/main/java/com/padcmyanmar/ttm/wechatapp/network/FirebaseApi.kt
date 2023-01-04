@@ -1,6 +1,5 @@
 package com.padcmyanmar.ttm.wechatapp.network
 
-import android.graphics.Bitmap
 import android.net.Uri
 import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
@@ -13,8 +12,10 @@ interface FirebaseApi {
         gender: String,
         password: String,
         phoneNum: String,
+        userId: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
+
     )
 
 
@@ -52,4 +53,27 @@ interface FirebaseApi {
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     )
+
+    fun addContacts(
+        userId: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
+
+    fun getContacts(
+        onSuccess: (contactsList: ArrayList<UserVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
+
+    fun editUser(
+        userName:String,
+        dateOfBirth: String,
+        genderType:String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
+
+    fun sendMessage(senderId:String,receiverId:String,msg:String,senderName:String,
+                    onSuccess: (message: String) -> Unit,
+                    onFailure: (message: String) -> Unit)
 }

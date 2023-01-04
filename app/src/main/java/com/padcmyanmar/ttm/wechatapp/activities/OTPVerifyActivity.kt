@@ -1,14 +1,11 @@
 package com.padcmyanmar.ttm.wechatapp.activities
 
 import `in`.aabhasjindal.otptextview.OTPListener
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.isEmpty
 import androidx.core.view.isNotEmpty
 import com.google.android.material.snackbar.Snackbar
 
@@ -136,7 +133,17 @@ class OTPVerifyActivity : BaseActivity(), OTPVerificationView {
                 // display the snackbar
                 snackbar.show()
             }else{
-                startActivity(SignUpActivity.newIntent(this, edtPhoneNo.text.toString()))
+                mPresenter.onTapVerify(
+                    this, edtPhoneNo.text.toString(),
+                    otpCode, onSuccess = {
+                        startActivity(SignUpActivity.newIntent(this, edtPhoneNo.text.toString(),
+                        it))
+                    },
+                    onFailure = {
+                        showError(it)
+                    }
+                )
+               // startActivity(SignUpActivity.newIntent(this, edtPhoneNo.text.toString()))
             }
 
         }
@@ -180,9 +187,9 @@ class OTPVerifyActivity : BaseActivity(), OTPVerificationView {
 
     }
 
-    override fun verifyFunction() {
-        startActivity(Intent(this@OTPVerifyActivity, SignUpActivity::class.java))
-    }
+   /* override fun verifyFunction() {
+       // startActivity(Intent(this@OTPVerifyActivity, SignUpActivity::class.java))
+    }*/
 
     override fun navigateToBackFunction() {
         onBackPressed()

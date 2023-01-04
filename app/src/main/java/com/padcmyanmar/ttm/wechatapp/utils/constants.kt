@@ -1,5 +1,6 @@
 package com.padcmyanmar.ttm.wechatapp.utils
 
+import android.Manifest
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
@@ -11,6 +12,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
+
+const val USER_COLLECTION = "users"
+const val MOMENTS_COLLECTION="moments"
+const val CONTACTS_COLLECTION = "contacts"
+
+const val DOCUMENT_FIELD_UID = "id"
+const val DOCUMENT_FIELD_NAME = "name"
+const val DOCUMENT_FIELD_DATE_OF_BIRTH = "dateOfBirth"
+const val DOCUMENT_FIELD_GENDER_TYPE = "genderType"
+const val DOCUMENT_FIELD_PASSWORD = "password"
+const val DOCUMENT_FIELD_PHONE_NUM = "phoneNumber"
+
 
 // Array of Months acting as a data pump
 var monthsDataList = arrayOf("Month",
@@ -24,6 +37,9 @@ var OTP_DEMO_TWO_DIGIT = "1234"
 
 const val VIEW_TYPE_ADD_MEDIA = 1
 const val VIEW_TYPE_IMAGE = 2
+
+const val VIEW_TYPE_ADD_GROUP = 1
+const val VIEW_TYPE_GROUP = 2
 
 fun isValidMobile(phone: String): Boolean {
     return if (!Pattern.matches("[a-zA-Z]+", phone)) {
@@ -130,3 +146,12 @@ fun covertTimeToText(dataDate: String?): String? {
 fun checkItem(arr: ArrayList<String>, item: String): Boolean {
     return arr.indexOf(item) != -1
 }
+
+var STORAGE_PERMISSIONS = arrayOf(
+    Manifest.permission.CAMERA
+
+)
+
+/*  Manifest.permission.READ_EXTERNAL_STORAGE,
+    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+    Manifest.permission.VIBRATE*/

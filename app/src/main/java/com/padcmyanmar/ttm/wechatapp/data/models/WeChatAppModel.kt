@@ -1,6 +1,5 @@
 package com.padcmyanmar.ttm.wechatapp.data.models
 
-import android.graphics.Bitmap
 import android.net.Uri
 import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
@@ -10,9 +9,9 @@ import com.padcmyanmar.ttm.wechatapp.network.FirebaseApi
 interface WeChatAppModel {
 
     var mFirebaseApi : FirebaseApi
-
+    var mFirebaseRealTimeApi : FirebaseApi
     fun addUser(name: String, dateOfBirth:String , gender:String, password:String,phoneNo:String,
-                onSuccess :  (message:String)->Unit , onFailure : (message:String)-> Unit)
+                userId:String,onSuccess :  (message:String)->Unit , onFailure : (message:String)-> Unit)
 
 
     fun getUser(phoneNumber:String,
@@ -47,5 +46,34 @@ interface WeChatAppModel {
     momentVO: MomentVO,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
+    )
+
+    fun addContacts(
+        userId: String,
+        onSuccess:(message:String)-> Unit,
+        onFailure: (message: String) -> Unit
+    )
+
+    fun getContacts(
+        onSuccess: (contactsList: ArrayList<UserVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
+
+    fun editUser(
+        userName:String,
+        dateOfBirth: String,
+        genderType:String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
+
+    fun sendMessage(
+        senderId: String,
+        receiverId: String,
+        msg: String,
+        senderName: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+
     )
 }

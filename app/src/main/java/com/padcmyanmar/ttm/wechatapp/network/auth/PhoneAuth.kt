@@ -132,7 +132,33 @@ object PhoneAuth: AuthManager {
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
+
     override fun verifyOTP(
+        context: Activity,
+        phoneNumber: String,
+        otpCode: String,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        mFirebaseAuth.createUserWithEmailAndPassword("${phoneNumber}User@gmail.com", "111111").addOnCompleteListener {
+        if (it.isSuccessful && it.isComplete) {
+            mFirebaseAuth.currentUser?.updateProfile(
+                UserProfileChangeRequest.Builder().setDisplayName("${phoneNumber}User").build()
+            )
+            var userId:String = mFirebaseAuth.currentUser?.uid ?: ""
+           onSuccess(userId)
+
+        } else {
+            onFailure(it.exception?.message ?: "Please check internet connection")
+        }
+    }
+    }
+
+
+
+
+
+   /* override fun verifyOTP(
         context: Activity,
         phoneNumber: String,
         otpCode: String,
@@ -163,7 +189,7 @@ object PhoneAuth: AuthManager {
                 }
                // progressBar.visibility = View.VISIBLE
             }
-    }
+    }*/
 
 //    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
 //        auth.signInWithCredential(credential)

@@ -17,15 +17,15 @@ object AuthenticationModelImpl : AuthenticationModel {
         context: Activity,
         phoneNumber: String,
         otpCode: String,
-        onSuccess: () -> Unit,
+        onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit
     ) {
 
         mAuthManager.verifyOTP(context , phoneNumber,otpCode, onSuccess = {
-            onSuccess
-        },
-            onFailure = {
-                onFailure(it)
-            })
+            onSuccess(it)
+        }
+        ) {
+            onFailure(it)
+        }
     }
 }

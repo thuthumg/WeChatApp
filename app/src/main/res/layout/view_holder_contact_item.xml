@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="@dimen/margin_medium_2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvContactNameFirstCharacter"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/text_regular_2x"
+            android:text="A"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            tools:itemCount="4"
+            tools:listitem="@layout/view_holder_contact_profile_item"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:id="@+id/rvContactProfileList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

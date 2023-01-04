@@ -1,12 +1,11 @@
 package com.padcmyanmar.ttm.wechatapp.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.LoginPresenter
@@ -142,10 +141,18 @@ class LoginActivity : BaseActivity(), LoginView {
 
 
     override fun loginFunction(userVO: UserVO) {
+
+        Log.d("loginactivity","qrcode = "+ userVO.id)
+
+
         startActivity(
             MainActivity.newIntent(
                 this@LoginActivity,
-                userVO.phoneNumber.toString(), userVO.name.toString()
+                userVO.phoneNumber.toString(),
+                userVO.name.toString(),
+                userVO.dateOfBirth.toString(),
+                userVO.genderType.toString(),
+                userVO.id
             )
         )
 

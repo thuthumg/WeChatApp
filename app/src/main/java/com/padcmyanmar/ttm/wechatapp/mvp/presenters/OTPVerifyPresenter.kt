@@ -8,7 +8,9 @@ interface OTPVerifyPresenter:BasePresenter<OTPVerificationView> {
 
     fun onTapGetOTPCode(context: Activity, phoneNumber: String)
 
-    fun onTapVerify(context: Activity,phoneNumber: String,otpCode:String)
+    fun onTapVerify(context: Activity,phoneNumber: String,otpCode:String,
+                    onSuccess: (message:String)-> Unit,
+                    onFailure:(message:String)-> Unit)
 
     fun onTapBackFunction()
 }

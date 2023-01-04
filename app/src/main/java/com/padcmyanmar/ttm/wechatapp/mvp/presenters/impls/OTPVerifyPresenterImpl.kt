@@ -25,17 +25,25 @@ class OTPVerifyPresenterImpl:OTPVerifyPresenter, AbstractBasePresenter<OTPVerifi
         //
     }
 
-    override fun onTapVerify(context: Activity,phoneNumber: String,otpCode:String) {
+    override fun onTapVerify(
+        context: Activity,
+        phoneNumber: String,
+        otpCode: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
         //  mView.verifyFunction()
         mAuthenticationModel.verifyOTP(
             context,
             phoneNumber = phoneNumber,
             otpCode = otpCode,
             onSuccess = {
-                mView.verifyFunction()
-            }, onFailure = {
-                mView.showError(it)
-            })
+                //mView.verifyFunction(it)
+                onSuccess(it)
+            }) {
+           // mView.showError(it)
+            onFailure(it)
+        }
     }
 
     override fun onTapBackFunction() {
