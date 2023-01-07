@@ -45,6 +45,18 @@ class ContactsFragmentPresenterImpl:ContactsFragmentPresenter,
        )
     }
 
+//    override fun getChatGroupsList(
+//        onSuccess: (chatGroupList: ArrayList<ChatGroupVO>) -> Unit,
+//        onFailure: (message: String) -> Unit
+//    ) {
+//        mWeChatAppModel.getChatGroupsList(onSuccess = {
+//            mView.showChatGroupsList(it)
+//        },
+//        onFailure = {
+//            mView.showError(it)
+//        })
+//    }
+
     override fun onUiReady(context: Context, owner: LifecycleOwner) {
         mWeChatAppModel.getContacts(
             onSuccess = {
@@ -54,9 +66,32 @@ class ContactsFragmentPresenterImpl:ContactsFragmentPresenter,
                 mView.showError(it)
             }
         )
+
+        mWeChatAppModel.getChatGroupsList(
+            onSuccess = {
+                mView.showChatGroupsList(it)
+            },
+            onFailure = {
+                mView.showError(it)
+            }
+        )
     }
 
-    override fun goToChatDetailFromContactList(contactName: UserVO) {
-        mView.navigateToChatDetailFromContactPage(contactName)
+    override fun goToCreateGroupChat(loginUserId: String) {
+       mView.navigateToChatGroupCreate(loginUserId)
     }
+
+    override fun goToChatDetailFromContactList(contactName: String, chatId: String) {
+        mView.navigateToChatDetailFromContactPage(contactName,chatId)
+    }
+
+    override fun goToChatDetailFromContactGroupList(contactName: String, chatId: String,sParam:String) {
+        mView.navigateToChatGroupDetailPage(contactName, chatId,sParam)
+    }
+
+    override fun onTapSelectContactList(contactName: UserVO) {
+
+    }
+
+
 }

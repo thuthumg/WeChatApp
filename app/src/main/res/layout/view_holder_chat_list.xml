@@ -76,7 +76,7 @@
                 android:textSize="@dimen/text_small"
                 android:layout_marginBottom="@dimen/margin_small"
                 android:text="12/12/2022"
-                android:id="@+id/tvChatDate"
+                android:id="@+id/tvChatTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <ImageView

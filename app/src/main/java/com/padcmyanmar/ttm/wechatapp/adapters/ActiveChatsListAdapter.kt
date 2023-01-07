@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.padcmyanmar.ttm.wechatapp.R
+import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.viewholders.ActiveChatsListViewHolder
 
 class ActiveChatsListAdapter : RecyclerView.Adapter<ActiveChatsListViewHolder>() {
 
-  //  private var mData: List<> = listOf()
+    private var mData: List<UserVO> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActiveChatsListViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -19,19 +20,19 @@ class ActiveChatsListAdapter : RecyclerView.Adapter<ActiveChatsListViewHolder>()
     }
 
     override fun onBindViewHolder(holder: ActiveChatsListViewHolder, position: Int) {
-//       if(mData.isNotEmpty()){
-//           holder.bindData(mData[position])
-//       }
+       if(mData.isNotEmpty()){
+           holder.bindData(mData[position])
+       }
     }
 
     override fun getItemCount(): Int {
-       // return mData.count()
-        return 20
+        return mData.count()
+
     }
 
-//    @SuppressLint("NotifyDataSetChanged")
-//    fun setNewData(data: List<>){
-//        mData = data
-//        notifyDataSetChanged()
-//    }
+    @SuppressLint("NotifyDataSetChanged")
+    fun setNewData(data: List<UserVO>){
+        mData = data
+        notifyDataSetChanged()
+    }
 }

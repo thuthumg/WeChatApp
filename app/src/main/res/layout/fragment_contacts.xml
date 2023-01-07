@@ -127,6 +127,7 @@ tools:context=".fragments.ContactsFragment">
         android:visibility="visible"
         tools:itemCount="3"
         tools:listitem="@layout/view_holder_contact_item"
+        android:paddingBottom="@dimen/margin_card_medium_2"
         android:clipToPadding="true"
         android:id="@+id/rvContactsList"
         android:layout_width="match_parent"

@@ -77,7 +77,6 @@ class MediaTypeDataAdapter(private val mDelegate:MediaTypeDataDelegate) : Recycl
     
     override fun getItemViewType(position: Int): Int {
 
-
         return when (position) {
             itemCount - 1 -> {
                 VIEW_TYPE_ADD_MEDIA

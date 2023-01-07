@@ -6,6 +6,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.webkit.MimeTypeMap
+import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -24,6 +25,7 @@ const val DOCUMENT_FIELD_GENDER_TYPE = "genderType"
 const val DOCUMENT_FIELD_PASSWORD = "password"
 const val DOCUMENT_FIELD_PHONE_NUM = "phoneNumber"
 
+var mUserVO: UserVO = UserVO()
 
 // Array of Months acting as a data pump
 var monthsDataList = arrayOf("Month",
@@ -40,6 +42,14 @@ const val VIEW_TYPE_IMAGE = 2
 
 const val VIEW_TYPE_ADD_GROUP = 1
 const val VIEW_TYPE_GROUP = 2
+
+const val VIEW_TYPE_SENDER = 1
+const val VIEW_TYPE_RECEIVER = 2
+
+const val VIEW_TYPE_GROUP_SELECT = 1
+const val VIEW_TYPE_CONTACT = 2
+
+
 
 fun isValidMobile(phone: String): Boolean {
     return if (!Pattern.matches("[a-zA-Z]+", phone)) {

@@ -35,6 +35,39 @@ class ChatDetailPresenterImpl:ChatDetailPresenter, AbstractBasePresenter<ChatDet
         )
     }
 
+    override fun sendGroupMessage(
+        senderId: String,
+        receiverId: String,
+        msg: String,
+        senderName: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+        mWeChatAppModel.sendGroupMessage(
+            senderId = senderId,
+            receiverId = receiverId,
+            msg = msg,
+            senderName = senderName,
+            onSuccess = {
+                onSuccess(it)
+            },
+            onFailure = {
+                onFailure(it)
+            }
+        )
+    }
+
+    override fun onUiReadyInChatDetails(owner: LifecycleOwner, receiverId: String,checkPrivateOrGroup:String) {
+       mWeChatAppModel.getChatMessageList(receiverId,
+           checkPrivateOrGroup,
+       onSuccess = {
+           mView.showChatMessageList(it)
+       },
+       onFailure = {
+           mView.showError(it)
+       })
+    }
+
     override fun onUiReady(context: Context, owner: LifecycleOwner) {
 
     }

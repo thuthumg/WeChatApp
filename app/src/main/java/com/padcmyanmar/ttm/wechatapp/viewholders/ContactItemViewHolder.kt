@@ -9,7 +9,7 @@ import com.padcmyanmar.ttm.wechatapp.delegates.ContactListItemDelegate
 import kotlinx.android.synthetic.main.view_holder_contact_item.view.*
 
 
-class ContactItemViewHolder(itemView: View, var mDelegate: ContactListItemDelegate) : RecyclerView.ViewHolder(itemView){
+class ContactItemViewHolder(itemView: View,var changeUIView:String, var mDelegate: ContactListItemDelegate) : RecyclerView.ViewHolder(itemView){
 
     lateinit var mContactProfileItemAdapter: ContactProfileItemAdapter
 
@@ -19,7 +19,7 @@ class ContactItemViewHolder(itemView: View, var mDelegate: ContactListItemDelega
 
     private fun setUpContactsProfileListAdapter() {
         mContactProfileItemAdapter =
-            ContactProfileItemAdapter(mDelegate)
+            ContactProfileItemAdapter(changeUIView,mDelegate)
         itemView.rvContactProfileList.adapter = mContactProfileItemAdapter
         itemView.rvContactProfileList.layoutManager = LinearLayoutManager(
             itemView.context,

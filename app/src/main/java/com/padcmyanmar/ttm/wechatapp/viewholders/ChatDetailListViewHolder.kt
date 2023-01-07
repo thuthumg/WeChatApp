@@ -3,26 +3,29 @@ package com.padcmyanmar.ttm.wechatapp.viewholders
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide.init
 import com.padcmyanmar.ttm.wechatapp.adapters.ChatDetailListAdapter
 import com.padcmyanmar.ttm.wechatapp.adapters.ReceiveMessageListAdapter
 import com.padcmyanmar.ttm.wechatapp.adapters.SendMessageListAdapter
+import com.padcmyanmar.ttm.wechatapp.data.vos.ChatMessageVO
 import kotlinx.android.synthetic.main.content_chat_detail_layout.*
 import kotlinx.android.synthetic.main.view_holder_chat_detail_list.view.*
 
 class ChatDetailListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-   lateinit var mSendMessageListAdapter: SendMessageListAdapter
-   lateinit var mReceiveMessageListAdapter: ReceiveMessageListAdapter
-
+ //  lateinit var mSendMessageListAdapter: SendMessageListAdapter
+ //  lateinit var mReceiveMessageListAdapter: ReceiveMessageListAdapter
+   var mChatMessageVO:ChatMessageVO = ChatMessageVO()
    init{
-      setUpSendMessageAdapter()
-      setUpReceiveMessageAdapter()
+    //  setUpSendMessageAdapter()
+    //  setUpReceiveMessageAdapter()
    }
 //
-//    fun bindData(data:){
-//
-//    }
+    fun bindData(data:ChatMessageVO){
+         mChatMessageVO = data
 
-   private fun setUpSendMessageAdapter() {
+    }
+
+   /*private fun setUpSendMessageAdapter() {
       mSendMessageListAdapter =
          SendMessageListAdapter()
       itemView.rvSendMsgList.adapter = mSendMessageListAdapter
@@ -42,5 +45,5 @@ class ChatDetailListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
          LinearLayoutManager.VERTICAL, false
       )
       itemView.rvReceiveMsgList.isNestedScrollingEnabled = false
-   }
+   }*/
 }

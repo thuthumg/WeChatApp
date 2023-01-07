@@ -1,16 +1,20 @@
 package com.padcmyanmar.ttm.wechatapp.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.padcmyanmar.ttm.wechatapp.R
+import com.padcmyanmar.ttm.wechatapp.data.vos.ChatGroupVO
+import com.padcmyanmar.ttm.wechatapp.delegates.ContactListItemDelegate
 import com.padcmyanmar.ttm.wechatapp.utils.VIEW_TYPE_ADD_GROUP
 import com.padcmyanmar.ttm.wechatapp.utils.VIEW_TYPE_GROUP
 import com.padcmyanmar.ttm.wechatapp.viewholders.*
 
-class ChatGroupsListAdapter() : RecyclerView.Adapter<BaseViewHolderForChatGroup>() {
+class ChatGroupsListAdapter(var mDelegate: ContactListItemDelegate) : RecyclerView.Adapter<BaseViewHolderForChatGroup>() {
 
-  //  private var mData: ArrayList<Uri> = arrayListOf()
+    private var mData: ArrayList<ChatGroupVO> = arrayListOf()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolderForChatGroup {
 
@@ -19,17 +23,17 @@ class ChatGroupsListAdapter() : RecyclerView.Adapter<BaseViewHolderForChatGroup>
             VIEW_TYPE_ADD_GROUP ->{
                 val view =
                     LayoutInflater.from(parent.context).inflate(R.layout.view_holder_add_chat_group_item, parent, false)
-                return AddChatGroupViewHolder(view)
+                return AddChatGroupViewHolder(view,mDelegate)
             }
             VIEW_TYPE_GROUP ->{
                 val view =
                     LayoutInflater.from(parent.context).inflate(R.layout.view_holder_chat_group_item, parent, false)
-                return ChatGroupsListViewHolder(view)
+                return ChatGroupsListViewHolder(view,mDelegate)
             }
             else->{
                 val view =
                     LayoutInflater.from(parent.context).inflate(R.layout.view_holder_add_chat_group_item, parent, false)
-                return AddChatGroupViewHolder(view)
+                return AddChatGroupViewHolder(view,mDelegate)
             }
         }
 
@@ -37,37 +41,36 @@ class ChatGroupsListAdapter() : RecyclerView.Adapter<BaseViewHolderForChatGroup>
 
     override fun onBindViewHolder(holder: BaseViewHolderForChatGroup, position: Int) {
 
-//        when(holder.itemViewType)
-//        {
-//            VIEW_TYPE_ADD_GROUP ->{
-//
+        when(holder.itemViewType)
+        {
+            VIEW_TYPE_ADD_GROUP ->{
+
 //                var  addChatGroupViewHolder: AddChatGroupViewHolder = holder as AddChatGroupViewHolder
 //                addChatGroupViewHolder.bindData(null)
-//
-//            }
-//            VIEW_TYPE_GROUP ->{
-//                var chatGroupsListViewHolder : ChatGroupsListViewHolder = holder as ChatGroupsListViewHolder
-//                chatGroupsListViewHolder.bindData(mData[position])
-//            }
-//        }
+
+            }
+            VIEW_TYPE_GROUP ->{
+                var chatGroupsListViewHolder : ChatGroupsListViewHolder = holder as ChatGroupsListViewHolder
+                chatGroupsListViewHolder.bindData(mData[position-1])
+            }
+        }
 
     }
 
     override fun getItemCount(): Int {
 
-        return 3
-    /*    return if(mData.isEmpty()) {
+        return if(mData.isEmpty()) {
             1
         }else{
             mData.count()+1
-        }*/
+        }
     }
 
-  /*  @SuppressLint("NotifyDataSetChanged")
-    fun setNewData(data:ArrayList<Uri>){
+    @SuppressLint("NotifyDataSetChanged")
+    fun setNewData(data:ArrayList<ChatGroupVO>){
         mData = data
         notifyDataSetChanged()
-    }*/
+    }
 
 
     override fun getItemViewType(position: Int): Int {

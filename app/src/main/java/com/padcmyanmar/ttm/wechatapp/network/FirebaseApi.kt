@@ -1,6 +1,7 @@
 package com.padcmyanmar.ttm.wechatapp.network
 
 import android.net.Uri
+import com.padcmyanmar.ttm.wechatapp.data.vos.ChatMessageVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
@@ -73,7 +74,4 @@ interface FirebaseApi {
         onFailure: (message: String) -> Unit
     )
 
-    fun sendMessage(senderId:String,receiverId:String,msg:String,senderName:String,
-                    onSuccess: (message: String) -> Unit,
-                    onFailure: (message: String) -> Unit)
-}
+  }

@@ -1,6 +1,9 @@
 package com.padcmyanmar.ttm.wechatapp.delegates
 
+import com.padcmyanmar.ttm.wechatapp.data.vos.ChatHistoryVO
+
 interface ChatsListDelegate {
 
-    fun goToChatDetail()
+
+    fun goToChatDetailFromChatFragmentPage(mChatHistoryVO: ChatHistoryVO)
 }

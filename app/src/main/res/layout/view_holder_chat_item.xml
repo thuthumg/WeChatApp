@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginEnd="@dimen/margin_medium_2"
+    android:layout_marginTop="@dimen/margin_medium_2"
+    android:layout_marginBottom="@dimen/margin_medium_2"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/margin_medium"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_gravity="end"
+            android:id="@+id/ivCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/new_group_close" />
+        <LinearLayout
+            android:padding="@dimen/margin_medium"
+            android:id="@+id/llChatItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/tvSelectedContactProfile"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/background_image" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvSelectedContactName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_medium"
+                android:gravity="center"
+                tools:text="Flora"
+                android:textColor="@color/text_title_color"
+                android:textSize="@dimen/text_small" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>

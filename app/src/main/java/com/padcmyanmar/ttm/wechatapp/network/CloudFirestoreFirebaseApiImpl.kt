@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.padcmyanmar.ttm.wechatapp.data.vos.ChatMessageVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
@@ -38,7 +39,6 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
     // [END set_firestore_settings]
 
 
-   var mUserVO:UserVO = UserVO()
 
 
     private val storage: FirebaseStorage = FirebaseStorage.getInstance()
@@ -424,17 +424,6 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                 Log.d("Failure","Failed to add user data")
                 onFailure("Save Failed")
             }
-    }
-
-    override fun sendMessage(
-        senderId: String,
-        receiverId: String,
-        msg: String,
-        senderName: String,
-        onSuccess: (message: String) -> Unit,
-        onFailure: (message: String) -> Unit
-    ) {
-
     }
 
 

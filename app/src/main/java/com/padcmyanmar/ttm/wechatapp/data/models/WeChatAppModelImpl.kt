@@ -1,17 +1,16 @@
 package com.padcmyanmar.ttm.wechatapp.data.models
 
 import android.net.Uri
-import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
-import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
-import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
+import com.padcmyanmar.ttm.wechatapp.data.vos.*
 import com.padcmyanmar.ttm.wechatapp.network.CloudFirestoreFirebaseApiImpl
 import com.padcmyanmar.ttm.wechatapp.network.FirebaseApi
+import com.padcmyanmar.ttm.wechatapp.network.RealTimeFirebaseApi
 import com.padcmyanmar.ttm.wechatapp.network.RealtimeDatabaseFirebaseApiImpl
 
 object WeChatAppModelImpl: WeChatAppModel  {
     override var mFirebaseApi: FirebaseApi = CloudFirestoreFirebaseApiImpl
 
-    override var mFirebaseRealTimeApi: FirebaseApi = RealtimeDatabaseFirebaseApiImpl
+    override var mFirebaseRealTimeApi: RealTimeFirebaseApi = RealtimeDatabaseFirebaseApiImpl
 
     override fun addUser(
         name: String,
@@ -171,6 +170,76 @@ object WeChatAppModelImpl: WeChatAppModel  {
             onFailure = {
                 onFailure(it)
             }
+        )
+    }
+
+    override fun getChatMessageList(
+        receiverId: String,
+        checkPrivateOrGroup:String,
+        onSuccess: (chatMsgList: List<ChatMessageVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+       mFirebaseRealTimeApi.getChatMessageList(receiverId = receiverId,
+           checkPrivateOrGroup,
+       onSuccess = {
+           onSuccess(it)
+       },
+       onFailure = {
+           onFailure(it)
+       })
+    }
+
+    override fun getChatHistoryList(
+        senderId: String,
+        onSuccess: (chatHistoryListVO: List<ChatHistoryVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+       mFirebaseRealTimeApi.getChatHistoryList(senderId = senderId,
+       onSuccess = {onSuccess(it)},onFailure = {onFailure(it)})
+    }
+
+    override fun createChatGroup(
+        groupName: String,
+        membersList: ArrayList<String>,
+        groupPhoto: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+        mFirebaseRealTimeApi.createChatGroup(
+            groupName =  groupName,
+            membersList = membersList,
+            groupPhoto = groupPhoto,
+            onSuccess={onSuccess(it)},
+            onFailure={onFailure(it)}
+
+        )
+    }
+
+    override fun getChatGroupsList(
+        onSuccess: (chatGroupList: ArrayList<ChatGroupVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+        mFirebaseRealTimeApi.getChatGroupsList(
+            onSuccess = {onSuccess(it)},
+            onFailure = {onFailure(it)}
+        )
+    }
+
+    override fun sendGroupMessage(
+        senderId: String,
+        receiverId: String,
+        msg: String,
+        senderName: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+        mFirebaseRealTimeApi.sendGroupMessage(
+            senderId,
+            receiverId,
+            msg,
+            senderName,
+            onSuccess={ onSuccess(it)},
+        onFailure ={ onFailure(it) }
         )
     }
 

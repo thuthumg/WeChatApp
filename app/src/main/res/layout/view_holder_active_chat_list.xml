@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<LinearLayout android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="60dp"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_medium"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 <FrameLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -27,11 +27,12 @@
         app:srcCompat="@drawable/active_status_green_bg" />
 </FrameLayout>
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvActiveProfileName"
         android:gravity="center"
         android:textSize="@dimen/text_small"
         android:textColor="@color/text_title_color"
         android:layout_marginTop="@dimen/margin_small"
-        android:text="Thu Thu Maung"
+        tools:text="Thu Thu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </LinearLayout>

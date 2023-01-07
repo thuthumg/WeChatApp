@@ -212,6 +212,9 @@ object PhoneAuth: AuthManager {
 //    }
 
     override fun getCurrentUser(): FirebaseUser? {
+
+        Log.d("PhoneAuth","check current user = ${mFirebaseAuth.currentUser?.uid}")
+
         return mFirebaseAuth.currentUser
     }
 }

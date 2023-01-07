@@ -20,14 +20,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 //import com.blikoon.qrcodescanner.QrCodeActivity
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.activities.ChatDetailActivity
+import com.padcmyanmar.ttm.wechatapp.activities.GroupChatActivity
 import com.padcmyanmar.ttm.wechatapp.activities.QRScannerActivity
 import com.padcmyanmar.ttm.wechatapp.adapters.ChatGroupsListAdapter
 import com.padcmyanmar.ttm.wechatapp.adapters.ContactItemAdapter
+import com.padcmyanmar.ttm.wechatapp.data.vos.ChatGroupVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.ContactsListVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.ContactsFragmentPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.ContactsFragmentPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.ContactsFragmentView
+import com.padcmyanmar.ttm.wechatapp.network.auth.PhoneAuth
 import com.padcmyanmar.ttm.wechatapp.utils.STORAGE_PERMISSIONS
 import kotlinx.android.synthetic.main.fragment_contacts.*
 
@@ -84,17 +87,18 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
 
     private fun setUpContactsListAdapter() {
         mContactItemAdapter =
-            ContactItemAdapter(mPresenter)
+            ContactItemAdapter("Contact", mPresenter)
         rvContactsList.adapter = mContactItemAdapter
         rvContactsList.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.VERTICAL, false
         )
+
     }
 
     private fun setUpChatGroupAdapter() {
         mChatGroupsListAdapter =
-            ChatGroupsListAdapter()
+            ChatGroupsListAdapter(mPresenter)
         rvChatGroupsList.adapter = mChatGroupsListAdapter
         rvChatGroupsList.layoutManager = LinearLayoutManager(
             context,
@@ -206,6 +210,8 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
             }
         }
 
+    //navigateToChatGroupDetailPage
+
     override fun showContactsData(contactsList: ArrayList<UserVO>) {
         Log.d("ContactsFragment", "check contacts list = ${contactsList.size}")
         mContactsList = contactsList
@@ -223,18 +229,37 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
 
     }
 
-    override fun navigateToChatDetailFromContactPage(contactVO: UserVO) {
-        Log.d("contactsFragment","${contactVO.name.toString()}")
+    override fun navigateToChatDetailFromContactPage(contactName: String, chatId: String) {
+        Log.d("contactsFragment","${contactName}-----${PhoneAuth.getCurrentUser()?.uid}")
 
         startActivity(ChatDetailActivity.newIntent(
             context = requireContext(),
-            chatUserName= contactVO.name.toString(),
-            chatUserId= contactVO.id.toString(),
-            chatUserPhoneNum = contactVO.phoneNumber.toString()
+            chatUserName= contactName,
+            chatUserId= chatId,
+            checkGroupOrPrivateChat = "Private"
         ))
-
+//,
+//            chatUserPhoneNum = contactVO.phoneNumber.toString()
 
     }
+
+    override fun navigateToChatGroupCreate(loginUserId: String) {
+        startActivity(Intent(context,GroupChatActivity::class.java))
+    }
+
+    override fun showChatGroupsList(chatGroupList: ArrayList<ChatGroupVO>) {
+        mChatGroupsListAdapter.setNewData(chatGroupList)
+    }
+
+    override fun navigateToChatGroupDetailPage(contactName: String, chatId: String, sParam: String) {
+        startActivity(ChatDetailActivity.newIntent(
+            context = requireContext(),
+            chatUserName= contactName,
+            chatUserId= chatId,
+            checkGroupOrPrivateChat = sParam
+        ))
+    }
+
 
     override fun showError(error: String) {
        Toast.makeText(context,error,Toast.LENGTH_SHORT).show()
@@ -267,30 +292,6 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
     }
 
 
-//    private fun contactsGroupList(contactsList: ArrayList<UserVO>): HashMap<String, ArrayList<String>> {
-//        val arrayList= HashMap<String,ArrayList<String>>()
-//        for (userItem in contactsList){
-//            val nameFirstCharacter=userItem.name?.subSequence(0,1).toString()
-//            if (arrayList.isEmpty()){
-//                val nameList= arrayListOf<String>()
-//                nameList.add(userItem.name?:"")
-//                arrayList[nameFirstCharacter]=nameList
-//            }else{
-//                var customGroupList= arrayListOf<String>()
-//                if (arrayList[nameFirstCharacter].isNullOrEmpty()){
-//                    customGroupList.add(userItem.name?:"")
-//                }else{
-//                    customGroupList= arrayList[nameFirstCharacter]!!
-//                    customGroupList.add(userItem.name?:"")
-//                }
-//                if (customGroupList.isNotEmpty()) {
-//                    arrayList[nameFirstCharacter] = customGroupList
-//                }
-//            }
-//        }
-//        Log.d("LogData",arrayList.toString())
-//        return arrayList
-//    }
 
 
 }

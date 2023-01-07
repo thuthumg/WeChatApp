@@ -45,6 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvReceiveMsg"
                         android:textSize="@dimen/text_regular"
                         android:textColor="@color/text_color"
                         android:text="What is your name?"
@@ -52,7 +53,7 @@
                         android:layout_height="wrap_content"/>
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_marginTop="@dimen/margin_small"
-                        android:id="@+id/ivSendTime"
+                        android:id="@+id/tvReceiveTime"
                         android:textSize="@dimen/text_smaller"
                         android:textColor="@color/hint_color"
                         android:text="12:00AM"

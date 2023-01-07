@@ -9,7 +9,7 @@ import com.padcmyanmar.ttm.wechatapp.data.vos.ContactsListVO
 import com.padcmyanmar.ttm.wechatapp.delegates.ContactListItemDelegate
 import com.padcmyanmar.ttm.wechatapp.viewholders.ContactItemViewHolder
 
-class ContactItemAdapter(var mDelegate: ContactListItemDelegate) : RecyclerView.Adapter<ContactItemViewHolder>() {
+class ContactItemAdapter(var changeUIView:String, var mDelegate: ContactListItemDelegate) : RecyclerView.Adapter<ContactItemViewHolder>() {
 
      // private var mData: List<> = listOf()
     private var mData:ArrayList<ContactsListVO> = arrayListOf()
@@ -19,7 +19,7 @@ class ContactItemAdapter(var mDelegate: ContactListItemDelegate) : RecyclerView.
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.view_holder_contact_item,parent,false)
 
-        return ContactItemViewHolder(view,mDelegate)
+        return ContactItemViewHolder(view,changeUIView,mDelegate)
     }
 
     override fun onBindViewHolder(holder: ContactItemViewHolder, position: Int) {

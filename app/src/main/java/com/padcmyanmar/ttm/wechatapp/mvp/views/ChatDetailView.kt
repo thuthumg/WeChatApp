@@ -1,6 +1,8 @@
 package com.padcmyanmar.ttm.wechatapp.mvp.views
 
-interface ChatDetailView:BaseView {
+import com.padcmyanmar.ttm.wechatapp.data.vos.ChatMessageVO
 
-  //  fun onTapSendMessage(senderId:String,receiverId:String,msg:String,senderName:String)
+interface ChatDetailView:BaseView {
+    fun showChatMessageList(chatMessagesList: List<ChatMessageVO>)
+
 }
