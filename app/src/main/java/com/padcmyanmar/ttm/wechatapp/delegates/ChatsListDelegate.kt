@@ -5,5 +5,5 @@ import com.padcmyanmar.ttm.wechatapp.data.vos.ChatHistoryVO
 interface ChatsListDelegate {
 
 
-    fun goToChatDetailFromChatFragmentPage(mChatHistoryVO: ChatHistoryVO)
+    fun goToChatDetailFromChatFragmentPage(mChatHistoryVO: ChatHistoryVO, checkListType: String)
 }

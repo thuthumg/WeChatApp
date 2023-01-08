@@ -76,10 +76,11 @@ tools:context=".fragments.ProfileFragment">
               android:layout_height="wrap_content">
 
               <de.hdodenhof.circleimageview.CircleImageView
+
                   android:src="@drawable/profile_sample"
-                  android:id="@+id/ivActiveChat"
-                  android:layout_width="150dp"
-                  android:layout_height="150dp"/>
+                  android:id="@+id/ivUserProfile"
+                  android:layout_width="125dp"
+                  android:layout_height="125dp"/>
               <androidx.appcompat.widget.AppCompatImageView
                  android:clickable="true"
                   android:background="@color/white"

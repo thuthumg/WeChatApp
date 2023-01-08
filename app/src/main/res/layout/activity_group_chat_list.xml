@@ -86,6 +86,27 @@ tools:context=".activities.GroupChatActivity">
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_gravity="center"
+        app:cardCornerRadius="@dimen/margin_medium"
+        app:cardBackgroundColor="#E0F2F1"
+        android:layout_width="150dp"
+        android:layout_height="150dp">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            android:id="@+id/ivGroupPhotoUpload"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_gravity="center"
+            android:id="@+id/btnGroupPhotoUpload"
+            android:layout_width="@dimen/margin_medium_3"
+            android:layout_height="@dimen/margin_medium_3"
+            android:src="@drawable/ic_baseline_cloud_upload_24" />
+    </androidx.cardview.widget.CardView>
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtInputGroupName"
         android:layout_width="match_parent"
@@ -110,7 +131,6 @@ tools:context=".activities.GroupChatActivity">
             android:textSize="@dimen/text_regular_2x" />
 
     </com.google.android.material.textfield.TextInputLayout>
-
     <androidx.appcompat.widget.AppCompatEditText
         android:layout_marginTop="@dimen/margin_medium_2"
         android:drawableStart="@drawable/ic_baseline_search_24_blue"

@@ -27,7 +27,7 @@ tools:context=".fragments.ChatFragment">
 
         <com.google.android.material.card.MaterialCardView
             android:clickable="true"
-            android:id="@+id/mcvCreateMoment"
+            android:id="@+id/ivCreateMoment"
             android:layout_marginEnd="@dimen/margin_medium"
             app:cardCornerRadius="@dimen/margin_medium"
             app:cardBackgroundColor="@color/custom_color"
@@ -83,7 +83,15 @@ tools:context=".fragments.ChatFragment">
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
+        <androidx.recyclerview.widget.RecyclerView
+            tools:itemCount="2"
+            android:clipToPadding="true"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:id="@+id/rvGroupChatsList"
+            tools:listitem="@layout/view_holder_active_chat_list"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 
 

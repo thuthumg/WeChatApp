@@ -18,7 +18,7 @@
             android:id="@+id/ivLogo"
             android:layout_width="160dp"
             android:layout_height="150dp"
-            android:src="@drawable/wechat_logo"
+            android:src="@drawable/chat_logo"
             app:layout_constraintBottom_toTopOf="@+id/tvFirstText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

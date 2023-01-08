@@ -1,7 +1,7 @@
 package com.padcmyanmar.ttm.wechatapp.network
 
+import android.graphics.Bitmap
 import android.net.Uri
-import com.padcmyanmar.ttm.wechatapp.data.vos.ChatMessageVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
@@ -14,6 +14,8 @@ interface FirebaseApi {
         password: String,
         phoneNum: String,
         userId: String,
+        profileImageUrl:String,
+        activeStatus:String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
 
@@ -40,7 +42,10 @@ interface FirebaseApi {
         onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
         onFailure: (message: String) -> Unit
     )
-
+    fun getMomentDataByBookMarkList(
+        onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
     fun addMoment(
         imgList: ArrayList<MediaDataVO>,
         likedId: ArrayList<String>,
@@ -73,5 +78,5 @@ interface FirebaseApi {
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     )
-
+    fun uploadImageAndEditUserVO(image: Bitmap, userVO: UserVO, onSuccess: (returnStringData:String?) -> Unit)
   }

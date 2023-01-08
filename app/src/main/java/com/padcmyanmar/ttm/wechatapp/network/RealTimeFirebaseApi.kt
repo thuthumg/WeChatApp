@@ -6,7 +6,12 @@ import com.padcmyanmar.ttm.wechatapp.data.vos.ChatMessageVO
 
 interface RealTimeFirebaseApi {
 
-    fun sendMessage(senderId:String,receiverId:String,msg:String,senderName:String,
+    fun sendMessage(senderId:String,
+                    receiverId:String,
+                    msg:String,
+                    senderName:String,
+                    fileUrl:String,
+                    profileUrl:String,
                     onSuccess: (message: String) -> Unit,
                     onFailure: (message: String) -> Unit)
 
@@ -32,6 +37,8 @@ interface RealTimeFirebaseApi {
     receiverId: String,
     msg: String,
     senderName: String,
+    fileUrl: String,
+    profileUrl: String,
     onSuccess: (message: String) -> Unit,
     onFailure: (message: String) -> Unit
     )

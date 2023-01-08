@@ -12,7 +12,6 @@ import com.padcmyanmar.ttm.wechatapp.fragments.*
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.MainPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.MainPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.MainView
-import com.padcmyanmar.ttm.wechatapp.network.auth.PhoneAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main_layout.*
 
@@ -26,6 +25,7 @@ class MainActivity : BaseActivity(), MainView {
     private var dateOfBirth:String? = ""
     private var gender:String? = ""
     private var qrCode:String? = ""
+    private var profileImageUrl:String? = ""
     private var REQUEST_CODE_QR_SCAN = 101
     lateinit var userVO:UserVO
     companion object{
@@ -34,7 +34,7 @@ class MainActivity : BaseActivity(), MainView {
         const val  BUNDLE_DATE_OF_BIRTH = "BUNDLE_DATE_OF_BIRTH"
         const val  BUNDLE_GENDER_TYPE = "BUNDLE_GENDER_TYPE"
         const val  BUNDLE_QR_CODE = "BUNDLE_QR_CODE"
-
+        const val BUNDLE_PROFILE_IMG_URL = "BUNDLE_PROFILE_IMG_URL"
 
         fun newIntent(
             context: Context,
@@ -42,7 +42,8 @@ class MainActivity : BaseActivity(), MainView {
             userName: String,
             dateOfBirth: String,
             gender: String,
-            qrCode: String?
+            qrCode: String?,
+            profileImageUrl: String?
         ):Intent{
             val intent = Intent(context, MainActivity::class.java)
             intent.putExtra(BUNDLE_PHONE_NUMBER, phoneNum)
@@ -50,6 +51,7 @@ class MainActivity : BaseActivity(), MainView {
             intent.putExtra(BUNDLE_DATE_OF_BIRTH, dateOfBirth)
             intent.putExtra(BUNDLE_GENDER_TYPE, gender)
             intent.putExtra(BUNDLE_QR_CODE, qrCode)
+            intent.putExtra(BUNDLE_PROFILE_IMG_URL,profileImageUrl)
             return intent
         }
     }
@@ -60,6 +62,7 @@ class MainActivity : BaseActivity(), MainView {
         dateOfBirth = intent?.getStringExtra(BUNDLE_DATE_OF_BIRTH).toString()
         gender = intent?.getStringExtra(BUNDLE_GENDER_TYPE).toString()
         qrCode = intent?.getStringExtra(BUNDLE_QR_CODE).toString()
+        profileImageUrl = intent?.getStringExtra(BUNDLE_PROFILE_IMG_URL).toString()
 
         Log.d("mainactivity","from main qrcode $qrCode")
     }
@@ -80,12 +83,13 @@ class MainActivity : BaseActivity(), MainView {
     }
 
     private fun clickListener() {
-        mcvCreateMoment.setOnClickListener {
+        ivCreateMoment.setOnClickListener {
             mPresenter.onTapCreateMoment()
         }
     }
 
     private fun setUpBottomNavUI() {
+        mainToolbar.visibility  = View.VISIBLE
         val bundle = Bundle()
         bundle.putString(BUNDLE_PHONE_NUMBER, phoneNumber)
         val fragment = MomentsFragment()
@@ -96,7 +100,7 @@ class MainActivity : BaseActivity(), MainView {
 
             when (it.itemId) {
                 R.id.action_moment -> {
-
+                    mainToolbar.visibility  = View.VISIBLE
                     mPresenter.onTapMomentsFragment()
                     return@setOnItemSelectedListener true
                 }
@@ -183,8 +187,7 @@ class MainActivity : BaseActivity(), MainView {
         bundle.putString(BUNDLE_DATE_OF_BIRTH, dateOfBirth)
         bundle.putString(BUNDLE_GENDER_TYPE, gender)
         bundle.putString(BUNDLE_QR_CODE, qrCode)
-
-
+        bundle.putString(BUNDLE_PROFILE_IMG_URL,profileImageUrl)
 
 
         val fragment = ProfileFragment()

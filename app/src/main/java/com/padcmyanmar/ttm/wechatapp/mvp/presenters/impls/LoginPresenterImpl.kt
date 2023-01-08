@@ -1,7 +1,6 @@
 package com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.padcmyanmar.ttm.wechatapp.activities.LoginActivity
 import com.padcmyanmar.ttm.wechatapp.data.models.WeChatAppModelImpl
@@ -23,7 +22,7 @@ class LoginPresenterImpl:LoginPresenter,AbstractBasePresenter<LoginView>() {
     ) {
 
         mWeChatAppModel.getUser(
-            phoneNo = phoneNo,
+            phoneNumber = phoneNo,
             password = password,
             onSuccess = {
                 onSuccess("Login Successfully.", it)

@@ -12,7 +12,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:src="@drawable/profile_sample"
-        android:id="@+id/ivActiveChat"
+        android:id="@+id/ivActiveChatProfile"
         android:layout_width="50dp"
         android:layout_height="50dp"/>
 

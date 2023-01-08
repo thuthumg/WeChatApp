@@ -9,7 +9,7 @@ import com.padcmyanmar.ttm.wechatapp.data.vos.ChatHistoryVO
 import com.padcmyanmar.ttm.wechatapp.delegates.ChatsListDelegate
 import com.padcmyanmar.ttm.wechatapp.viewholders.ChatsListViewHolder
 
-class ChatsListAdapter(var mDelegate:ChatsListDelegate) : RecyclerView.Adapter<ChatsListViewHolder>() {
+class ChatsListAdapter(var mDelegate: ChatsListDelegate, var checkListType: String) : RecyclerView.Adapter<ChatsListViewHolder>() {
 
     private var mData: List<ChatHistoryVO> = listOf()
 
@@ -17,7 +17,7 @@ class ChatsListAdapter(var mDelegate:ChatsListDelegate) : RecyclerView.Adapter<C
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.view_holder_chat_list,parent,false)
 
-        return ChatsListViewHolder(view,mDelegate)
+        return ChatsListViewHolder(view,mDelegate,checkListType)
     }
 
     override fun onBindViewHolder(holder: ChatsListViewHolder, position: Int) {

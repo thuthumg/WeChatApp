@@ -27,6 +27,10 @@ class MomentFragmentPresenterImpl : MomentFragmentPresenter, AbstractBasePresent
         mView.favouriteFunction(momentVO)
     }
 
+    override fun onTapBookMark(momentVO: MomentVO) {
+        mView.bookMarkFunction(momentVO)
+    }
+
     override fun onTapSavePost() {
 
     }

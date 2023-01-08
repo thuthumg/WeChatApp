@@ -142,7 +142,7 @@ class LoginActivity : BaseActivity(), LoginView {
 
     override fun loginFunction(userVO: UserVO) {
 
-        Log.d("loginactivity","qrcode = "+ userVO.id)
+        Log.d("loginactivity","user profile = "+ userVO.profileUrl)
 
 
         startActivity(
@@ -152,9 +152,12 @@ class LoginActivity : BaseActivity(), LoginView {
                 userVO.name.toString(),
                 userVO.dateOfBirth.toString(),
                 userVO.genderType.toString(),
-                userVO.id
+                userVO.id,
+                userVO.profileUrl
             )
         )
+
+        finish()
 
     }
 

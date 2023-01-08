@@ -7,11 +7,15 @@ interface ContactsFragmentView:BaseView {
 
     fun showContactsData(contactsList:ArrayList<UserVO>)
 
-    fun navigateToChatDetailFromContactPage(contactName: String, chatId: String)
+    fun navigateToChatDetailFromContactPage(
+        contactName: String,
+        chatId: String,
+        contactProfile: String
+    )
 
     fun navigateToChatGroupCreate(loginUserId:String)
 
     fun showChatGroupsList(chatGroupList:ArrayList<ChatGroupVO>)
 
-    fun navigateToChatGroupDetailPage(contactName: String, chatId: String,sParam:String)
+    fun navigateToChatGroupDetailPage(contactName: String, chatId: String, contactProfile:String)
 }

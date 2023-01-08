@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.delegates.ContactListItemDelegate
+import com.padcmyanmar.ttm.wechatapp.utils.CHAT_TYPE_GROUP
 import com.padcmyanmar.ttm.wechatapp.utils.VIEW_TYPE_CONTACT
 import com.padcmyanmar.ttm.wechatapp.utils.VIEW_TYPE_GROUP_SELECT
 import com.padcmyanmar.ttm.wechatapp.viewholders.BaseViewHolder
@@ -77,7 +78,7 @@ class ContactProfileItemAdapter(var changeUIView:String,var mDelegate: ContactLi
 
 
     override fun getItemViewType(position: Int): Int {
-       return if(changeUIView == "Group")
+       return if(changeUIView == CHAT_TYPE_GROUP)
        {
            VIEW_TYPE_GROUP_SELECT
        }else{

@@ -21,7 +21,7 @@
                 android:paddingEnd="@dimen/margin_medium"
                 android:paddingTop="@dimen/margin_card_medium"
                 android:paddingBottom="@dimen/margin_card_medium"
-                android:id="@+id/ivBack"
+                android:id="@+id/ivChatDetailBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_back_arrow_back" />
@@ -33,7 +33,7 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:src="@drawable/profile_sample"
-                    android:id="@+id/ivActiveChat"
+                    android:id="@+id/ivChatDetailProfile"
                     android:layout_width="50dp"
                     android:layout_height="50dp"/>
 

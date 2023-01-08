@@ -2,22 +2,36 @@ package com.padcmyanmar.ttm.wechatapp.fragments
 
 import android.R.attr.bitmap
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context.WINDOW_SERVICE
+import android.content.Intent
+import android.database.Cursor
 import android.graphics.Color
+import android.graphics.ImageDecoder
 import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.zxing.WriterException
 import com.padcmyanmar.ttm.wechatapp.R
+import com.padcmyanmar.ttm.wechatapp.activities.CreateNewMomentActivity
+import com.padcmyanmar.ttm.wechatapp.activities.MainActivity
 import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_DATE_OF_BIRTH
 import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_GENDER_TYPE
 import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_PHONE_NUMBER
+import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_PROFILE_IMG_URL
 import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_QR_CODE
 import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_USER_NAME
 import com.padcmyanmar.ttm.wechatapp.adapters.MomentsListAdapter
@@ -36,20 +50,24 @@ import com.padcmyanmar.ttm.wechatapp.dialogs.QRCodePopUpDialog.Companion.TAG_QR_
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.ProfileFragmentPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.ProfileFragmentPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.ProfileFragmentView
+import kotlinx.android.synthetic.main.activity_create_new_moment.*
 import kotlinx.android.synthetic.main.fragment_profile.*
+import java.io.IOException
 
 
 class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
 
     lateinit var mPresenter: ProfileFragmentPresenter
 
-    lateinit var mMomentsListAdapter: MomentsListAdapter
+    private lateinit var mMomentsListAdapter: MomentsListAdapter
 
     private var loginUserPhoneNumber = ""
     private var loginUserUserName = ""
     private var loginUserDateOfBirth = ""
     private var loginUserGenderType = ""
     private var loginUserQRCode = ""
+    private var loginUserProfileImageUrl=""
+    private val PICK_IMAGE_REQUEST_FOR_PROFILE = 100
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,6 +86,7 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
         loginUserDateOfBirth = arguments?.getString(BUNDLE_DATE_OF_BIRTH).toString()
         loginUserGenderType = arguments?.getString(BUNDLE_GENDER_TYPE).toString()
         loginUserQRCode = arguments?.getString(BUNDLE_QR_CODE).toString()
+        loginUserProfileImageUrl = arguments?.getString(BUNDLE_PROFILE_IMG_URL).toString()
 
         setUpProfileUI()
         setUpMomentsList()
@@ -81,10 +100,16 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
     }
 
     private fun setUpProfileUI() {
+        Log.d("ProfileFragment","check Url ${loginUserProfileImageUrl}")
        tvProfileName.text = loginUserUserName
         tvPhoneNumber.text = loginUserPhoneNumber
         tvBirthDate.text = loginUserDateOfBirth
         tvGenderType.text = loginUserGenderType
+        Glide.with(this)
+            .load(loginUserProfileImageUrl)
+            .placeholder(R.drawable.empty_image)
+            .into(ivUserProfile)
+
         generateQRCode(loginUserQRCode)
     }
 
@@ -143,6 +168,9 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
 
 
         }
+        ivGallery.setOnClickListener {
+            openGallery()
+        }
     }
 
     private fun setUpMomentsList() {
@@ -157,6 +185,10 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
     }
 
     override fun onTapFavorite(momentVO: MomentVO) {
+
+    }
+
+    override fun onTapBookMark(momentVO: MomentVO) {
 
     }
 
@@ -177,11 +209,68 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
     }
 
     override fun onTapEditProfile(userName: String, dateOfBirth: String, genderType: String) {
-       // TODO("Not yet implemented")
+
+    }
+
+    override fun showMomentData(mMomentVOList: ArrayList<MomentVO>) {
+        Log.d("ProfileFragment","check momentlist size ${mMomentVOList.size}")
+        mMomentsListAdapter.setNewData(mMomentVOList)
     }
 
     override fun showError(error: String) {
-      //  TODO("Not yet implemented")
+
     }
+
+    private fun openGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST_FOR_PROFILE)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST_FOR_PROFILE && resultCode == Activity.RESULT_OK) {
+            if (data == null || data.data == null) {
+                return
+            }
+
+            val filePath = data.data
+            try {
+
+
+                filePath?.let {
+                    if (Build.VERSION.SDK_INT >= 29) {
+                        val source: ImageDecoder.Source =
+                            ImageDecoder.createSource(context?.contentResolver!!, filePath)
+
+                        val bitmap = ImageDecoder.decodeBitmap(source)
+                        mPresenter.onPhotoTaken(bitmap, onSuccess = {
+                            Log.d("profileFragment","url $it")
+                            Glide.with(this)
+                                .load(it)
+                                .placeholder(R.drawable.empty_image)
+                                .into(ivUserProfile)
+                        })
+                    } else {
+                        val bitmap = MediaStore.Images.Media.getBitmap(
+                            context?.contentResolver, filePath
+                        )
+                        mPresenter.onPhotoTaken(bitmap, onSuccess = {
+                            Log.d("profileFragment","url $it")
+                            Glide.with(this)
+                                .load(it)
+                                .into(ivUserProfile)
+                        })
+                    }
+                }
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
 
 }

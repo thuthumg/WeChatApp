@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mcvSelectedImage"
+    android:layout_margin="@dimen/margin_medium"
+    app:cardCornerRadius="20dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+
+        android:id="@+id/ivSelectedImage"
+        android:scaleType="centerCrop"
+        android:src="@drawable/flower_logo"
+        android:layout_width="108dp"
+        android:layout_height="108dp"/>
+    <FrameLayout
+        android:background="#4DFFFFFF"
+        android:visibility="gone"
+        android:id="@+id/flSelectedVideo"
+        android:layout_width="108dp"
+        android:layout_height="108dp">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_play_circle_outline_24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
+    <!--    <androidx.appcompat.widget.AppCompatImageView-->
+    <!--        android:layout_marginTop="@dimen/margin_medium"-->
+    <!--        android:layout_marginEnd="@dimen/margin_medium"-->
+    <!--        android:layout_gravity="end"-->
+    <!--        android:id="@+id/ivClose"-->
+    <!--        android:scaleType="centerCrop"-->
+    <!--        android:src="@drawable/close"-->
+    <!--        android:layout_width="24dp"-->
+    <!--        android:layout_height="24dp"/>-->
+
+    <!--    165 340-->
+
+</com.google.android.material.card.MaterialCardView>

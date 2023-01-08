@@ -31,6 +31,8 @@ import com.padcmyanmar.ttm.wechatapp.mvp.presenters.ContactsFragmentPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.ContactsFragmentPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.ContactsFragmentView
 import com.padcmyanmar.ttm.wechatapp.network.auth.PhoneAuth
+import com.padcmyanmar.ttm.wechatapp.utils.CHAT_TYPE_GROUP
+import com.padcmyanmar.ttm.wechatapp.utils.CHAT_TYPE_PRIVATE
 import com.padcmyanmar.ttm.wechatapp.utils.STORAGE_PERMISSIONS
 import kotlinx.android.synthetic.main.fragment_contacts.*
 
@@ -108,15 +110,15 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
     }
 
     private fun qrCode() {
-        Log.d("contactsfragment", "qrCode")
+
         activity?.let {
             if (hasPermissions(activity as Context, STORAGE_PERMISSIONS)) {
                 scanQR()
-                Log.d("contactsfragment", "go to qr scanner")
+
 //                val i = Intent(context, QRScannerActivity::class.java)
 //                startActivity(i)
             } else {
-                Log.d("contactsfragment", "permission launcher")
+
                 cameraReqLauncher.launch(
                     STORAGE_PERMISSIONS
                 )
@@ -229,14 +231,19 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
 
     }
 
-    override fun navigateToChatDetailFromContactPage(contactName: String, chatId: String) {
+    override fun navigateToChatDetailFromContactPage(
+        contactName: String,
+        chatId: String,
+        contactProfile: String
+    ) {
         Log.d("contactsFragment","${contactName}-----${PhoneAuth.getCurrentUser()?.uid}")
 
         startActivity(ChatDetailActivity.newIntent(
             context = requireContext(),
             chatUserName= contactName,
             chatUserId= chatId,
-            checkGroupOrPrivateChat = "Private"
+            chatUserProfile = contactProfile,
+            checkGroupOrPrivateChat = CHAT_TYPE_PRIVATE
         ))
 //,
 //            chatUserPhoneNum = contactVO.phoneNumber.toString()
@@ -251,12 +258,13 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
         mChatGroupsListAdapter.setNewData(chatGroupList)
     }
 
-    override fun navigateToChatGroupDetailPage(contactName: String, chatId: String, sParam: String) {
+    override fun navigateToChatGroupDetailPage(contactName: String, chatId: String, contactProfile: String) {
         startActivity(ChatDetailActivity.newIntent(
             context = requireContext(),
             chatUserName= contactName,
             chatUserId= chatId,
-            checkGroupOrPrivateChat = sParam
+            chatUserProfile = contactProfile,
+            checkGroupOrPrivateChat = CHAT_TYPE_GROUP
         ))
     }
 

@@ -1,5 +1,6 @@
 package com.padcmyanmar.ttm.wechatapp.data.models
 
+import android.graphics.Bitmap
 import android.net.Uri
 import com.padcmyanmar.ttm.wechatapp.data.vos.*
 import com.padcmyanmar.ttm.wechatapp.network.CloudFirestoreFirebaseApiImpl
@@ -7,7 +8,7 @@ import com.padcmyanmar.ttm.wechatapp.network.FirebaseApi
 import com.padcmyanmar.ttm.wechatapp.network.RealTimeFirebaseApi
 import com.padcmyanmar.ttm.wechatapp.network.RealtimeDatabaseFirebaseApiImpl
 
-object WeChatAppModelImpl: WeChatAppModel  {
+object WeChatAppModelImpl : WeChatAppModel {
     override var mFirebaseApi: FirebaseApi = CloudFirestoreFirebaseApiImpl
 
     override var mFirebaseRealTimeApi: RealTimeFirebaseApi = RealtimeDatabaseFirebaseApiImpl
@@ -18,45 +19,47 @@ object WeChatAppModelImpl: WeChatAppModel  {
         gender: String,
         password: String,
         phoneNo: String,
-        userId:String,
+        userId: String,
+        imageUrl: String,
+        activeStatus: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
-        mFirebaseApi.addUser(name = name,
-            dateOfBirth =  dateOfBirth,
-            gender =  gender,
+        mFirebaseApi.addUser(
+            name = name,
+            dateOfBirth = dateOfBirth,
+            gender = gender,
             password = password,
             phoneNum = phoneNo,
             userId = userId,
+            profileImageUrl = imageUrl,
+            activeStatus = activeStatus,
             onSuccess,
-            onFailure)
+            onFailure
+        )
     }
 
     override fun getUser(
-        phoneNo:String,
+        phoneNumber: String,
         password: String,
         onSuccess: (userVO: UserVO) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
         mFirebaseApi.getUser(
-            phoneNum = phoneNo,
+            phoneNum = phoneNumber,
             password = password,
             onSuccess = {
-                        onSuccess(it)
+                onSuccess(it)
             },
             onFailure = {
                 onFailure(it)
             })
     }
 
-
-//    override fun uploadPhoto(image: Bitmap, onSuccess: (returnUrlString: String?) -> Unit){
-//        mFirebaseApi.uploadImageUserVO(
-//            image = image,
-//            onSuccess = onSuccess
-//        )
-//    }
-    override fun uploadImageAndVideoFile(fileUri: Uri, onSuccess: (returnUrlString: String?) -> Unit){
+    override fun uploadImageAndVideoFile(
+        fileUri: Uri,
+        onSuccess: (returnUrlString: String?) -> Unit
+    ) {
         mFirebaseApi.uploadImageAndVideoFile(
             fileUri = fileUri,
             onSuccess = {
@@ -67,7 +70,7 @@ object WeChatAppModelImpl: WeChatAppModel  {
 
     override fun addMoment(
         imgList: ArrayList<MediaDataVO>,
-        likeIdList:ArrayList<String>,
+        likeIdList: ArrayList<String>,
         description: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
@@ -77,7 +80,7 @@ object WeChatAppModelImpl: WeChatAppModel  {
             likedId = likeIdList,
             description = description,
             onSuccess = {
-                        onSuccess(it)
+                onSuccess(it)
             }
         ) {
             onFailure(it)
@@ -85,9 +88,9 @@ object WeChatAppModelImpl: WeChatAppModel  {
     }
 
 
-    override fun getMomentData  (
-    onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
-    onFailure: (message: String) -> Unit
+    override fun getMomentData(
+        onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
+        onFailure: (message: String) -> Unit
     ) {
         mFirebaseApi.getMomentData(
             onSuccess = {
@@ -98,8 +101,21 @@ object WeChatAppModelImpl: WeChatAppModel  {
             })
     }
 
+    override fun getMomentDataByBookMarkList(
+        onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+        mFirebaseApi.getMomentDataByBookMarkList(
+            onSuccess = {
+                onSuccess(it)
+            },
+            onFailure = {
+                onFailure(it)
+            })
+    }
+
     override fun editMoment(
-        momentVO:MomentVO,
+        momentVO: MomentVO,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
@@ -118,13 +134,13 @@ object WeChatAppModelImpl: WeChatAppModel  {
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
-       mFirebaseApi.addContacts(userId = userId,
-       onSuccess = {
-           onSuccess(it)
-       },
-       onFailure = {
-           onFailure(it)
-       })
+        mFirebaseApi.addContacts(userId = userId,
+            onSuccess = {
+                onSuccess(it)
+            },
+            onFailure = {
+                onFailure(it)
+            })
     }
 
     override fun getContacts(
@@ -141,10 +157,12 @@ object WeChatAppModelImpl: WeChatAppModel  {
         )
     }
 
-    override fun editUser(userName: String, dateOfBirth: String, genderType: String,
-                             onSuccess: (message: String) -> Unit,
-                             onFailure: (message: String) -> Unit) {
-        mFirebaseApi.editUser(userName,dateOfBirth,genderType, onSuccess = {
+    override fun editUser(
+        userName: String, dateOfBirth: String, genderType: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+        mFirebaseApi.editUser(userName, dateOfBirth, genderType, onSuccess = {
             onSuccess(it)
         }, onFailure = {
             onFailure(it)
@@ -152,41 +170,45 @@ object WeChatAppModelImpl: WeChatAppModel  {
 
     }
 
-    override fun sendMessage( senderId: String,
-                              receiverId: String,
-                              msg: String,
-                              senderName: String,
-                              onSuccess: (message: String) -> Unit,
-                              onFailure: (message: String) -> Unit
+    override fun sendMessage(
+        senderId: String,
+        receiverId: String,
+        msg: String,
+        senderName: String,
+        fileUrl: String,
+        profileUrl: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
     ) {
         mFirebaseRealTimeApi.sendMessage(
-            senderId =  senderId,
+            senderId = senderId,
             receiverId = receiverId,
-            msg =  msg,
+            msg = msg,
             senderName = senderName,
+            fileUrl = fileUrl,
+            profileUrl = profileUrl,
+            onSuccess = {
+                onSuccess(it)
+            }
+        ) {
+            onFailure(it)
+        }
+    }
+
+    override fun getChatMessageList(
+        receiverId: String,
+        checkPrivateOrGroup: String,
+        onSuccess: (chatMsgList: List<ChatMessageVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+        mFirebaseRealTimeApi.getChatMessageList(receiverId = receiverId,
+            checkPrivateOrGroup,
             onSuccess = {
                 onSuccess(it)
             },
             onFailure = {
                 onFailure(it)
-            }
-        )
-    }
-
-    override fun getChatMessageList(
-        receiverId: String,
-        checkPrivateOrGroup:String,
-        onSuccess: (chatMsgList: List<ChatMessageVO>) -> Unit,
-        onFailure: (message: String) -> Unit
-    ) {
-       mFirebaseRealTimeApi.getChatMessageList(receiverId = receiverId,
-           checkPrivateOrGroup,
-       onSuccess = {
-           onSuccess(it)
-       },
-       onFailure = {
-           onFailure(it)
-       })
+            })
     }
 
     override fun getChatHistoryList(
@@ -194,8 +216,8 @@ object WeChatAppModelImpl: WeChatAppModel  {
         onSuccess: (chatHistoryListVO: List<ChatHistoryVO>) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
-       mFirebaseRealTimeApi.getChatHistoryList(senderId = senderId,
-       onSuccess = {onSuccess(it)},onFailure = {onFailure(it)})
+        mFirebaseRealTimeApi.getChatHistoryList(senderId = senderId,
+            onSuccess = { onSuccess(it) }, onFailure = { onFailure(it) })
     }
 
     override fun createChatGroup(
@@ -205,14 +227,15 @@ object WeChatAppModelImpl: WeChatAppModel  {
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
-        mFirebaseRealTimeApi.createChatGroup(
-            groupName =  groupName,
+         mFirebaseRealTimeApi.createChatGroup(
+            groupName = groupName,
             membersList = membersList,
             groupPhoto = groupPhoto,
-            onSuccess={onSuccess(it)},
-            onFailure={onFailure(it)}
-
+            onSuccess = { onSuccess(it) },
+            onFailure = { onFailure(it) }
         )
+
+
     }
 
     override fun getChatGroupsList(
@@ -220,8 +243,8 @@ object WeChatAppModelImpl: WeChatAppModel  {
         onFailure: (message: String) -> Unit
     ) {
         mFirebaseRealTimeApi.getChatGroupsList(
-            onSuccess = {onSuccess(it)},
-            onFailure = {onFailure(it)}
+            onSuccess = { onSuccess(it) },
+            onFailure = { onFailure(it) }
         )
     }
 
@@ -230,17 +253,30 @@ object WeChatAppModelImpl: WeChatAppModel  {
         receiverId: String,
         msg: String,
         senderName: String,
+        fileUrl: String,
+        profileUrl: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
         mFirebaseRealTimeApi.sendGroupMessage(
-            senderId,
-            receiverId,
-            msg,
-            senderName,
-            onSuccess={ onSuccess(it)},
-        onFailure ={ onFailure(it) }
-        )
+            senderId = senderId,
+            receiverId = receiverId,
+            msg = msg,
+            senderName = senderName,
+            fileUrl = fileUrl,
+            profileUrl = profileUrl,
+            onSuccess = { onSuccess(it) }
+        ) { onFailure(it) }
+    }
+
+    override fun uploadImageAndUpdateGrocery(
+        userVO: UserVO,
+        image: Bitmap,
+        onSuccess: (returnUrlString: String?) -> Unit
+    ) {
+
+
+        mFirebaseApi.uploadImageAndEditUserVO(image, userVO, onSuccess = { onSuccess(it) })
     }
 
 

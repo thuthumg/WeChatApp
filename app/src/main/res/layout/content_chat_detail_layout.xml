@@ -31,6 +31,18 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="vertical">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMediaTypeList"
+                tools:itemCount="2"
+                tools:listitem="@layout/view_holder_media_item_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
         <RelativeLayout
             android:elevation="@dimen/margin_small"
             android:background="@drawable/edit_text_chat_msg_bg"
@@ -72,6 +84,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
                 <androidx.cardview.widget.CardView
+                    android:clickable="true"
                     android:id="@+id/cvGallery"
                     android:layout_margin="@dimen/margin_medium"
                     app:cardBackgroundColor="@color/white"

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.padcmyanmar.ttm.wechatapp.R
+import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.ProfileFragmentPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.ProfileFragmentPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.ProfileFragmentView
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.dialog_edit_profile.spDayEdit
 import kotlinx.android.synthetic.main.dialog_edit_profile.spMonthEdit
 import kotlinx.android.synthetic.main.dialog_edit_profile.spYearEdit
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ProfileDialogFragment : DialogFragment(), ProfileFragmentView {
     lateinit var mPresenter: ProfileFragmentPresenter
@@ -312,6 +314,10 @@ class ProfileDialogFragment : DialogFragment(), ProfileFragmentView {
     }
 
     override fun onTapEditProfile(userName: String, dateOfBirth: String, genderType: String) {
+
+    }
+
+    override fun showMomentData(mMomentVOList: ArrayList<MomentVO>) {
 
     }
 

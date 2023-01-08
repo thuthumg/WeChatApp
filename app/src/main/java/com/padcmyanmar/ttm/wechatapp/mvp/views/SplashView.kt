@@ -4,4 +4,5 @@ interface SplashView: BaseView {
 
     fun navigateToSignUpScreen()
     fun navigateToLoginScreen()
+    fun navigateToHomeScreen(s:String)
 }

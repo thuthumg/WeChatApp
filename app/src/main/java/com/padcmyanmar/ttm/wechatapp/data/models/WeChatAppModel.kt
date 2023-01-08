@@ -1,5 +1,6 @@
 package com.padcmyanmar.ttm.wechatapp.data.models
 
+import android.graphics.Bitmap
 import android.net.Uri
 import com.padcmyanmar.ttm.wechatapp.data.vos.*
 import com.padcmyanmar.ttm.wechatapp.network.FirebaseApi
@@ -10,8 +11,16 @@ interface WeChatAppModel {
     var mFirebaseApi: FirebaseApi
     var mFirebaseRealTimeApi: RealTimeFirebaseApi
     fun addUser(
-        name: String, dateOfBirth: String, gender: String, password: String, phoneNo: String,
-        userId: String, onSuccess: (message: String) -> Unit, onFailure: (message: String) -> Unit
+        name: String,
+        dateOfBirth: String,
+        gender: String,
+        password: String,
+        phoneNo: String,
+        userId: String,
+        imageUrl: String,
+        activeStatus:String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
     )
 
 
@@ -22,15 +31,18 @@ interface WeChatAppModel {
         onFailure: (message: String) -> Unit
     )
 
-//    fun uploadPhoto(image: Bitmap, onSuccess: (returnUrlString: String?) -> Unit)
-
     fun uploadImageAndVideoFile(fileUri: Uri, onSuccess: (returnUrlString: String?) -> Unit)
-
 
     fun getMomentData(
         onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
         onFailure: (message: String) -> Unit
     )
+
+    fun getMomentDataByBookMarkList(
+        onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    )
+
 
     fun addMoment(
         imgList: ArrayList<MediaDataVO>,
@@ -40,13 +52,6 @@ interface WeChatAppModel {
         onFailure: (message: String) -> Unit
     )
 
-    //    fun addMoment(
-//        imgList: ArrayList<String>,
-//        likeIdList: ArrayList<String>,
-//        description: String,
-//        onSuccess: (message: String) -> Unit,
-//        onFailure: (message: String) -> Unit
-//    )
     fun editMoment(
         momentVO: MomentVO,
         onSuccess: (message: String) -> Unit,
@@ -77,6 +82,8 @@ interface WeChatAppModel {
         receiverId: String,
         msg: String,
         senderName: String,
+        fileUrl: String,
+        profileUrl: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
 
@@ -113,9 +120,16 @@ interface WeChatAppModel {
         receiverId: String,
         msg: String,
         senderName: String,
+        fileUrl: String,
+        profileUrl: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     )
 
+    fun uploadImageAndUpdateGrocery(
+        userVO: UserVO,
+        image: Bitmap,
+        onSuccess: (returnUrlString: String?) -> Unit
+    )
 
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_margin="@dimen/margin_medium"
@@ -18,7 +18,7 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:src="@drawable/profile_sample"
-                    android:id="@+id/ivActiveChat"
+                    android:id="@+id/ivReceiverChatProfile"
                     android:layout_width="50dp"
                     android:layout_height="50dp"/>
 
@@ -33,6 +33,8 @@
                     app:srcCompat="@drawable/active_status_green_bg" />
             </FrameLayout>
             <androidx.cardview.widget.CardView
+                android:id="@+id/cvReceiverTextMessage"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/margin_small"
                 android:layout_marginStart="@dimen/margin_medium"
 
@@ -48,20 +50,64 @@
                         android:id="@+id/tvReceiveMsg"
                         android:textSize="@dimen/text_regular"
                         android:textColor="@color/text_color"
-                        android:text="What is your name?"
+                        tools:text="What is your name?"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:gravity="center"
+                        android:drawableEnd="@drawable/ic_seen"
                         android:layout_marginTop="@dimen/margin_small"
                         android:id="@+id/tvReceiveTime"
                         android:textSize="@dimen/text_smaller"
                         android:textColor="@color/hint_color"
-                        android:text="12:00AM"
+                        tools:text="12:00AM"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
                 </LinearLayout>
+
             </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/llReceiverImageMessage"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:layout_gravity="end"
+        android:padding="@dimen/margin_medium"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            app:cardCornerRadius="@dimen/margin_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+                tools:src="@drawable/error_image_bg"
+                android:scaleType="centerCrop"
+                android:id="@+id/ivReceiverImageMessage"
+                android:layout_width="200dp"
+                android:layout_height="150dp"/>
+        </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_gravity="end"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:gravity="center"
+                android:id="@+id/tvReceiveImageTime"
+                android:drawableEnd="@drawable/ic_seen"
+                android:textSize="@dimen/text_smaller"
+                android:textColor="@color/hint_color"
+                tools:text="12:00AM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
 
+
+    </LinearLayout>
 </LinearLayout>

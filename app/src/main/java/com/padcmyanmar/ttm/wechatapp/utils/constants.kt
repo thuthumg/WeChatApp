@@ -13,17 +13,48 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
-
+const val REALTIME_DB_INSTANCE_PATH = "https://wechatapp-e0922-default-rtdb.asia-southeast1.firebasedatabase.app/"
 const val USER_COLLECTION = "users"
 const val MOMENTS_COLLECTION="moments"
 const val CONTACTS_COLLECTION = "contacts"
+const val GROUPS_COLLECTION = "groups"
+const val CONTACTS_AND_MESSAGES_COLLECTION = "contacts&Messages"
 
-const val DOCUMENT_FIELD_UID = "id"
-const val DOCUMENT_FIELD_NAME = "name"
-const val DOCUMENT_FIELD_DATE_OF_BIRTH = "dateOfBirth"
-const val DOCUMENT_FIELD_GENDER_TYPE = "genderType"
-const val DOCUMENT_FIELD_PASSWORD = "password"
-const val DOCUMENT_FIELD_PHONE_NUM = "phoneNumber"
+const val USER_DOCUMENT_FIELD_UID = "id"
+const val USER_DOCUMENT_FIELD_NAME = "name"
+const val USER_DOCUMENT_FIELD_DATE_OF_BIRTH = "dateOfBirth"
+const val USER_DOCUMENT_FIELD_GENDER_TYPE = "genderType"
+const val USER_DOCUMENT_FIELD_PASSWORD = "password"
+const val USER_DOCUMENT_FIELD_PHONE_NUM = "phoneNumber"
+const val USER_DOCUMENT_FIELD_PROFILE_URL = "profileUrl"
+const val USER_DOCUMENT_FIELD_LOGIN_ACTIVE_STATUS = "activeStatus"
+
+const val MOMENT_DOCUMENT_FIELD_LIKED_ID = "likedId"
+const val MOMENT_DOCUMENT_FIELD_BOOK_MARKED_ID = "bookMarkedId"
+const val MOMENT_DOCUMENT_FIELD_TIMESTAMP = "timestamp"
+const val MOMENT_DOCUMENT_FIELD_MEDIA_TYPE = "mediaType"
+const val MOMENT_DOCUMENT_FIELD_MEDIA_DATA_LINK = "mediaDataLink"
+const val MOMENT_DOCUMENT_FIELD_DESCRIPTION = "description"
+const val MOMENT_DOCUMENT_PHOTO_VIDEO_LINK = "photoOrVideoUrlLink"
+
+
+const val CHAT_MSG_DOCUMENT_FIELD_FILE = "file"
+const val CHAT_MSG_DOCUMENT_FIELD_SEND_USER_NAME = "name"
+const val CHAT_MSG_DOCUMENT_FIELD_MESSAGE = "message"
+const val CHAT_MSG_DOCUMENT_FIELD_SEND_USER_PROFILE_URL = "profileUrl"
+const val CHAT_MSG_DOCUMENT_FIELD_TIMESTAMP = "timestamp"
+const val CHAT_MSG_DOCUMENT_FIELD_SEND_USER_ID = "userId"
+
+//const val DOCUMENT_FIELD_PROFILE_URL_CONTACT = "profileImageUrl"
+
+const val GROUP_DOCUMENT_FIELD_GROUP_NAME = "name"
+const val GROUP_DOCUMENT_FIELD_GROUP_MESSAGE = "message"
+const val GROUP_DOCUMENT_FIELD_GROUP_MEMBERS = "membersList"
+const val GROUP_DOCUMENT_FIELD_GROUP_PROFILE_URL = "profileUrl"
+
+const val CHAT_TYPE_GROUP = "Group"
+const val CHAT_TYPE_PRIVATE = "PRIVATE"
+
 
 var mUserVO: UserVO = UserVO()
 
@@ -161,7 +192,11 @@ var STORAGE_PERMISSIONS = arrayOf(
     Manifest.permission.CAMERA
 
 )
+fun changeFromTimestampToDate(timestamp:Long):String{
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
+     return   dateFormat.format(timestamp?.let { Date(it) })
+}
 /*  Manifest.permission.READ_EXTERNAL_STORAGE,
     Manifest.permission.WRITE_EXTERNAL_STORAGE,
     Manifest.permission.VIBRATE*/

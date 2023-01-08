@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.graphics.scale
 import com.bumptech.glide.Glide
+import com.padcmyanmar.ttm.wechatapp.R
 
 fun Uri.loadBitMapFromUri(context: Context): Bitmap {
     return Glide.with(context)

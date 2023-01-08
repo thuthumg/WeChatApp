@@ -68,7 +68,7 @@ class ChatDetailListAdapter : RecyclerView.Adapter<BaseViewHolder<ChatMessageVO>
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if( mData[position].user_id == mUserVO.id){
+        return if( mData[position].userId == mUserVO.id){
             VIEW_TYPE_SENDER
         }else{
             VIEW_TYPE_RECEIVER

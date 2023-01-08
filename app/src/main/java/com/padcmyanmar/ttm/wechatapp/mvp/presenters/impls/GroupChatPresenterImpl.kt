@@ -1,12 +1,15 @@
 package com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import androidx.lifecycle.LifecycleOwner
 import com.padcmyanmar.ttm.wechatapp.data.models.WeChatAppModelImpl
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.AbstractBasePresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.GroupChatPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.views.GroupChatView
+import com.padcmyanmar.ttm.wechatapp.utils.mUserVO
 
 class GroupChatPresenterImpl:GroupChatPresenter,
 AbstractBasePresenter<GroupChatView>(){
@@ -14,7 +17,11 @@ AbstractBasePresenter<GroupChatView>(){
     private val mWeChatAppModel = WeChatAppModelImpl
 
 
-    override fun goToChatDetailFromContactList(contactName: String, chatId: String) {
+    override fun goToChatDetailFromContactList(
+        contactName: String,
+        chatId: String,
+        contactProfile: String
+    ) {
       //  mView.selectContactItem(contactVO)
         mView.selectContactItem(contactName)
     }
@@ -22,7 +29,8 @@ AbstractBasePresenter<GroupChatView>(){
     override fun goToChatDetailFromContactGroupList(
         contactName: String,
         chatId: String,
-        sParam: String
+        contactProfile: String,
+        CHAT_TYPE_GROUP: String
     ) {
 
     }
@@ -56,11 +64,29 @@ AbstractBasePresenter<GroupChatView>(){
             groupPhoto = groupPhoto,
             onSuccess = {
                 mView.showError(it)
-            },
-            onFailure = {
+            }, onFailure = {
                 mView.showError(it)
             }
         )
+    }
+
+    override fun onPhotoTaken(bitmap: Bitmap, onSuccess: (returnUrlString: String) -> Unit) {
+
+        mWeChatAppModel.uploadImageAndUpdateGrocery(mUserVO, bitmap, onSuccess = {
+            it?.let {
+                    it1 -> onSuccess(it1)
+            }
+        })
+    }
+
+    override fun uploadImageAndVideoFile(
+        imageEncoded: Uri,
+        onSuccess: (urlString: String) -> Unit
+    ) {
+        mWeChatAppModel.uploadImageAndVideoFile(imageEncoded,  onSuccess = {
+
+            it?.let { it1 -> onSuccess(it1) }
+        })
     }
 
 

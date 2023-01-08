@@ -1,14 +1,21 @@
 package com.padcmyanmar.ttm.wechatapp.activities
 
+import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.adapters.ContactItemAdapter
 import com.padcmyanmar.ttm.wechatapp.adapters.SelectedChatItemListAdapter
@@ -17,10 +24,12 @@ import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.GroupChatPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.GroupChatPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.GroupChatView
+import com.padcmyanmar.ttm.wechatapp.utils.CHAT_TYPE_GROUP
 import com.padcmyanmar.ttm.wechatapp.utils.mUserVO
 import kotlinx.android.synthetic.main.activity_group_chat_list.*
 import kotlinx.android.synthetic.main.activity_group_chat_list.btnClose
 import kotlinx.android.synthetic.main.activity_group_chat_list.rvContactsList
+
 
 
 class GroupChatActivity : AppCompatActivity(), GroupChatView {
@@ -30,7 +39,8 @@ class GroupChatActivity : AppCompatActivity(), GroupChatView {
     var mSelectedContactsList:ArrayList<UserVO> = arrayListOf()
     lateinit var mSelectedChatItemListAdapter: SelectedChatItemListAdapter
     private lateinit var mContactItemAdapter:ContactItemAdapter
-
+    val PICK_IMAGE_REQUEST_FOR_PROFILE = 100
+    var imageEncoded: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group_chat_list)
@@ -96,24 +106,31 @@ class GroupChatActivity : AppCompatActivity(), GroupChatView {
                     membersList.add(it.id.toString())
                 }
                 membersList.add(mUserVO.id.toString())
+                imageEncoded?.let { it1 ->
+                    mPresenter.uploadImageAndVideoFile(it1) { urlString->
+                        mPresenter.onTapCreateChatGroup(
+                            groupName = edtGroupName.text.toString(),
+                            membersList = membersList,
+                            groupPhoto = urlString,
+                            onSuccess = {
 
-                mPresenter.onTapCreateChatGroup(
-                    groupName = edtGroupName.text.toString(),
-                    membersList = membersList,
-                    groupPhoto = "",
-                    onSuccess = {
-                        showError(it)
-                        finish()
-                    },
-                    onFailure = {
-                        showError(it)
+                               // showError(it)
+                                this.finish()
+                            }
+                        , onFailure = {
+                            showError(it)
+                            })
                     }
-                )
+                }
+
             }
         }
 
         btnClose.setOnClickListener {
             finish()
+        }
+        btnGroupPhotoUpload.setOnClickListener {
+            openGallery()
         }
     }
 
@@ -135,7 +152,7 @@ class GroupChatActivity : AppCompatActivity(), GroupChatView {
 
     private fun setUpSelectedChatItemListAdapter() {
         mContactItemAdapter =
-            ContactItemAdapter("Group",mPresenter)
+            ContactItemAdapter(CHAT_TYPE_GROUP,mPresenter)
         rvContactsList.adapter = mContactItemAdapter
         rvContactsList.layoutManager = LinearLayoutManager(
             this,
@@ -168,7 +185,6 @@ class GroupChatActivity : AppCompatActivity(), GroupChatView {
 
 
     override fun onTapSelectContactList(contactVO: UserVO) {
-        Log.d("groupchat","check select obj data ${contactVO.isSelected}")
        if(mSelectedContactsList.isNotEmpty())
        {
 
@@ -251,4 +267,95 @@ class GroupChatActivity : AppCompatActivity(), GroupChatView {
         Log.d("LogData",arrayList.toString())
         return arrayList
     }
+
+    private fun openGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST_FOR_PROFILE)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        try {
+            // When an Image is picked
+            if (requestCode == PICK_IMAGE_REQUEST_FOR_PROFILE && resultCode == RESULT_OK && null != data) {
+
+
+                // Get the Image from data
+                val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+                if (data.data != null) {
+                    val mImageUri = data.data
+
+                    // Get the cursor
+                    val cursor: Cursor? = contentResolver?.query(
+                        mImageUri!!,
+                        filePathColumn, null, null, null
+                    )
+                    // Move to first row
+                    cursor?.moveToFirst()
+                    val columnIndex: Int? = cursor?.getColumnIndex(filePathColumn[0])
+                   // imageEncoded = cursor?.getString(columnIndex!!)
+
+                    mImageUri?.let {
+                        imageEncoded = it
+                        //imagesEncodedList?.add(it)
+                        Glide.with(this)
+                            .load(it)
+                            .placeholder(R.drawable.profile_sample)
+                            .into(ivGroupPhotoUpload)
+//                         mPresenter.uploadFileCreate(it, onSuccess = {uploadedFileUrl->
+//                             uploadedFileUrl?.let { imgUrl -> imagesUrlList.add(imgUrl) }
+//                         })
+                    }
+
+                    cursor?.close()
+                } else {
+                    if (data.clipData != null) {
+                        val mClipData = data.clipData
+
+                        for (i in 0 until mClipData!!.itemCount) {
+                            val item = mClipData.getItemAt(i)
+                            val uri = item.uri
+                            imageEncoded = uri
+                            //  mArrayUri.add(uri)
+                           // imagesEncodedList!!.add(uri)
+                            Glide.with(this)
+                                .load(uri)
+                                .placeholder(R.drawable.profile_sample)
+                                .into(ivGroupPhotoUpload)
+//                             mPresenter.uploadFileCreate(uri, onSuccess = {
+//                                 it?.let { imgUrl ->
+//                                     imagesUrlList.add(imgUrl)
+//
+//                                 }
+//                             })
+
+                            // Get the cursor
+                            val cursor: Cursor? =
+                                contentResolver
+                                    ?.query(uri, filePathColumn, null, null, null)
+                            // Move to first row
+                            cursor?.moveToFirst()
+                            val columnIndex: Int? = cursor?.getColumnIndex(filePathColumn[0])
+                           // imageEncoded = cursor?.getString(columnIndex!!)
+                            cursor?.close()
+                        }
+
+
+                    }
+                }
+            } else {
+                Toast.makeText(
+                    this, "You haven't picked Image",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
+                .show()
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
 }

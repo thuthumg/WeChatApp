@@ -5,16 +5,15 @@ import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.padcmyanmar.ttm.wechatapp.data.vos.*
-
-import com.padcmyanmar.ttm.wechatapp.utils.mUserVO
+import com.padcmyanmar.ttm.wechatapp.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
-object RealtimeDatabaseFirebaseApiImpl:RealTimeFirebaseApi {
+object RealtimeDatabaseFirebaseApiImpl : RealTimeFirebaseApi {
 
-    private val database: DatabaseReference = FirebaseDatabase.getInstance("https://wechatapp-e0922-default-rtdb.asia-southeast1.firebasedatabase.app/").reference
+    private val database: DatabaseReference =
+        FirebaseDatabase.getInstance(REALTIME_DB_INSTANCE_PATH).reference
     private var db = Firebase.firestore
 
     override fun sendMessage(
@@ -22,40 +21,31 @@ object RealtimeDatabaseFirebaseApiImpl:RealTimeFirebaseApi {
         receiverId: String,
         msg: String,
         senderName: String,
+        fileUrl: String,
+        profileUrl: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
 
-        Log.d("realtime","before save to realtime db")
-
         var chatMessageVO = ChatMessageVO()
-        val currentTimestamp = System.currentTimeMillis()
+        var currentTimestamp = System.currentTimeMillis()
+        chatMessageVO.file = fileUrl
         chatMessageVO.message = msg
-        chatMessageVO.user_id = senderId
         chatMessageVO.name = senderName
+        chatMessageVO.profileUrl = profileUrl
         chatMessageVO.timestamp = currentTimestamp
-        Log.d("realtime","before save to realtime db 2 ${chatMessageVO.name}")
-
-           /* database.child("contactsAndMessages")
-                .child("234567")
-                .setValue("bbb")
-                .addOnSuccessListener {
-                    Log.d("realtime","success case")
-                }
-                .addOnFailureListener {
-                    Log.d("realtime","fail case ${it.message.toString()}")
-                }*/
+        chatMessageVO.userId = senderId
 
 
 
-        database.child("contacts&Messages")
+        database.child(CONTACTS_AND_MESSAGES_COLLECTION)
             .child(senderId)
             .child(receiverId)
             .child(currentTimestamp.toString())
             .setValue(chatMessageVO)
             .addOnSuccessListener {
 
-                database.child("contacts&Messages")
+                database.child(CONTACTS_AND_MESSAGES_COLLECTION)
                     .child(receiverId)
                     .child(senderId)
                     .child(currentTimestamp.toString())
@@ -75,39 +65,36 @@ object RealtimeDatabaseFirebaseApiImpl:RealTimeFirebaseApi {
     }
 
     override fun getChatMessageList(
-        receiverId:String,
-        checkPrivateOrGroup:String,
+        receiverId: String,
+        checkPrivateOrGroup: String,
         onSuccess: (chatMsgList: List<ChatMessageVO>) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
-        if(checkPrivateOrGroup == "GroupChat")
-
-        {
-            database.child("groups")
+        if (checkPrivateOrGroup == CHAT_TYPE_GROUP) {
+            database.child(GROUPS_COLLECTION)
                 .child(receiverId)
-                .child("messages")
-                .addValueEventListener(object : ValueEventListener{
+                .child(GROUP_DOCUMENT_FIELD_GROUP_MESSAGE)
+                .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
                         onFailure(error.message)
                     }
 
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val mChatMsgList = arrayListOf<ChatMessageVO>()
-
-                        snapshot.children.forEach { dataSnapshot ->
+                      var sortedListData = snapshot.children.sortedByDescending { dataSnapshot -> dataSnapshot.key }
+                        sortedListData.forEach { dataSnapshot ->
                             dataSnapshot.getValue(ChatMessageVO::class.java)?.let {
                                 mChatMsgList.add(it)
                             }
                         }
-                        Log.d("Realtime","check chat msg list = ${mChatMsgList.size}")
                         onSuccess(mChatMsgList)
                     }
                 })
-        } else{
-            database.child("contacts&Messages")
+        } else {
+            database.child(CONTACTS_AND_MESSAGES_COLLECTION)
                 .child(mUserVO.id.toString())
                 .child(receiverId)
-                .addValueEventListener(object : ValueEventListener{
+                .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
                         onFailure(error.message)
                     }
@@ -120,7 +107,6 @@ object RealtimeDatabaseFirebaseApiImpl:RealTimeFirebaseApi {
                                 mChatMsgList.add(it)
                             }
                         }
-                        Log.d("Realtime","check chat msg list = ${mChatMsgList.size}")
                         onSuccess(mChatMsgList)
                     }
                 })
@@ -133,119 +119,52 @@ object RealtimeDatabaseFirebaseApiImpl:RealTimeFirebaseApi {
         onFailure: (message: String) -> Unit
     ) {
 
-        database.child("contacts&Messages")
+        database.child(CONTACTS_AND_MESSAGES_COLLECTION)
             .child(mUserVO.id.toString())
-            .addValueEventListener(object : ValueEventListener{
+            .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                     onFailure(error.message)
                 }
+
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d("Realtime","onDataChange 1")
+
                     val mChatHistoryListVO = arrayListOf<ChatHistoryVO>()
 
-                    for((index,dataSnapshot) in snapshot.children.withIndex())
-                    {
-                       // val mChatMsgList = arrayListOf<ChatMessageVO>()
-                        getChatUser(dataSnapshot?.key ?: "", onSuccess = {userVO->
-                            Log.d("Realtime","onDataChange 6 ${userVO.name} ")
-                            // chatHistoryVO.chatUserName = userVO.name
-                            dataSnapshot.children.lastOrNull()?.getValue(ChatMessageVO::class.java)?.let {chatMsg->
-                                //  mChatMsgList.add(chatMsg)
-                                //  chatHistoryVO.chatMsgListVO = chatMsg
-                                //  mChatHistoryVO.add(chatHistoryVO)
+                    for ((index, dataSnapshot) in snapshot.children.withIndex()) {
+                        //user of receiver
+                        getChatUser(dataSnapshot?.key ?: "", onSuccess = { receiverUserVO ->
+
+                         var sortedListData =  dataSnapshot.children.sortedByDescending { dataSnapshot -> dataSnapshot.key }
+                            sortedListData.firstOrNull()?.getValue(ChatMessageVO::class.java)
+                                ?.let { chatMsg ->
+
+                                    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                                    val dateString: String =
+                                        dateFormat.format(chatMsg.timestamp?.let { Date(it) })
 
 
+                                    Log.d("realtimedb","check msg ${chatMsg.message}")
 
-                                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                                val  dateString:String = dateFormat.format( chatMsg.timestamp?.let { Date(it) })
+                                    mChatHistoryListVO.add(
+                                        ChatHistoryVO(
+                                            chatUserId = dataSnapshot?.key,
+                                            chatUserName = receiverUserVO.name,
+                                            chatMsg = chatMsg.message,
+                                            chatTime = dateString,
+                                            chatUserProfileUrl = receiverUserVO.profileUrl
+                                        )
+                                    )
 
-
-
-                                mChatHistoryListVO.add(ChatHistoryVO(
-                                    chatUserId = dataSnapshot?.key,
-                                    chatUserName = userVO.name,
-                                    chatMsg = chatMsg.message,
-                                    chatTime = dateString))
-                                Log.d("Realtime","onDataChange 7 = ${chatMsg.message}")
-
-                                Log.d("Realtime","onDataChange 8 $index ---- ${(snapshot.children.count())-1}")
-                                if(index == (snapshot.children.count())-1)
-                                {
-                                    /*getChatGroupsList(onSuccess = {
-                                        it.forEach {chatGroupVO->
-
-                                            chatGroupVO.messages?.sortedByDescending { chatMessageVO -> chatMessageVO.timestamp }
-                                            Log.d("Realtime","onDataChange 10 ${chatGroupVO.messages?.firstOrNull()?.timestamp}")
-                                            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                                            val  dateString:String = dateFormat.format(
-                                                chatGroupVO.messages?.firstOrNull()?.timestamp?.let { Date(it) })
-
-
-
-                                            mChatHistoryListVO.add(ChatHistoryVO(
-                                                chatUserId = chatGroupVO.id,
-                                                chatUserName = chatGroupVO.name,
-                                                chatMsg = chatGroupVO.messages?.firstOrNull()?.message,
-                                                chatTime = dateString))
-                                        }
+                                    if (index == (snapshot.children.count()) - 1) {
                                         onSuccess(mChatHistoryListVO)
-                                    },
-                                    onFailure = {
-                                        onSuccess(mChatHistoryListVO)
-                                    })*/
+                                    }
 
-                                    onSuccess(mChatHistoryListVO)
                                 }
-
-                            }
-                        }, onFailure = {errorMsg->
+                        }, onFailure = { errorMsg ->
                             onFailure(errorMsg)
                         })
 
                     }
-
-                  //  snapshot.children.forEach { dataSnapshot ->
-                 //       Log.d("Realtime","onDataChange 2 ${dataSnapshot.key}")
-                       // var chatHistoryVO = ChatHistoryVO()
-
-
-
-
-
-
-//                        dataSnapshot.children.forEach{ chatMsgList ->
-//                            Log.d("Realtime","onDataChange 7")
-//
-//                            dataSnapshot?.key?.let {
-//                                Log.d("Realtime","onDataChange 3 $it")
-//                                chatHistoryVO.chatUserName = "aaaa"
-//                                getChatUser(it, onSuccess = {userVO->
-//                                    Log.d("Realtime","onDataChange 6 ${userVO.name} ")
-//                                    chatHistoryVO.chatUserName = userVO.name
-//
-//
-//                                }, onFailure = {errorMsg->
-//                                    onFailure(errorMsg)
-//                                })
-//                            }
-//
-//
-//                            chatMsgList.getValue(ChatMessageVO::class.java)?.let {chatMsg->
-//                                mChatMsgList.add(chatMsg)
-//                                chatHistoryVO.chatMsgListVO = mChatMsgList
-//                                //  mChatHistoryVO.add(chatHistoryVO)
-//
-//                            }
-//
-//                        }
-
-                      //  mChatHistoryVO.add(chatHistoryVO)
-                      //  Log.d("Realtime","onDataChange 8 ${mChatHistoryVO.size}")
-
-                  //  }
-
-                      //  Log.d("Realtime","check chat msg list = ${mChatHistoryVO.size}")
-                     //   onSuccess(mChatHistoryVO)
 
 
                 }
@@ -259,18 +178,21 @@ object RealtimeDatabaseFirebaseApiImpl:RealTimeFirebaseApi {
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
-        val currentTimestamp = System.currentTimeMillis()
-        Log.d("Realtime","createChatGroup $groupName --- ${membersList.size}")
 
-        database.child("groups")
+
+        val currentTimestamp = System.currentTimeMillis()
+        database.child(GROUPS_COLLECTION)
             .child(currentTimestamp.toString())
-            .setValue(ChatGroupVO(
-                id = currentTimestamp.toString(),
-                name = groupName,
-            membersList = membersList,
-                photo = groupPhoto,
-                message = arrayListOf()
-            ))
+            .setValue(
+                ChatGroupVO(
+                    id = currentTimestamp.toString(),
+                    name = groupName,
+                    message = hashMapOf(),
+                    membersList = membersList,
+                    profileUrl = groupPhoto
+
+                )
+            )
             .addOnSuccessListener {
                 onSuccess("Successfully created")
             }
@@ -279,35 +201,36 @@ object RealtimeDatabaseFirebaseApiImpl:RealTimeFirebaseApi {
             }
     }
 
+
     override fun getChatGroupsList(
         onSuccess: (chatGroupList: ArrayList<ChatGroupVO>) -> Unit,
         onFailure: (message: String) -> Unit
-    ) {
-        Log.d("realtime","chat group data")
-        database.child("groups")
+    ) {  Log.d("realtime","check user vo and memberslist")
+        database.child(GROUPS_COLLECTION)
             .addValueEventListener(object : ValueEventListener{
                 override fun onCancelled(error: DatabaseError) {
+                    Log.d("realtime","check user vo and memberslist error")
                     onFailure(error.message)
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d("realtime","chat group data 1")
                     val mChatGroupVOList = arrayListOf<ChatGroupVO>()
+                    Log.d("realtime","check user vo and memberslist 1")
 
                     for((index,dataSnapshot) in snapshot.children.withIndex())
                     {
                         dataSnapshot.getValue(ChatGroupVO::class.java)?.let {
-                            Log.d("realtime","chat group data 2")
+
+                            Log.d("realtime","check user vo and memberslist 2 ${it.membersList} ---- ${mUserVO.id.toString()}")
+
                             if(it.membersList?.contains(mUserVO.id.toString()) == true)
                             {
                                 mChatGroupVOList.add(it)
-
                             }
                         }
 
                         if(index == (snapshot.children.count())-1)
                         {
-                            Log.d("realtime","chat group data 3")
                             onSuccess(mChatGroupVOList)
                         }
                     }
@@ -316,30 +239,104 @@ object RealtimeDatabaseFirebaseApiImpl:RealTimeFirebaseApi {
                 }
             })
     }
+    /*override fun getChatGroupsList(
+        onSuccess: (chatGroupList: ArrayList<ChatGroupVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+       /* val rootRef = FirebaseDatabase.getInstance().reference
 
-    private fun getChatUser(receiverId: String,onSuccess: (mChatUserData:UserVO) -> Unit,
-    onFailure: (message: String) -> Unit){
+        val valueEventListener: ValueEventListener = object : ValueEventListener {
+            override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
+                val mChatGroupListVO: MutableList<ChatGroupVO?> = ArrayList()
+                for (valueRes in dataSnapshot.children) {
+                    val chatGroupVO: ChatGroupVO? =
+                        valueRes.getValue(ChatGroupVO::class.java)
+                    Log.d("Test", "${chatGroupVO?.message?.firstOrNull()?.message}")
+                    mChatGroupListVO.add(chatGroupVO)
+                }
+                onSuccess(mChatGroupListVO)
+                //Do what you need to do with listRes
+            }
 
-        Log.d("Realtime","onDataChange 4 $receiverId")
-        db.collection("users")
+            override fun onCancelled(@NonNull databaseError: DatabaseError) {
+                throw databaseError.toException()
+            }
+        }
+        database.child(GROUPS_COLLECTION).addListenerForSingleValueEvent(valueEventListener)
+        */
+
+        database.child(GROUPS_COLLECTION)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    onFailure(error.message)
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+
+
+                    /*val mChatGroupListVO: ArrayList<ChatGroupVO> = arrayListOf()
+                    for (valueRes in snapshot.children) {
+                        val chatGroupVO = ChatGroupVO()
+                        chatGroupVO.id = valueRes.getValue<ChatGroupVO>()?.id
+                        chatGroupVO.message = valueRes.getValue<ChatGroupVO>()?.message
+                        chatGroupVO.membersList = valueRes.getValue<ChatGroupVO>()?.membersList
+                        chatGroupVO.name = valueRes.getValue<ChatGroupVO>()?.name
+                        chatGroupVO.profileUrl =valueRes.getValue<ChatGroupVO>()?.profileUrl
+                     //   mChatGroupListVO.add(chatGroupVO)
+//                        val chatGroupVO: ChatGroupVO? =
+//                            valueRes.getValue(ChatGroupVO::class.java)
+//                        Log.d("Test", "${chatGroupVO?.message?.firstOrNull()?.message}")
+//                        chatGroupVO?.let { mChatGroupListVO.add(it) }
+                    }
+
+                    onSuccess(mChatGroupListVO)*/
+
+                    val mChatGroupVOList = arrayListOf<ChatGroupVO>()
+
+                    for ((index, dataSnapshot) in snapshot.children.withIndex()) {
+
+
+                        dataSnapshot.getValue(ChatGroupVO::class.java)?.let {
+
+                            if (it.membersList?.contains(mUserVO.id.toString()) == true) {
+                                mChatGroupVOList.add(it)
+                            }
+                        }
+
+                        if (index == (snapshot.children.count()) - 1) {
+                            onSuccess(mChatGroupVOList)
+                        }
+                    }
+
+
+                }
+            })
+    }*/
+
+    private fun getChatUser(
+        receiverId: String, onSuccess: (mChatUserData: UserVO) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+
+        db.collection(USER_COLLECTION)
             .document(receiverId)
             .get()
-            .addOnSuccessListener{result->
-//                val usersList: MutableList<UserVO> = arrayListOf()
-//
-//                for (document in result)
-//                {
+            .addOnSuccessListener { result ->
 
                 val data = result.data
-                Log.d("Realtime","onDataChange 5 ${data?.get("name")}")
                 var chatUserData = UserVO()
-                chatUserData.name = data?.get("name") as String
-                chatUserData.dateOfBirth = data["dateOfBirth"] as String
-                chatUserData.genderType = data["genderType"] as String
-                chatUserData.password = data["password"] as String
-                chatUserData.phoneNumber = data["phoneNumber"] as String
-                //     usersList.add(userData)
-                //  }
+                data?.let {userVO->
+
+                    chatUserData.id = userVO[USER_DOCUMENT_FIELD_UID] as String
+                    chatUserData.name = userVO[USER_DOCUMENT_FIELD_NAME] as String
+                    chatUserData.dateOfBirth = userVO[USER_DOCUMENT_FIELD_DATE_OF_BIRTH] as String
+                    chatUserData.genderType = userVO[USER_DOCUMENT_FIELD_GENDER_TYPE] as String
+                    chatUserData.password = userVO[USER_DOCUMENT_FIELD_PASSWORD] as String
+                    chatUserData.phoneNumber = userVO[USER_DOCUMENT_FIELD_PHONE_NUM] as String
+                    chatUserData.profileUrl = userVO[USER_DOCUMENT_FIELD_PROFILE_URL] as String
+
+                }
 
                 onSuccess(chatUserData)
             }
@@ -353,23 +350,24 @@ object RealtimeDatabaseFirebaseApiImpl:RealTimeFirebaseApi {
         receiverId: String,
         msg: String,
         senderName: String,
+        fileUrl: String,
+        profileUrl: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
 
-      //  Log.d("realtime","before save to realtime db")
-
-        var chatMessageVO = ChatMessageVO()
-        val currentTimestamp = System.currentTimeMillis()
+        val chatMessageVO = ChatMessageVO()
+        var currentTimestamp = System.currentTimeMillis()
+        chatMessageVO.file = fileUrl
         chatMessageVO.message = msg
-        chatMessageVO.user_id = senderId
         chatMessageVO.name = senderName
+        chatMessageVO.profileUrl = profileUrl
         chatMessageVO.timestamp = currentTimestamp
-      //  Log.d("realtime","before save to realtime db 2 ${chatMessageVO.name}")
+        chatMessageVO.userId = senderId
 
-        database.child("groups")
+        database.child(GROUPS_COLLECTION)
             .child(receiverId)
-            .child("messages")
+            .child(GROUP_DOCUMENT_FIELD_GROUP_MESSAGE)
             .child(currentTimestamp.toString())
             .setValue(chatMessageVO)
             .addOnSuccessListener {

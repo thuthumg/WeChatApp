@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.adapters.MediaTypeDataAdapter
@@ -26,6 +27,7 @@ import com.padcmyanmar.ttm.wechatapp.mvp.presenters.CreateNewMomentPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.CreateNewMomentPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.CreateNewMomentView
 import com.padcmyanmar.ttm.wechatapp.utils.getFileExtensionFunc
+import com.padcmyanmar.ttm.wechatapp.utils.mUserVO
 import kotlinx.android.synthetic.main.activity_create_new_moment.*
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.content_create_moment_layout.*
@@ -39,7 +41,6 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
 
     var imageEncoded: String? = null
     var imagesEncodedList: ArrayList<Uri>? = arrayListOf()
-   // var imagesUrlList: ArrayList<String>? = arrayListOf()
     var imagesUrlList: ArrayList<MediaDataVO>? = arrayListOf()
 
     private var phoneNumber:String? = ""
@@ -115,6 +116,11 @@ class CreateNewMomentActivity : BaseActivity(),CreateNewMomentView {
 
     private fun setUpNameUI() {
        tvNameTitle.text = userName
+        Glide.with(this)
+            .load(mUserVO.profileUrl)
+            .placeholder(R.drawable.empty_image)
+            .into(ivProfileImage)
+
     }
 
     private fun setUpDescriptionText() {

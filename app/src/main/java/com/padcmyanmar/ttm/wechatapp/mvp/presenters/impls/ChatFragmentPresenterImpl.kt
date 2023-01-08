@@ -31,10 +31,23 @@ class ChatFragmentPresenterImpl:ChatFragmentPresenter,
                 mView.showError(it)
             }
         )
+
+
+        mWeChatAppModel.getChatGroupsList(
+            onSuccess = {
+                mView.showGroupChatListData(it)
+            },
+            onFailure = {
+                mView.showError(it)
+            }
+        )
     }
 
-    override fun goToChatDetailFromChatFragmentPage(mChatHistoryVO: ChatHistoryVO) {
-        mView.navigateToChatDetailFromChatFragmentPage(mChatHistoryVO)
+    override fun goToChatDetailFromChatFragmentPage(
+        mChatHistoryVO: ChatHistoryVO,
+        checkListType: String
+    ) {
+        mView.navigateToChatDetailFromChatFragmentPage(mChatHistoryVO,checkListType)
     }
 
 

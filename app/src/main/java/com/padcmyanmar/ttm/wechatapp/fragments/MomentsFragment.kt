@@ -1,7 +1,6 @@
 package com.padcmyanmar.ttm.wechatapp.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -69,10 +68,6 @@ class MomentsFragment : Fragment(), MomentFragmentView {
 
     override fun favouriteFunction(momentVOParam: MomentVO) {
 
-        //  outerLoop@for (momentItem in mMomentsList.reversed())
-        // {
-        // if(momentItem.id == momentVOParam.id)
-        //  {
         var arr = momentVOParam.likedId
         val key = loginUserPhoneNumber
 
@@ -92,22 +87,6 @@ class MomentsFragment : Fragment(), MomentFragmentView {
                 }
             )
 
-            /*if(loginUserPhoneNumber == momentData.phoneNumber)
-            {
-                momentData.likedId?.remove(momentVOParam.phoneNumber)
-                momentData.id?.let {
-                    mPresenter.onTapEditMoment(
-                        momentData,
-                        onSuccess = {
-
-                        }
-                    ) { e ->
-                        pbLoading.visibility = View.GONE
-                        showError(e)
-                    }
-                }
-            }*/
-
         } else {
 
             loginUserPhoneNumber?.let {
@@ -126,41 +105,51 @@ class MomentsFragment : Fragment(), MomentFragmentView {
                 }
             )
 
-            /* loginUserPhoneNumber?.let { momentData.likedId?.add(it) }
-            /* momentData.id?.let {
-                 mPresenter.onTapEditMoment(
-                     it,
-                     momentData.photoOrVideoUrlLink ?: arrayListOf(),
-                     momentData.likedId ?: arrayListOf(),
-                     momentData.description.toString(),
-
-                     onSuccess = {
-
-                     },
-                     onFailure = { e ->
-                         pbLoading.visibility = View.GONE
-                         showError(e)
-                     }
-                 )
-             }*/
-             momentData.id?.let {
-                 mPresenter.onTapEditMoment(
-                     momentData,
-                     onSuccess = {
-
-                     }
-                 ) { e ->
-                     pbLoading.visibility = View.GONE
-                     showError(e)
-                 }
-             }*/
         }
 
-        //      break@outerLoop
-        //  }
-        // }
+    }
+
+    override fun bookMarkFunction(momentVO: MomentVO) {
 
 
+        var arr = momentVO.bookMarkedId
+        val key = loginUserPhoneNumber
+
+        var checkDataExistOrNot: Boolean? = arr?.let { key?.let { it1 -> checkItem(it, it1) } }
+
+        if (checkDataExistOrNot == true) {
+
+            momentVO.bookMarkedId?.remove(loginUserPhoneNumber)
+            mPresenter.onTapEditMoment(
+                momentVO,
+                onSuccess = {
+                    mMomentsListAdapter.setNewData(mMomentsList.reversed())
+                },
+                onFailure = { e ->
+                    pbLoading.visibility = View.GONE
+                    showError(e)
+                }
+            )
+
+        } else {
+
+            loginUserPhoneNumber?.let {
+
+                momentVO.bookMarkedId?.add(it)
+            }
+            mPresenter.onTapEditMoment(
+                momentVO,
+                onSuccess = {
+
+                    mMomentsListAdapter.setNewData(mMomentsList.reversed())
+                },
+                onFailure = { e ->
+                    pbLoading.visibility = View.GONE
+                    showError(e)
+                }
+            )
+
+        }
     }
 
     override fun showError(error: String) {

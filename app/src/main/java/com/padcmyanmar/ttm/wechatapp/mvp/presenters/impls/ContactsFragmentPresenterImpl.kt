@@ -81,12 +81,21 @@ class ContactsFragmentPresenterImpl:ContactsFragmentPresenter,
        mView.navigateToChatGroupCreate(loginUserId)
     }
 
-    override fun goToChatDetailFromContactList(contactName: String, chatId: String) {
-        mView.navigateToChatDetailFromContactPage(contactName,chatId)
+    override fun goToChatDetailFromContactList(
+        contactName: String,
+        chatId: String,
+        contactProfile: String
+    ) {
+        mView.navigateToChatDetailFromContactPage(contactName,chatId,contactProfile)
     }
 
-    override fun goToChatDetailFromContactGroupList(contactName: String, chatId: String,sParam:String) {
-        mView.navigateToChatGroupDetailPage(contactName, chatId,sParam)
+    override fun goToChatDetailFromContactGroupList(
+        contactName: String,
+        chatId: String,
+        contactProfile: String,
+        CHAT_TYPE_GROUP: String
+    ) {
+        mView.navigateToChatGroupDetailPage(contactName, chatId,contactProfile)
     }
 
     override fun onTapSelectContactList(contactName: UserVO) {

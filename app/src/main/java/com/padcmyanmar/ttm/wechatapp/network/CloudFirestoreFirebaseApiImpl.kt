@@ -1,6 +1,7 @@
 package com.padcmyanmar.ttm.wechatapp.network
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import com.google.android.gms.tasks.Task
@@ -14,11 +15,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import com.padcmyanmar.ttm.wechatapp.data.vos.ChatMessageVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MediaDataVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.utils.*
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -30,16 +31,11 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
     @SuppressLint("StaticFieldLeak")
     private var db = Firebase.firestore
     // [END get_firestore_instance]
-
     // [START set_firestore_settings]
     private val settings = firestoreSettings {
         isPersistenceEnabled = true
     }
-
     // [END set_firestore_settings]
-
-
-
 
     private val storage: FirebaseStorage = FirebaseStorage.getInstance()
     private val storageReference: StorageReference = storage.reference
@@ -52,27 +48,29 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         password: String,
         phoneNum: String,
         userId: String,
+        profileImageUrl: String,
+        activeStatus: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
 
         val userMap: HashMap<String,Any> = hashMapOf(
-            DOCUMENT_FIELD_NAME to name,
-            DOCUMENT_FIELD_DATE_OF_BIRTH to dateOfBirth,
-            DOCUMENT_FIELD_GENDER_TYPE to gender,
-            DOCUMENT_FIELD_PASSWORD to password,
-            DOCUMENT_FIELD_PHONE_NUM to phoneNum,
-            DOCUMENT_FIELD_UID to userId
+            USER_DOCUMENT_FIELD_NAME to name,
+            USER_DOCUMENT_FIELD_DATE_OF_BIRTH to dateOfBirth,
+            USER_DOCUMENT_FIELD_GENDER_TYPE to gender,
+            USER_DOCUMENT_FIELD_PASSWORD to password,
+            USER_DOCUMENT_FIELD_PHONE_NUM to phoneNum,
+            USER_DOCUMENT_FIELD_UID to userId,
+            USER_DOCUMENT_FIELD_PROFILE_URL to profileImageUrl,
+            USER_DOCUMENT_FIELD_LOGIN_ACTIVE_STATUS to activeStatus
         )
         db.collection(USER_COLLECTION)
             .document(userId)
             .set(userMap)
             .addOnSuccessListener {
-                Log.d("Success","Successfully added user data")
                 onSuccess("Saved Successfully")
             }
             .addOnFailureListener {
-                Log.d("Failure","Failed to add user data")
                 onFailure("Save Failed")
             }
     }
@@ -83,10 +81,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         onSuccess: (userVO: UserVO) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
-        Log.d("cloudFirestore", "getUser function $phoneNum")
-      //  val usersList: MutableList<UserVO> = arrayListOf()
         db.firestoreSettings = settings
-
         db.collection(USER_COLLECTION)
             .addSnapshotListener { value, error ->
                 error?.let {
@@ -98,16 +93,18 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                     outerLoop@for(document : DocumentSnapshot in result)
                     {
                         val data = document.data
-                        if(data?.get(DOCUMENT_FIELD_PHONE_NUM) == phoneNum && data?.get(
-                                DOCUMENT_FIELD_PASSWORD) == password)
+                        if(data?.get(USER_DOCUMENT_FIELD_PHONE_NUM) == phoneNum && data?.get(
+                                USER_DOCUMENT_FIELD_PASSWORD) == password)
                         {
 
-                            userData.name = data[DOCUMENT_FIELD_NAME] as String
-                            userData.dateOfBirth = data[DOCUMENT_FIELD_DATE_OF_BIRTH] as String
-                            userData.genderType = data[DOCUMENT_FIELD_GENDER_TYPE] as String
-                            userData.password = data[DOCUMENT_FIELD_PASSWORD] as String
-                            userData.phoneNumber = data[DOCUMENT_FIELD_PHONE_NUM] as String
-                            userData.id = data[DOCUMENT_FIELD_UID] as String
+                            userData.name = data[USER_DOCUMENT_FIELD_NAME] as String
+                            userData.dateOfBirth = data[USER_DOCUMENT_FIELD_DATE_OF_BIRTH] as String
+                            userData.genderType = data[USER_DOCUMENT_FIELD_GENDER_TYPE] as String
+                            userData.password = data[USER_DOCUMENT_FIELD_PASSWORD] as String
+                            userData.phoneNumber = data[USER_DOCUMENT_FIELD_PHONE_NUM] as String
+                            userData.id = data[USER_DOCUMENT_FIELD_UID] as String
+                            userData.profileUrl = data[USER_DOCUMENT_FIELD_PROFILE_URL] as String
+                            userData.activeStatus = "1"
                             mUserVO = userData
                             checkFlag = true
 
@@ -124,22 +121,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                     }else{
                         onFailure("Login Failed.")
                     }
-
-//                    val source = if (value?.metadata?.isFromCache == true)
-//                    {
-//                        "local cache"
-//
-//                    }
-//                    else
-//                    {
-//                        "server"
-//                    }
-
-
                 }
-
-
-
 
             }
 
@@ -159,12 +141,14 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         val postedTime: String = dateFormat.format(Date())
 
         val momentMap : HashMap<String,Any> = hashMapOf(
-            "name" to mUserVO.name.toString(),
-            "description" to description,
-            "timestamp" to postedTime,
-            "phoneNum" to mUserVO.phoneNumber.toString(),
-            "photoOrVideoUrlLink" to imgList,
-            "likedId" to likedId
+            USER_DOCUMENT_FIELD_NAME to mUserVO.name.toString(),
+            MOMENT_DOCUMENT_FIELD_DESCRIPTION to description,
+            MOMENT_DOCUMENT_FIELD_TIMESTAMP to postedTime,
+            USER_DOCUMENT_FIELD_PHONE_NUM to mUserVO.phoneNumber.toString(),
+            MOMENT_DOCUMENT_PHOTO_VIDEO_LINK to imgList,
+            MOMENT_DOCUMENT_FIELD_LIKED_ID to likedId,
+            MOMENT_DOCUMENT_FIELD_BOOK_MARKED_ID to arrayListOf<String>(),
+            USER_DOCUMENT_FIELD_PROFILE_URL to mUserVO.profileUrl.toString()
         )
 
         db.collection(MOMENTS_COLLECTION)
@@ -207,13 +191,21 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         }
 
 
+        var bookMarkedData = momentVO.bookMarkedId as ArrayList<String>
+        var bookMarkDataList:ArrayList<String> = arrayListOf()
+        for(bookMarkData in bookMarkedData)
+        {
+            bookMarkDataList.add(bookMarkData)
+        }
         val momentMap : HashMap<String,Any> = hashMapOf(
-            "name" to momentVO.name.toString(),
-            "description" to momentVO.description.toString(),
-            "timestamp" to momentVO.timestamp.toString(),
-            "phoneNum" to momentVO.phoneNumber.toString(),
-            "photoOrVideoUrlLink" to mediaDataList,
-            "likedId" to likedDataList
+            USER_DOCUMENT_FIELD_NAME to momentVO.name.toString(),
+            MOMENT_DOCUMENT_FIELD_DESCRIPTION to momentVO.description.toString(),
+            MOMENT_DOCUMENT_FIELD_TIMESTAMP to momentVO.timestamp.toString(),
+            USER_DOCUMENT_FIELD_PHONE_NUM to momentVO.phoneNumber.toString(),
+            MOMENT_DOCUMENT_PHOTO_VIDEO_LINK to mediaDataList,
+            MOMENT_DOCUMENT_FIELD_LIKED_ID to likedDataList,
+            MOMENT_DOCUMENT_FIELD_BOOK_MARKED_ID to bookMarkDataList,
+            USER_DOCUMENT_FIELD_PROFILE_URL to momentVO.profileUrl.toString()
         )
 
         momentVO.id?.let {
@@ -238,10 +230,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         onFailure: (message: String) -> Unit
     ) {
 
-       // Log.d("cloudFirestore", "getUser function $phoneNum")
-        //  val usersList: MutableList<UserVO> = arrayListOf()
         db.firestoreSettings = settings
-
         db.collection(USER_COLLECTION)
             .document(userId)
             .addSnapshotListener { value, error ->
@@ -249,17 +238,15 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                     onFailure(it.message ?: "Please check connection")
                 }?: run {
                     val result : DocumentSnapshot? = value
-                    Log.d("CloudFirebase","check scan qr data " +
-                            "scan user = ${result?.data?.get("name")}" +
-                            "---- current user = ${mUserVO.id}")
 
                     var contactVO = UserVO()
 
-                    contactVO.name =result?.data?.get(DOCUMENT_FIELD_NAME) as String
-                    contactVO.dateOfBirth = result?.data?.get(DOCUMENT_FIELD_DATE_OF_BIRTH) as String
-                    contactVO.genderType = result?.data?.get(DOCUMENT_FIELD_GENDER_TYPE) as String
-                    contactVO.phoneNumber = result?.data?.get(DOCUMENT_FIELD_PHONE_NUM) as String
-                    contactVO.id = result?.data?.get(DOCUMENT_FIELD_UID) as String
+                    contactVO.name =result?.data?.get(USER_DOCUMENT_FIELD_NAME) as String
+                    contactVO.dateOfBirth = result?.data?.get(USER_DOCUMENT_FIELD_DATE_OF_BIRTH) as String
+                    contactVO.genderType = result?.data?.get(USER_DOCUMENT_FIELD_GENDER_TYPE) as String
+                    contactVO.phoneNumber = result?.data?.get(USER_DOCUMENT_FIELD_PHONE_NUM) as String
+                    contactVO.id = result?.data?.get(USER_DOCUMENT_FIELD_UID) as String
+                    contactVO.profileUrl =  result?.data?.get(USER_DOCUMENT_FIELD_PROFILE_URL) as String
                     mUserVO.id?.let {qrcode->
 
                         db.collection("users")
@@ -277,6 +264,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                                 currentUserVO.genderType =  mUserVO.genderType
                                 currentUserVO.phoneNumber =  mUserVO.phoneNumber
                                 currentUserVO.id =  mUserVO.id
+                                contactVO.profileUrl =  mUserVO.profileUrl
                                 db.collection("users")
                                     .document(userId)
                                     .collection("contacts")
@@ -354,10 +342,6 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                 .document(userid)
                 .collection(CONTACTS_COLLECTION)
                 .addSnapshotListener(MetadataChanges.INCLUDE) { querySnapshot, e ->
-
-                    Log.d("cloudfirestore","before check get contacts list ${querySnapshot!!.documentChanges.size}")
-
-
                     if (e != null) {
                     //   Log.w(TAG, "Listen error", e)
                     onFailure(e.message ?: " Please check connection ")
@@ -366,31 +350,16 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
 
                 for (change in querySnapshot!!.documentChanges) {
                     if (change.type == DocumentChange.Type.ADDED) {
-                        Log.d("cloudfirestore","check get contacts list ${change.document.data["name"]}")
-                        var contactUserVO = UserVO()
-                        contactUserVO.name = change.document.data[DOCUMENT_FIELD_NAME] as String
-                        contactUserVO.phoneNumber =  change.document.data[DOCUMENT_FIELD_PHONE_NUM] as String
-                        contactUserVO.genderType =  change.document.data[DOCUMENT_FIELD_GENDER_TYPE] as String
-                        contactUserVO.dateOfBirth =  change.document.data[DOCUMENT_FIELD_DATE_OF_BIRTH] as String
-                        contactUserVO.id =  change.document.data[DOCUMENT_FIELD_UID] as String
+
+                        val contactUserVO = UserVO()
+                        contactUserVO.name = change.document.data[USER_DOCUMENT_FIELD_NAME] as String
+                        contactUserVO.phoneNumber =  change.document.data[USER_DOCUMENT_FIELD_PHONE_NUM] as String
+                        contactUserVO.genderType =  change.document.data[USER_DOCUMENT_FIELD_GENDER_TYPE] as String
+                        contactUserVO.dateOfBirth =  change.document.data[USER_DOCUMENT_FIELD_DATE_OF_BIRTH] as String
+                        contactUserVO.id =  change.document.data[USER_DOCUMENT_FIELD_UID] as String
+                        contactUserVO.profileUrl = change.document.data[USER_DOCUMENT_FIELD_PROFILE_URL] as String
                         mContactsList.add(contactUserVO)
-                    /*var userVO = UserVO()
-                        momentVO.id =  change.document.id
-                        momentVO.name = change.document.data["name"] as String
-                        momentVO.description = change.document.data["description"] as String
-                        momentVO.phoneNumber = change.document.data["phoneNum"] as String
-                        var urlData = change.document.data["photoOrVideoUrlLink"] as ArrayList<HashMap<String,String>>
-                        var mediaDataList:ArrayList<MediaDataVO> = arrayListOf()
-                        for(mediaUrlData in urlData)
-                        {
-                            mediaDataList.add(MediaDataVO(mediaUrlData["mediaType"],mediaUrlData["mediaDataLink"]))
-                        }
 
-                        momentVO.photoOrVideoUrlLink = mediaDataList
-                        momentVO.timestamp = change.document.data["timestamp"] as String
-                        momentVO.likedId = change.document.data["likedId"] as ArrayList<String>
-
-                        mMomentsList.add(momentVO)*/
                     }
 
                 }
@@ -405,49 +374,65 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
     onSuccess: (message: String) -> Unit,
     onFailure: (message: String) -> Unit) {
         val editUserDataMap : HashMap<String,Any> = hashMapOf(
-           DOCUMENT_FIELD_NAME to userName,
-           DOCUMENT_FIELD_DATE_OF_BIRTH to dateOfBirth,
-            DOCUMENT_FIELD_GENDER_TYPE to genderType,
-            DOCUMENT_FIELD_PASSWORD to mUserVO.password.toString(),
-            DOCUMENT_FIELD_PHONE_NUM to mUserVO.phoneNumber.toString(),
-            DOCUMENT_FIELD_UID to mUserVO.id.toString()
+           USER_DOCUMENT_FIELD_NAME to userName,
+           USER_DOCUMENT_FIELD_DATE_OF_BIRTH to dateOfBirth,
+            USER_DOCUMENT_FIELD_GENDER_TYPE to genderType,
+            USER_DOCUMENT_FIELD_PASSWORD to mUserVO.password.toString(),
+            USER_DOCUMENT_FIELD_PHONE_NUM to mUserVO.phoneNumber.toString(),
+            USER_DOCUMENT_FIELD_UID to mUserVO.id.toString(),
+            USER_DOCUMENT_FIELD_PROFILE_URL to mUserVO.profileUrl.toString(),
+            USER_DOCUMENT_FIELD_LOGIN_ACTIVE_STATUS to mUserVO.activeStatus
         )
 
         db.collection(USER_COLLECTION)
             .document(mUserVO.id.toString())
             .set(editUserDataMap)
             .addOnSuccessListener {
-                Log.d("Success","Successfully added user data")
+
                 onSuccess("Saved Successfully")
             }
             .addOnFailureListener {
-                Log.d("Failure","Failed to add user data")
+
                 onFailure("Save Failed")
             }
     }
 
+    override fun uploadImageAndEditUserVO(
+        image: Bitmap,
+        userVO: UserVO,
+        onSuccess: (returnStringData: String?) -> Unit
+    ) {
+        val byteArrayOutput = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100,byteArrayOutput)
+        val data: ByteArray = byteArrayOutput.toByteArray()
 
-    /* override fun uploadImageUserVO(image: Bitmap, onSuccess: (returnUrlString: String?) -> Unit) {
-         val baos = ByteArrayOutputStream()
-         image.compress(Bitmap.CompressFormat.JPEG, 100,baos)
-         val data: ByteArray = baos.toByteArray()
+        val imageRef: StorageReference = storageReference.child("images/${UUID.randomUUID()}")
+        val uploadTask: UploadTask = imageRef.putBytes(data)
+        uploadTask.addOnFailureListener{
 
-         val imageRef: StorageReference = storageReference.child("images/${UUID.randomUUID()}")
-         val uploadTask: UploadTask = imageRef.putBytes(data)
-         uploadTask.addOnFailureListener{
+        }.addOnSuccessListener {
+        }
 
-         }.addOnSuccessListener {
-         }
+        val urlTask: Task<Uri> = uploadTask.continueWithTask {
+            return@continueWithTask imageRef.downloadUrl
+        }.addOnCompleteListener { task->
+            val imageUrl : String? = task.result?.toString()
+            returnUrlString = imageUrl
+            addUser(
+                name=userVO.name ?: "",
+                dateOfBirth = userVO.dateOfBirth ?: "",
+                gender = userVO.genderType ?: "",
+                password = userVO.password ?: "",
+                phoneNum = userVO.phoneNumber ?: "",
+                userId = userVO.id ?: "",
+                profileImageUrl = imageUrl ?: "",
+                activeStatus = mUserVO.activeStatus,
+                onSuccess = {}) {}
 
-         val urlTask: Task<Uri> = uploadTask.continueWithTask {
-             return@continueWithTask imageRef.downloadUrl
-         }.addOnCompleteListener { task->
-             val imageUrl : String? = task.result?.toString()
-             returnUrlString = imageUrl
-             onSuccess(returnUrlString)
+            onSuccess(returnUrlString)
 
-         }
-     }*/
+        }
+    }
 
     override fun uploadImageAndVideoFile(fileUri: Uri, onSuccess: (returnUrlString: String?) -> Unit) {
       //  val videoRef: StorageReference = storageReference.child("videos/${UUID.randomUUID()}")
@@ -464,7 +449,6 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         }.addOnCompleteListener { task->
             val imageUrl : String? = task.result?.toString()
             returnUrlString = imageUrl
-            Log.d("CreateNewMoment","check image link at upload function 2= $returnUrlString")
             onSuccess(returnUrlString)
 
         }
@@ -476,7 +460,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
         onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
-         var mMomentsList:ArrayList<MomentVO> = arrayListOf()
+         val mMomentsList:ArrayList<MomentVO> = arrayListOf()
         db.firestoreSettings = settings
         db.collection(MOMENTS_COLLECTION).addSnapshotListener(MetadataChanges.INCLUDE) { querySnapshot, e ->
                 if (e != null) {
@@ -488,21 +472,24 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                 for (change in querySnapshot!!.documentChanges) {
                     if (change.type == DocumentChange.Type.ADDED) {
 
-                        var momentVO = MomentVO()
+                        val momentVO = MomentVO()
                         momentVO.id =  change.document.id
-                        momentVO.name = change.document.data["name"] as String
-                        momentVO.description = change.document.data["description"] as String
-                        momentVO.phoneNumber = change.document.data["phoneNum"] as String
-                        var urlData = change.document.data["photoOrVideoUrlLink"] as ArrayList<HashMap<String,String>>
-                        var mediaDataList:ArrayList<MediaDataVO> = arrayListOf()
+                        momentVO.name = change.document.data[USER_DOCUMENT_FIELD_NAME] as String
+                        momentVO.description = change.document.data[MOMENT_DOCUMENT_FIELD_DESCRIPTION] as String
+                        momentVO.phoneNumber = change.document.data[USER_DOCUMENT_FIELD_PHONE_NUM] as String
+                        val urlData = change.document.data[MOMENT_DOCUMENT_PHOTO_VIDEO_LINK] as ArrayList<HashMap<String,String>>
+                        val mediaDataList:ArrayList<MediaDataVO> = arrayListOf()
                         for(mediaUrlData in urlData)
                         {
-                            mediaDataList.add(MediaDataVO(mediaUrlData["mediaType"],mediaUrlData["mediaDataLink"]))
+                            mediaDataList.add(MediaDataVO(mediaUrlData[MOMENT_DOCUMENT_FIELD_MEDIA_TYPE],
+                                mediaUrlData[MOMENT_DOCUMENT_FIELD_MEDIA_DATA_LINK]))
                         }
 
                         momentVO.photoOrVideoUrlLink = mediaDataList
-                        momentVO.timestamp = change.document.data["timestamp"] as String
-                        momentVO.likedId = change.document.data["likedId"] as ArrayList<String>
+                        momentVO.timestamp = change.document.data[MOMENT_DOCUMENT_FIELD_TIMESTAMP] as String
+                        momentVO.likedId = change.document.data[MOMENT_DOCUMENT_FIELD_LIKED_ID] as ArrayList<String>
+                        momentVO.bookMarkedId = change.document.data[MOMENT_DOCUMENT_FIELD_BOOK_MARKED_ID] as ArrayList<String>
+                        momentVO.profileUrl = change.document.data[USER_DOCUMENT_FIELD_PROFILE_URL] as String
 
                         mMomentsList.add(momentVO)
                     }
@@ -511,11 +498,69 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                         "local cache"
                     else
                         "server"
-                    // Log.d(TAG, "Data fetched from $source")
                 }
                 onSuccess(mMomentsList)
 
             }
+
+    }
+
+
+    override fun getMomentDataByBookMarkList(
+        onSuccess: (momentsList: ArrayList<MomentVO>) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
+        val mMomentsList:ArrayList<MomentVO> = arrayListOf()
+        db.firestoreSettings = settings
+        db.collection(MOMENTS_COLLECTION).addSnapshotListener(MetadataChanges.INCLUDE) { querySnapshot, e ->
+            if (e != null) {
+                //   Log.w(TAG, "Listen error", e)
+                onFailure(e.message ?: " Please check connection ")
+                return@addSnapshotListener
+            }
+
+            for (change in querySnapshot!!.documentChanges) {
+                if (change.type == DocumentChange.Type.ADDED) {
+
+                    val momentVO = MomentVO()
+                    val bookMarkArray = change.document.data[MOMENT_DOCUMENT_FIELD_BOOK_MARKED_ID]as ArrayList<String>
+                    val checkPhoneNum = change.document.data[USER_DOCUMENT_FIELD_PHONE_NUM] as String
+
+                    if(bookMarkArray.isNotEmpty() && checkPhoneNum == mUserVO.phoneNumber){
+                        momentVO.id =  change.document.id
+                        momentVO.name = change.document.data[USER_DOCUMENT_FIELD_NAME] as String
+                        momentVO.description = change.document.data[MOMENT_DOCUMENT_FIELD_DESCRIPTION] as String
+                        momentVO.phoneNumber = change.document.data[USER_DOCUMENT_FIELD_PHONE_NUM] as String
+                        val urlData = change.document.data[MOMENT_DOCUMENT_PHOTO_VIDEO_LINK] as ArrayList<HashMap<String,String>>
+                        val mediaDataList:ArrayList<MediaDataVO> = arrayListOf()
+                        for(mediaUrlData in urlData)
+                        {
+                            mediaDataList.add(MediaDataVO(mediaUrlData[MOMENT_DOCUMENT_FIELD_MEDIA_TYPE],
+                                mediaUrlData[MOMENT_DOCUMENT_FIELD_MEDIA_DATA_LINK]))
+                        }
+
+                        momentVO.photoOrVideoUrlLink = mediaDataList
+                        momentVO.timestamp = change.document.data[MOMENT_DOCUMENT_FIELD_TIMESTAMP] as String
+                        momentVO.likedId = change.document.data[MOMENT_DOCUMENT_FIELD_LIKED_ID] as ArrayList<String>
+                        momentVO.bookMarkedId = change.document.data[MOMENT_DOCUMENT_FIELD_BOOK_MARKED_ID] as ArrayList<String>
+                        momentVO.profileUrl = change.document.data[USER_DOCUMENT_FIELD_PROFILE_URL] as String
+
+                        mMomentsList.add(momentVO)
+
+                    }
+
+
+                }
+
+                val source = if (querySnapshot.metadata.isFromCache)
+                    "local cache"
+                else
+                    "server"
+                // Log.d(TAG, "Data fetched from $source")
+            }
+            onSuccess(mMomentsList)
+
+        }
         /* db.collection("users")
              .get()
              .addOnSuccessListener{result->

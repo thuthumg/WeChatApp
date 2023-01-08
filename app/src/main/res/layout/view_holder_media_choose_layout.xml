@@ -3,19 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="20dp"
+
     android:layout_margin="@dimen/margin_medium"
-    app:strokeWidth="1dp"
-    app:strokeColor="@color/custom_color"
+
     android:layout_width="108dp"
     android:layout_height="108dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivSelectedImage"
         android:layout_gravity="center"
-        android:padding="@dimen/margin_medium"
+
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_baseline_add_24"
+        android:src="@drawable/ic_choose_media_pic"
         android:layout_width="100dp"
         android:layout_height="100dp"/>
 

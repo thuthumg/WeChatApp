@@ -1,10 +1,9 @@
 package com.padcmyanmar.ttm.wechatapp.data.vos
 
-class ChatGroupVO (
+class ChatGroupVO(
     var id:String? = "",
     var name:String? = "",
-    var message:ArrayList<ChatMessageVO>? = arrayListOf(),
+    var message:Map<String,ChatMessageVO>? = hashMapOf(),
     var membersList:ArrayList<String>? = arrayListOf(),
-    var photo:String? = ""
-
+    var profileUrl:String? = ""
 )

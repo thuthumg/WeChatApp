@@ -7,4 +7,6 @@ interface MomentFragmentView:BaseView {
     fun showMomentData(momentList:ArrayList<MomentVO>)
 
     fun favouriteFunction(momentVO: MomentVO)
+
+    fun bookMarkFunction(momentVO: MomentVO)
 }

@@ -26,25 +26,18 @@ tools:context=".activities.MainActivity">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <com.google.android.material.card.MaterialCardView
-            android:clickable="true"
-            android:id="@+id/mcvCreateMoment"
-            android:layout_marginEnd="@dimen/margin_medium"
-            app:cardCornerRadius="@dimen/margin_medium"
-            app:cardBackgroundColor="@color/custom_color"
-            android:layout_gravity="end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+
             <androidx.appcompat.widget.AppCompatImageView
+                android:layout_gravity="end"
+                android:id="@+id/ivCreateMoment"
                android:paddingStart="@dimen/margin_medium"
                 android:paddingEnd="@dimen/margin_medium"
                 android:paddingTop="@dimen/margin_card_medium"
                 android:paddingBottom="@dimen/margin_card_medium"
-                android:id="@+id/btnBackAboutBook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_create_icon_24" />
-        </com.google.android.material.card.MaterialCardView>
+                app:srcCompat="@drawable/ic_add_moment" />
+
 
 
 

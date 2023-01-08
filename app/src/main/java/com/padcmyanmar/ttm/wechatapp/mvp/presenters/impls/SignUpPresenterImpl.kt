@@ -28,14 +28,14 @@ class SignUpPresenterImpl:SignUpPresenter, AbstractBasePresenter<SignUpView>() {
             password,
             phoneNo,
             userId,
+            "",
+            activeStatus = "0",
             onSuccess = {
                 onSuccess(it)
                 mView.signUpFunction()
-            },
-            onFailure = {
-                onFailure(it)
-            }
-        )
+            }) {
+            onFailure(it)
+        }
         // mView.signUpFunction()
 
 
