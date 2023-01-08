@@ -7,7 +7,7 @@
         android:title="Moment" />
     <item
         android:id="@+id/action_chat"
-        android:icon="@drawable/ic_chat"
+        android:icon="@drawable/ic_chat_30"
         android:title="Chat" />
 
     <item
@@ -17,11 +17,11 @@
 
     <item
         android:id="@+id/action_me"
-        android:icon="@drawable/ic_me"
+        android:icon="@drawable/ic_me_30"
         android:title="Me" />
 
     <item
         android:id="@+id/action_setting"
-        android:icon="@drawable/ic_more"
+        android:icon="@drawable/ic_setting_30"
         android:title="Setting" />
 </menu>

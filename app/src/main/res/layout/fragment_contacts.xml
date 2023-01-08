@@ -18,41 +18,33 @@ tools:context=".fragments.ContactsFragment">
         android:background="@color/white_dark">
 
         <TextView
+            android:id="@+id/tvContactText"
             android:textStyle="bold"
             android:textColor="@color/text_title_color"
             android:textSize="@dimen/text_heading_1x"
-            android:text="Contacts"
+            tools:text="Contacts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-
+            android:id="@+id/tvConactCount"
             android:textStyle="bold"
             android:textColor="@color/hint_color"
             android:textSize="@dimen/text_small"
-            android:text="(0)"
+            tools:text="(0)"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_marginEnd="@dimen/margin_medium_2"
 
-            android:clickable="true"
-            android:id="@+id/mcvEditProfile"
-            app:cardCornerRadius="@dimen/margin_medium"
-            app:cardBackgroundColor="@color/custom_color"
-            android:layout_gravity="end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
             <androidx.appcompat.widget.AppCompatImageView
+                android:layout_gravity="end"
+                android:id="@+id/ivEditProfile"
                 android:paddingStart="@dimen/margin_medium"
                 android:paddingEnd="@dimen/margin_medium"
                 android:paddingTop="@dimen/margin_card_medium"
                 android:paddingBottom="@dimen/margin_card_medium"
-                android:id="@+id/btnBackAboutBook"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                app:srcCompat="@drawable/ic_baseline_person_add_alt_1_24" />
-        </com.google.android.material.card.MaterialCardView>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_contact_add_64" />
 
 
 
@@ -104,13 +96,14 @@ tools:context=".fragments.ContactsFragment">
 
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvGroupCount"
         android:visibility="visible"
         android:layout_marginTop="@dimen/margin_medium_2"
         android:layout_marginBottom="@dimen/margin_medium_2"
         android:textStyle="bold"
-        android:textSize="@dimen/text_regular"
+        android:textSize="@dimen/text_regular_2x"
         android:textColor="@color/text_title_color"
-        android:text="Groups(0)"
+        tools:text="Groups(0)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

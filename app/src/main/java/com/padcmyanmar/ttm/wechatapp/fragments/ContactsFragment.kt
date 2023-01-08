@@ -42,6 +42,8 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
 
     private lateinit var mChatGroupsListAdapter: ChatGroupsListAdapter
     private lateinit var mContactItemAdapter: ContactItemAdapter
+    private var contactCount = 0
+    private var groupCount = 0
     //  private var REQUEST_CODE_QR_SCAN = 101
 
     var mContactsList: ArrayList<UserVO> = arrayListOf()
@@ -60,10 +62,34 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
         setUpPresenter()
 
         setUpEmptyChatUI()
+        setUpContactAndGroupCount()
         setUpChatGroupAdapter()
         setUpContactsListAdapter()
         clickListener()
         context?.let { mPresenter.onUiReady(it, this) }
+    }
+
+    private fun setUpContactAndGroupCount() {
+        if(contactCount > 1)
+        {
+            tvContactText.text = "Contacts"
+            tvConactCount.text = "(${contactCount})"
+
+        }
+        else{
+            tvContactText.text = "Contact"
+            tvConactCount.text = "(${contactCount})"
+
+        }
+
+        if(groupCount > 1)
+        {
+            tvGroupCount.text = "Groups(${groupCount})"
+        }else{
+            tvGroupCount.text = "Group(${groupCount})"
+        }
+
+
     }
 
     private fun setUpPresenter() {
@@ -79,7 +105,7 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
     }
 
     private fun clickListener() {
-        mcvEditProfile.setOnClickListener {
+        ivEditProfile.setOnClickListener {
             /*  val i = Intent(context, QrCodeActivity::class.java)
               startActivityForResult(i, REQUEST_CODE_QR_SCAN)*/
 
@@ -170,7 +196,7 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
                                     contactsListVO.usersList = bindData.value
                                     contactsArrayList.add(contactsListVO)
                                 }
-
+                                contactCount = contactsArrayList.size
                                 mContactItemAdapter.setNewData(contactsArrayList)
 
                             },
@@ -225,7 +251,7 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
             contactsListVO.usersList = bindData.value
             contactsArrayList.add(contactsListVO)
         }
-
+        contactCount = contactsArrayList.size
         mContactItemAdapter.setNewData(contactsArrayList)
 
 
@@ -255,6 +281,7 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
     }
 
     override fun showChatGroupsList(chatGroupList: ArrayList<ChatGroupVO>) {
+        groupCount = chatGroupList.size
         mChatGroupsListAdapter.setNewData(chatGroupList)
     }
 

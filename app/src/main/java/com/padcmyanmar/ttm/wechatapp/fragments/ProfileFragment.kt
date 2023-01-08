@@ -1,11 +1,9 @@
 package com.padcmyanmar.ttm.wechatapp.fragments
 
-import android.R.attr.bitmap
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context.WINDOW_SERVICE
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.graphics.Point
@@ -14,20 +12,15 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.zxing.WriterException
 import com.padcmyanmar.ttm.wechatapp.R
-import com.padcmyanmar.ttm.wechatapp.activities.CreateNewMomentActivity
-import com.padcmyanmar.ttm.wechatapp.activities.MainActivity
 import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_DATE_OF_BIRTH
 import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_GENDER_TYPE
 import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_PHONE_NUMBER
@@ -153,7 +146,7 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
     }
 
     private fun clickListenerFunc() {
-        mcvEditProfile.setOnClickListener {
+        ivEditProfile.setOnClickListener {
             setUpEditProfile()
         }
 

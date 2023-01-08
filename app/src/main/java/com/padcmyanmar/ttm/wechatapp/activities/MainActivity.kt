@@ -52,6 +52,7 @@ class MainActivity : BaseActivity(), MainView {
             intent.putExtra(BUNDLE_GENDER_TYPE, gender)
             intent.putExtra(BUNDLE_QR_CODE, qrCode)
             intent.putExtra(BUNDLE_PROFILE_IMG_URL,profileImageUrl)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             return intent
         }
     }

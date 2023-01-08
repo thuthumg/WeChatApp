@@ -11,23 +11,14 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-
 import androidx.core.content.ContextCompat
-
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.SignUpPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.SignUpPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.SignUpView
-
 import com.padcmyanmar.ttm.wechatapp.utils.monthsDataList
-
-
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlinx.android.synthetic.main.activity_sign_up.edtPassword
-import kotlinx.android.synthetic.main.activity_sign_up.txtInputPassword
-
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class SignUpActivity : BaseActivity(), SignUpView {
@@ -374,7 +365,9 @@ class SignUpActivity : BaseActivity(), SignUpView {
     }
 
     override fun signUpFunction() {
-        startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
+        var intent = Intent(this@SignUpActivity,LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
 

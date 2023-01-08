@@ -22,6 +22,7 @@
 
 
     <LinearLayout
+        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,7 +70,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_send"/>
+                android:src="@drawable/ic_send_btn"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -96,7 +97,7 @@
                         android:id="@+id/ivGallery"
                         android:padding="@dimen/margin_medium"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_gallery"
+                        android:src="@drawable/ic_gallery_30"
                         android:layout_width="40dp"
                         android:layout_height="40dp"/>
                 </androidx.cardview.widget.CardView>
@@ -120,7 +121,7 @@
                         android:id="@+id/ivCamera"
                         android:padding="@dimen/margin_medium"
                         android:layout_gravity="center"
-                        android:src="@drawable/camera"
+                        android:src="@drawable/ic_camera_30"
                         android:layout_width="40dp"
                         android:layout_height="40dp"/>
                 </androidx.cardview.widget.CardView>
@@ -144,7 +145,7 @@
                         android:id="@+id/ivGif"
                         android:padding="@dimen/margin_medium"
                         android:layout_gravity="center"
-                        android:src="@drawable/gif"
+                        android:src="@drawable/ic_gif_30"
                         android:layout_width="40dp"
                         android:layout_height="40dp"/>
                 </androidx.cardview.widget.CardView>
@@ -168,7 +169,7 @@
                         android:id="@+id/ivLocation"
                         android:padding="@dimen/margin_medium"
                         android:layout_gravity="center"
-                        android:src="@drawable/placeholder"
+                        android:src="@drawable/ic_location_30"
                         android:layout_width="40dp"
                         android:layout_height="40dp"/>
                 </androidx.cardview.widget.CardView>
@@ -192,7 +193,7 @@
                         android:id="@+id/ivVoice"
                         android:padding="@dimen/margin_medium"
                         android:layout_gravity="center"
-                        android:src="@drawable/microphone"
+                        android:src="@drawable/ic_sound_30"
                         android:layout_width="40dp"
                         android:layout_height="40dp"/>
                 </androidx.cardview.widget.CardView>

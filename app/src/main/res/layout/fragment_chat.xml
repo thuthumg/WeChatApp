@@ -39,7 +39,7 @@ tools:context=".fragments.ChatFragment">
                 android:paddingEnd="@dimen/margin_medium"
                 android:paddingTop="@dimen/margin_card_medium"
                 android:paddingBottom="@dimen/margin_card_medium"
-                android:id="@+id/btnBackAboutBook"
+                android:id="@+id/btnSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_baseline_search_24" />
@@ -52,6 +52,8 @@ tools:context=".fragments.ChatFragment">
 </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
+        android:layout_marginEnd="@dimen/margin_medium_2"
+        android:layout_marginStart="@dimen/margin_medium_2"
         android:orientation="vertical"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:layout_width="match_parent"
@@ -59,6 +61,7 @@ tools:context=".fragments.ChatFragment">
 
 
         <androidx.appcompat.widget.AppCompatTextView
+
             android:textSize="@dimen/text_regular"
             android:textColor="#80113A5D"
             android:layout_margin="@dimen/margin_medium"
@@ -66,6 +69,7 @@ tools:context=".fragments.ChatFragment">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <androidx.recyclerview.widget.RecyclerView
+
             android:clipToPadding="true"
             android:id="@+id/rvActiveChatsList"
             tools:itemCount="2"
@@ -75,6 +79,7 @@ tools:context=".fragments.ChatFragment">
             android:layout_height="wrap_content"/>
 
         <androidx.recyclerview.widget.RecyclerView
+
             tools:itemCount="2"
             android:clipToPadding="true"
             android:layout_marginTop="@dimen/margin_medium"
@@ -84,6 +89,7 @@ tools:context=".fragments.ChatFragment">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <androidx.recyclerview.widget.RecyclerView
+
             tools:itemCount="2"
             android:clipToPadding="true"
             android:layout_marginTop="@dimen/margin_medium"

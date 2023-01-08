@@ -1,5 +1,6 @@
 package com.padcmyanmar.ttm.wechatapp.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -144,7 +145,6 @@ class LoginActivity : BaseActivity(), LoginView {
 
         Log.d("loginactivity","user profile = "+ userVO.profileUrl)
 
-
         startActivity(
             MainActivity.newIntent(
                 this@LoginActivity,
@@ -157,7 +157,6 @@ class LoginActivity : BaseActivity(), LoginView {
             )
         )
 
-        finish()
 
     }
 

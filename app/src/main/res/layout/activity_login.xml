@@ -65,8 +65,7 @@
 
 
              <androidx.appcompat.widget.AppCompatImageView
-
-                android:layout_marginTop="@dimen/spacing_xxlarge"
+                android:layout_marginTop="@dimen/spacing_xlarge"
                  android:layout_centerHorizontal="true"
                  android:id="@+id/ivLoginLogo"
                  android:layout_width="wrap_content"

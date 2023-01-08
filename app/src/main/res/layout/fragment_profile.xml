@@ -27,7 +27,7 @@ tools:context=".fragments.ProfileFragment">
 
         <com.google.android.material.card.MaterialCardView
             android:clickable="true"
-            android:id="@+id/mcvEditProfile"
+            android:id="@+id/ivEditProfile"
             android:layout_marginEnd="@dimen/margin_medium"
             app:cardCornerRadius="@dimen/margin_medium"
             app:cardBackgroundColor="@color/custom_color"

@@ -1,6 +1,7 @@
 package com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.AbstractBasePresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.SplashPresenter
@@ -18,7 +19,7 @@ class SplashPresenterImpl: SplashPresenter, AbstractBasePresenter<SplashView>() 
     }
 
     override fun onUiReady(context: Context, owner: LifecycleOwner) {
-
+        Log.d("splash","check mUserVO ${mUserVO.id}")
         if(mUserVO.id == null || mUserVO.id == "null" || mUserVO.id == "")
         {
             mView.navigateToHomeScreen("goToSplash")
