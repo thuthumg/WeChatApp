@@ -26,7 +26,7 @@ tools:context=".fragments.ContactsFragment">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/tvConactCount"
+            android:id="@+id/tvContactCount"
             android:textStyle="bold"
             android:textColor="@color/hint_color"
             android:textSize="@dimen/text_small"
@@ -52,119 +52,125 @@ tools:context=".fragments.ContactsFragment">
 
 </com.google.android.material.appbar.AppBarLayout>
 
-<LinearLayout
-    android:background="@color/contact_page_bg"
-    android:layout_margin="@dimen/margin_medium_2"
-    android:orientation="vertical"
-    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:drawableStart="@drawable/ic_baseline_search_24_blue"
-        android:drawableEnd="@drawable/ic_baseline_close_24"
-        android:hint="Search"
-        android:background="@drawable/contact_search_edit_text_bg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-
-
-    <LinearLayout
-        android:visibility="gone"
-        android:background="@color/contact_page_bg"
-        android:gravity="center"
-        android:orientation="vertical"
+    <androidx.core.widget.NestedScrollView
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_gravity="center"
-            android:src="@drawable/empty_contacts_pic"
+        <LinearLayout
+            android:background="@color/contact_page_bg"
+            android:layout_margin="@dimen/margin_medium_2"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvEmptyText"
-            android:textColor="@color/hint_color"
-            android:textSize="18sp"
+            android:layout_height="match_parent">
 
-            android:layout_gravity="center"
-            android:gravity="center"
-            tools:text="No Contact or group with name \n 'Aung Aung' exits"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvGroupCount"
-        android:visibility="visible"
-        android:layout_marginTop="@dimen/margin_medium_2"
-        android:layout_marginBottom="@dimen/margin_medium_2"
-        android:textStyle="bold"
-        android:textSize="@dimen/text_regular_2x"
-        android:textColor="@color/text_title_color"
-        tools:text="Groups(0)"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:visibility="visible"
-        tools:itemCount="3"
-        tools:listitem="@layout/view_holder_chat_group_item"
-        android:clipToPadding="true"
-        android:id="@+id/rvChatGroupsList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:visibility="visible"
-        tools:itemCount="3"
-        tools:listitem="@layout/view_holder_contact_item"
-        android:paddingBottom="@dimen/margin_card_medium_2"
-        android:clipToPadding="true"
-        android:id="@+id/rvContactsList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-<!--    <LinearLayout-->
-<!--        android:orientation="horizontal"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
-<!--        <com.google.android.material.card.MaterialCardView-->
-<!--            android:clickable="true"-->
-<!--            app:cardCornerRadius="@dimen/margin_medium"-->
-<!--            app:cardBackgroundColor="@color/custom_color"-->
-<!--            android:layout_width="100dp"-->
-<!--            android:layout_height="100dp">-->
-
-<!--            <LinearLayout-->
-<!--                android:gravity="center"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:orientation="vertical"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content">-->
-<!--                <androidx.appcompat.widget.AppCompatImageView-->
-
-<!--                    android:layout_width="45dp"-->
-<!--                    android:layout_height="45dp"-->
-<!--                    app:srcCompat="@drawable/ic_baseline_group_add_24" />-->
-<!--                <androidx.appcompat.widget.AppCompatTextView-->
-
-<!--                    android:textSize="@dimen/text_regular_2x"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:text="Add New"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"/>-->
-<!--            </LinearLayout>-->
+            <androidx.appcompat.widget.AppCompatEditText
+                android:drawableStart="@drawable/ic_baseline_search_24_blue"
+                android:drawableEnd="@drawable/ic_baseline_close_24"
+                android:hint="Search"
+                android:background="@drawable/contact_search_edit_text_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
 
 
+            <LinearLayout
+                android:visibility="gone"
+                android:background="@color/contact_page_bg"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_gravity="center"
+                    android:src="@drawable/empty_contacts_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvEmptyText"
+                    android:textColor="@color/hint_color"
+                    android:textSize="18sp"
 
-<!--        </com.google.android.material.card.MaterialCardView>-->
-<!--       -->
-<!--    </LinearLayout>-->
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    tools:text="No Contact or group with name \n 'Aung Aung' exits"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
-</LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvGroupCount"
+                android:visibility="visible"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_regular_2x"
+                android:textColor="@color/text_title_color"
+                tools:text="Groups(0)"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:visibility="visible"
+                tools:itemCount="3"
+                tools:listitem="@layout/view_holder_chat_group_item"
+                android:clipToPadding="true"
+                android:id="@+id/rvChatGroupsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:visibility="visible"
+                tools:itemCount="3"
+                tools:listitem="@layout/view_holder_contact_item"
+                android:paddingBottom="@dimen/margin_card_medium_2"
+                android:clipToPadding="true"
+                android:id="@+id/rvContactsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!--    <LinearLayout-->
+            <!--        android:orientation="horizontal"-->
+            <!--        android:layout_width="match_parent"-->
+            <!--        android:layout_height="wrap_content">-->
+            <!--        <com.google.android.material.card.MaterialCardView-->
+            <!--            android:clickable="true"-->
+            <!--            app:cardCornerRadius="@dimen/margin_medium"-->
+            <!--            app:cardBackgroundColor="@color/custom_color"-->
+            <!--            android:layout_width="100dp"-->
+            <!--            android:layout_height="100dp">-->
+
+            <!--            <LinearLayout-->
+            <!--                android:gravity="center"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:orientation="vertical"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content">-->
+            <!--                <androidx.appcompat.widget.AppCompatImageView-->
+
+            <!--                    android:layout_width="45dp"-->
+            <!--                    android:layout_height="45dp"-->
+            <!--                    app:srcCompat="@drawable/ic_baseline_group_add_24" />-->
+            <!--                <androidx.appcompat.widget.AppCompatTextView-->
+
+            <!--                    android:textSize="@dimen/text_regular_2x"-->
+            <!--                    android:textColor="@color/white"-->
+            <!--                    android:text="Add New"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"/>-->
+            <!--            </LinearLayout>-->
+
+
+
+
+            <!--        </com.google.android.material.card.MaterialCardView>-->
+            <!--       -->
+            <!--    </LinearLayout>-->
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

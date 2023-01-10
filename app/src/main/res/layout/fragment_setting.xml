@@ -1,14 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".fragments.SettingFragment">
+
+<com.google.android.material.appbar.AppBarLayout
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.SettingFragment">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Setting Fragment" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white_dark">
 
-</FrameLayout>
+        <TextView
+            android:textStyle="bold"
+            android:textColor="@color/text_title_color"
+            android:textSize="@dimen/text_heading_1x"
+            android:text="Me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:clickable="true"
+            android:id="@+id/ivEditProfile"
+            android:layout_marginEnd="@dimen/margin_medium"
+            app:cardCornerRadius="@dimen/margin_medium"
+            app:cardBackgroundColor="@color/custom_color"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:paddingStart="@dimen/margin_medium"
+                android:paddingEnd="@dimen/margin_medium"
+                android:paddingTop="@dimen/margin_card_medium"
+                android:paddingBottom="@dimen/margin_card_medium"
+                android:id="@+id/btnBack"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                app:srcCompat="@drawable/ic_edit" />
+        </com.google.android.material.card.MaterialCardView>
+
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+</com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_margin="@dimen/margin_medium_3"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/custom_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <FrameLayout
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:id="@+id/flProfilePhoto"
+                        android:layout_margin="@dimen/margin_card_medium_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+
+                            android:src="@drawable/profile_sample"
+                            android:id="@+id/ivUserProfile"
+                            android:layout_width="125dp"
+                            android:layout_height="125dp"/>
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:clickable="true"
+                            android:background="@color/white"
+                            android:id="@+id/ivQrCode"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="bottom|end"
+                            app:srcCompat="@drawable/ic_qr_code" />
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivGallery"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="bottom|start"
+                            app:srcCompat="@drawable/ic_gallery_white" />
+                    </FrameLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+
+                        android:layout_marginStart="@dimen/margin_medium_3"
+                        android:layout_marginTop="@dimen/margin_card_medium_2"
+                        android:id="@+id/tvProfileName"
+                        android:layout_toEndOf="@id/flProfilePhoto"
+                        tools:text="Thu Thu Mg"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/text_heading_1x"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+
+                        android:layout_marginStart="@dimen/margin_medium_3"
+                        android:id="@+id/tvPhoneNumber"
+                        android:drawableStart="@drawable/ic_baseline_smartphone_24"
+                        android:layout_marginTop="@dimen/margin_card_medium_2"
+                        android:layout_below="@id/tvProfileName"
+                        android:layout_toEndOf="@id/flProfilePhoto"
+                        tools:text="09 252525252"
+                        android:drawablePadding="@dimen/margin_card_medium"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_regular_2x"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+
+                        android:layout_marginStart="@dimen/margin_medium_3"
+                        android:id="@+id/tvBirthDate"
+                        android:drawablePadding="@dimen/margin_card_medium"
+                        android:drawableStart="@drawable/ic_birth_date"
+                        android:layout_marginTop="@dimen/margin_card_medium_2"
+                        android:layout_below="@id/tvPhoneNumber"
+                        android:layout_toEndOf="@id/flProfilePhoto"
+                        tools:text="1994-02-02"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_regular_2x"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+
+                        android:layout_marginStart="@dimen/margin_medium_3"
+                        android:id="@+id/tvGenderType"
+                        app:drawableStartCompat="@drawable/ic_direction"
+                        android:layout_marginTop="@dimen/margin_card_medium_2"
+                        android:layout_below="@id/tvBirthDate"
+                        android:layout_toEndOf="@id/flProfilePhoto"
+                        tools:text="Male"
+                        android:drawablePadding="@dimen/margin_card_medium"
+
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_regular_2x"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_card_medium_2"/>
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvBookMark"
+                android:layout_marginTop="@dimen/margin_medium_3"
+                android:textColor="@color/text_title_color"
+                android:textSize="@dimen/text_regular_3x"
+                android:textStyle="bold"
+                tools:text="Bookmarked Moments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                tools:itemCount="2"
+                tools:listitem="@layout/view_holder_moment_item"
+                android:id="@+id/rvBookMarkList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

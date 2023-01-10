@@ -159,14 +159,15 @@ object WeChatAppModelImpl : WeChatAppModel {
 
     override fun editUser(
         userName: String, dateOfBirth: String, genderType: String,
+        phoneNumber: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     ) {
-        mFirebaseApi.editUser(userName, dateOfBirth, genderType, onSuccess = {
+        mFirebaseApi.editUser(userName, dateOfBirth, genderType,phoneNumber, onSuccess = {
             onSuccess(it)
-        }, onFailure = {
+        }) {
             onFailure(it)
-        })
+        }
 
     }
 

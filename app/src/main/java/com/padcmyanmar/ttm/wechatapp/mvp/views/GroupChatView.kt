@@ -8,6 +8,7 @@ interface GroupChatView:BaseView {
     fun selectContactItem(contactName: String)
     fun onTapSelectContactList(contactVO:UserVO)
     fun onTapSelectContactCancel(contactVO:UserVO)
+    fun createGroupSuccess(msg:String)
 //    fun onTapCreateChatGroup(groupName:String,membersList:ArrayList<String>,groupPhoto:String,
 //                             onSuccess: (message: String) -> Unit,
 //                             onFailure: (message: String) -> Unit)

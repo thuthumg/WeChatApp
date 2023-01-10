@@ -123,6 +123,7 @@ class ChatFragment : Fragment(),ChatFragmentView {
     }
 
     override fun showContactsData(contactsList: ArrayList<UserVO>) {
+        Log.d("chatfragment","show contact list ${contactsList.firstOrNull()?.profileUrl}")
         mActiveChatsListAdapter.setNewData(contactsList)
     }
 

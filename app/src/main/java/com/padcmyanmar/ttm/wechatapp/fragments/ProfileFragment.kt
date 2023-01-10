@@ -10,6 +10,8 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.util.Log
 import android.view.*
 import androidmads.library.qrgenearator.QRGContents
@@ -29,10 +31,10 @@ import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_QR
 import com.padcmyanmar.ttm.wechatapp.activities.MainActivity.Companion.BUNDLE_USER_NAME
 import com.padcmyanmar.ttm.wechatapp.adapters.MomentsListAdapter
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
-import com.padcmyanmar.ttm.wechatapp.delegates.MomentItemDelegate
 import com.padcmyanmar.ttm.wechatapp.dialogs.ProfileDialogFragment
 import com.padcmyanmar.ttm.wechatapp.dialogs.ProfileDialogFragment.Companion.BUNDLE_DATE_OF_BIRTH_EDIT
 import com.padcmyanmar.ttm.wechatapp.dialogs.ProfileDialogFragment.Companion.BUNDLE_GENDER_TYPE_EDIT
+import com.padcmyanmar.ttm.wechatapp.dialogs.ProfileDialogFragment.Companion.BUNDLE_PHONE_NUMBER_EDIT
 import com.padcmyanmar.ttm.wechatapp.dialogs.ProfileDialogFragment.Companion.BUNDLE_USER_ID
 import com.padcmyanmar.ttm.wechatapp.dialogs.ProfileDialogFragment.Companion.BUNDLE_USER_NAME_EDIT
 import com.padcmyanmar.ttm.wechatapp.dialogs.ProfileDialogFragment.Companion.TAG_PROFILE_EDIT_DIALOG
@@ -43,12 +45,15 @@ import com.padcmyanmar.ttm.wechatapp.dialogs.QRCodePopUpDialog.Companion.TAG_QR_
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.ProfileFragmentPresenter
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.ProfileFragmentPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.views.ProfileFragmentView
+import com.padcmyanmar.ttm.wechatapp.utils.checkItem
+import com.padcmyanmar.ttm.wechatapp.utils.mUserVO
 import kotlinx.android.synthetic.main.activity_create_new_moment.*
+import kotlinx.android.synthetic.main.content_create_moment_layout.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import java.io.IOException
 
 
-class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
+class ProfileFragment : Fragment(),ProfileFragmentView {
 
     lateinit var mPresenter: ProfileFragmentPresenter
 
@@ -61,6 +66,7 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
     private var loginUserQRCode = ""
     private var loginUserProfileImageUrl=""
     private val PICK_IMAGE_REQUEST_FOR_PROFILE = 100
+    var mMomentsList: ArrayList<MomentVO> = arrayListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -98,6 +104,10 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
         tvPhoneNumber.text = loginUserPhoneNumber
         tvBirthDate.text = loginUserDateOfBirth
         tvGenderType.text = loginUserGenderType
+
+        val mSpannableString = SpannableString("Bookmarked Moments")
+        mSpannableString.setSpan(UnderlineSpan(), 0, mSpannableString.length, 0)
+        tvBookMark.text = mSpannableString
         Glide.with(this)
             .load(loginUserProfileImageUrl)
             .placeholder(R.drawable.empty_image)
@@ -168,7 +178,7 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
 
     private fun setUpMomentsList() {
         mMomentsListAdapter =
-            MomentsListAdapter(this, "")
+            MomentsListAdapter(mPresenter, mUserVO.phoneNumber)
         rvBookMarkList.adapter = mMomentsListAdapter
         rvBookMarkList.layoutManager = LinearLayoutManager(
             context,
@@ -177,7 +187,7 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
         rvBookMarkList.isNestedScrollingEnabled = false
     }
 
-    override fun onTapFavorite(momentVO: MomentVO) {
+  /*  override fun onTapFavorite(momentVO: MomentVO) {
 
     }
 
@@ -186,6 +196,97 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
     }
 
     override fun onTapSavePost() {
+
+    }*/
+
+
+    override fun favouriteFunction(momentVOParam: MomentVO) {
+
+        var arr = momentVOParam.likedId
+        val key = loginUserPhoneNumber
+
+        var checkDataExistOrNot: Boolean? = arr?.let { key?.let { it1 -> checkItem(it, it1) } }
+
+        if (checkDataExistOrNot == true) {
+
+            momentVOParam.likedId?.remove(loginUserPhoneNumber)
+            mPresenter.onTapEditMoment(
+                momentVOParam,
+                onSuccess = {
+                    mMomentsListAdapter.setNewData(mMomentsList.reversed())
+                },
+                onFailure = { e ->
+                    pbLoading.visibility = View.GONE
+                    showError(e)
+                }
+            )
+
+        } else {
+
+            loginUserPhoneNumber?.let {
+
+                momentVOParam.likedId?.add(it)
+            }
+            mPresenter.onTapEditMoment(
+                momentVOParam,
+                onSuccess = {
+
+                    mMomentsListAdapter.setNewData(mMomentsList.reversed())
+                },
+                onFailure = { e ->
+                    pbLoading.visibility = View.GONE
+                    showError(e)
+                }
+            )
+
+        }
+
+    }
+
+    override fun bookMarkFunction(momentVO: MomentVO) {
+
+
+        var arr = momentVO.bookMarkedId
+        val key = loginUserPhoneNumber
+
+        var checkDataExistOrNot: Boolean? = arr?.let { key?.let { it1 -> checkItem(it, it1) } }
+
+        if (checkDataExistOrNot == true) {
+
+            momentVO.bookMarkedId?.remove(loginUserPhoneNumber)
+            mPresenter.onTapEditMoment(
+                momentVO,
+                onSuccess = {
+                    mMomentsListAdapter.setNewData(mMomentsList.reversed())
+                },
+                onFailure = { e ->
+                    pbLoading.visibility = View.GONE
+                    showError(e)
+                }
+            )
+
+        } else {
+
+            loginUserPhoneNumber?.let {
+
+                momentVO.bookMarkedId?.add(it)
+            }
+            mPresenter.onTapEditMoment(
+                momentVO,
+                onSuccess = {
+
+                    mMomentsListAdapter.setNewData(mMomentsList.reversed())
+                },
+                onFailure = { e ->
+                    pbLoading.visibility = View.GONE
+                    showError(e)
+                }
+            )
+
+        }
+    }
+
+    override fun editUserSuccess(msg: String) {
 
     }
 
@@ -197,6 +298,7 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
         bundle.putString(BUNDLE_USER_NAME_EDIT, loginUserUserName)
         bundle.putString(BUNDLE_DATE_OF_BIRTH_EDIT,loginUserDateOfBirth)
         bundle.putString(BUNDLE_GENDER_TYPE_EDIT, loginUserGenderType)
+        bundle.putString(BUNDLE_PHONE_NUMBER_EDIT,loginUserPhoneNumber)
         profileEditDialog.arguments = bundle
         profileEditDialog.show(parentFragmentManager, TAG_PROFILE_EDIT_DIALOG)
     }
@@ -205,9 +307,9 @@ class ProfileFragment : Fragment(), MomentItemDelegate,ProfileFragmentView {
 
     }
 
-    override fun showMomentData(mMomentVOList: ArrayList<MomentVO>) {
-        Log.d("ProfileFragment","check momentlist size ${mMomentVOList.size}")
-        mMomentsListAdapter.setNewData(mMomentVOList)
+    override fun showMomentData(momentVOList: ArrayList<MomentVO>) {
+        mMomentsList = momentVOList
+        mMomentsListAdapter.setNewData(momentVOList)
     }
 
     override fun showError(error: String) {

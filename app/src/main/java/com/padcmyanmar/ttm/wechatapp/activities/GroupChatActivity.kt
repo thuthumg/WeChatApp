@@ -22,7 +22,9 @@ import com.padcmyanmar.ttm.wechatapp.adapters.SelectedChatItemListAdapter
 import com.padcmyanmar.ttm.wechatapp.data.vos.ContactsListVO
 import com.padcmyanmar.ttm.wechatapp.data.vos.UserVO
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.GroupChatPresenter
+import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.CreateNewMomentPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.GroupChatPresenterImpl
+import com.padcmyanmar.ttm.wechatapp.mvp.views.CreateNewMomentView
 import com.padcmyanmar.ttm.wechatapp.mvp.views.GroupChatView
 import com.padcmyanmar.ttm.wechatapp.utils.CHAT_TYPE_GROUP
 import com.padcmyanmar.ttm.wechatapp.utils.mUserVO
@@ -32,7 +34,7 @@ import kotlinx.android.synthetic.main.activity_group_chat_list.rvContactsList
 
 
 
-class GroupChatActivity : AppCompatActivity(), GroupChatView {
+class GroupChatActivity : BaseActivity(), GroupChatView {
 
     lateinit var mPresenter:GroupChatPresenter
     var mContactsList: ArrayList<UserVO> = arrayListOf()
@@ -113,9 +115,8 @@ class GroupChatActivity : AppCompatActivity(), GroupChatView {
                             membersList = membersList,
                             groupPhoto = urlString,
                             onSuccess = {
-
-                               // showError(it)
-                                this.finish()
+                                showError(it)
+                                finish()
                             }
                         , onFailure = {
                             showError(it)
@@ -135,8 +136,10 @@ class GroupChatActivity : AppCompatActivity(), GroupChatView {
     }
 
     private fun setUpPresenter() {
-        mPresenter = ViewModelProvider(this)[GroupChatPresenterImpl::class.java]
-        mPresenter.initPresenter(this)
+      //  mPresenter = ViewModelProvider(this)[GroupChatPresenterImpl::class.java]
+      //  mPresenter.initPresenter(this)
+
+        mPresenter = getPresenter<GroupChatPresenterImpl, GroupChatView>()
     }
 
 
@@ -226,6 +229,11 @@ class GroupChatActivity : AppCompatActivity(), GroupChatView {
            mSelectedContactsList.remove(contactVO)
         }
         mSelectedChatItemListAdapter.setNewData(mSelectedContactsList)
+    }
+
+    override fun createGroupSuccess(msg: String) {
+        showError(msg)
+        finish()
     }
 
     private fun addDataToContactItemAdapter(mContactsUpdateList: ArrayList<UserVO>) {

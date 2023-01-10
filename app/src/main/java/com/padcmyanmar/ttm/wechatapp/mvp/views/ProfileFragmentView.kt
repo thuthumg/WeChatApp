@@ -9,4 +9,10 @@ interface ProfileFragmentView:BaseView {
     genderType:String)
 
     fun showMomentData(mMomentVOList:ArrayList<MomentVO>)
+
+    fun favouriteFunction(momentVO: MomentVO)
+
+    fun bookMarkFunction(momentVO: MomentVO)
+
+    fun editUserSuccess(msg:String)
 }

@@ -249,9 +249,9 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                     contactVO.profileUrl =  result?.data?.get(USER_DOCUMENT_FIELD_PROFILE_URL) as String
                     mUserVO.id?.let {qrcode->
 
-                        db.collection("users")
+                        db.collection(USER_COLLECTION)
                             .document(qrcode)
-                            .collection("contacts")
+                            .collection(CONTACTS_COLLECTION)
                             .document(userId)
                             .set(contactVO)
                             .addOnSuccessListener {
@@ -264,10 +264,10 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                                 currentUserVO.genderType =  mUserVO.genderType
                                 currentUserVO.phoneNumber =  mUserVO.phoneNumber
                                 currentUserVO.id =  mUserVO.id
-                                contactVO.profileUrl =  mUserVO.profileUrl
-                                db.collection("users")
+                                currentUserVO.profileUrl =  mUserVO.profileUrl
+                                db.collection(USER_COLLECTION)
                                     .document(userId)
-                                    .collection("contacts")
+                                    .collection(CONTACTS_COLLECTION)
                                     .document(qrcode)
                                     .set(currentUserVO)
                                     .addOnSuccessListener {
@@ -351,6 +351,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                 for (change in querySnapshot!!.documentChanges) {
                     if (change.type == DocumentChange.Type.ADDED) {
 
+                        Log.d("cloud","check document data = ${change.document.data[USER_DOCUMENT_FIELD_NAME]}")
                         val contactUserVO = UserVO()
                         contactUserVO.name = change.document.data[USER_DOCUMENT_FIELD_NAME] as String
                         contactUserVO.phoneNumber =  change.document.data[USER_DOCUMENT_FIELD_PHONE_NUM] as String
@@ -370,15 +371,18 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
 
     }
 
-    override fun editUser(userName: String, dateOfBirth: String, genderType: String,
-    onSuccess: (message: String) -> Unit,
-    onFailure: (message: String) -> Unit) {
+    override fun editUser(
+        userName: String, dateOfBirth: String, genderType: String,
+        phoneNumber: String,
+        onSuccess: (message: String) -> Unit,
+        onFailure: (message: String) -> Unit
+    ) {
         val editUserDataMap : HashMap<String,Any> = hashMapOf(
            USER_DOCUMENT_FIELD_NAME to userName,
            USER_DOCUMENT_FIELD_DATE_OF_BIRTH to dateOfBirth,
             USER_DOCUMENT_FIELD_GENDER_TYPE to genderType,
             USER_DOCUMENT_FIELD_PASSWORD to mUserVO.password.toString(),
-            USER_DOCUMENT_FIELD_PHONE_NUM to mUserVO.phoneNumber.toString(),
+            USER_DOCUMENT_FIELD_PHONE_NUM to phoneNumber,
             USER_DOCUMENT_FIELD_UID to mUserVO.id.toString(),
             USER_DOCUMENT_FIELD_PROFILE_URL to mUserVO.profileUrl.toString(),
             USER_DOCUMENT_FIELD_LOGIN_ACTIVE_STATUS to mUserVO.activeStatus
@@ -471,7 +475,7 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
 
                 for (change in querySnapshot!!.documentChanges) {
                     if (change.type == DocumentChange.Type.ADDED) {
-
+                        Log.d("cloud","check phone ${change.document.id}")
                         val momentVO = MomentVO()
                         momentVO.id =  change.document.id
                         momentVO.name = change.document.data[USER_DOCUMENT_FIELD_NAME] as String
@@ -526,26 +530,29 @@ object CloudFirestoreFirebaseApiImpl : FirebaseApi{
                     val bookMarkArray = change.document.data[MOMENT_DOCUMENT_FIELD_BOOK_MARKED_ID]as ArrayList<String>
                     val checkPhoneNum = change.document.data[USER_DOCUMENT_FIELD_PHONE_NUM] as String
 
-                    if(bookMarkArray.isNotEmpty() && checkPhoneNum == mUserVO.phoneNumber){
-                        momentVO.id =  change.document.id
-                        momentVO.name = change.document.data[USER_DOCUMENT_FIELD_NAME] as String
-                        momentVO.description = change.document.data[MOMENT_DOCUMENT_FIELD_DESCRIPTION] as String
-                        momentVO.phoneNumber = change.document.data[USER_DOCUMENT_FIELD_PHONE_NUM] as String
-                        val urlData = change.document.data[MOMENT_DOCUMENT_PHOTO_VIDEO_LINK] as ArrayList<HashMap<String,String>>
-                        val mediaDataList:ArrayList<MediaDataVO> = arrayListOf()
-                        for(mediaUrlData in urlData)
-                        {
-                            mediaDataList.add(MediaDataVO(mediaUrlData[MOMENT_DOCUMENT_FIELD_MEDIA_TYPE],
-                                mediaUrlData[MOMENT_DOCUMENT_FIELD_MEDIA_DATA_LINK]))
-                        }
+                    if(bookMarkArray.isNotEmpty() && bookMarkArray.contains(mUserVO.phoneNumber)){// && checkPhoneNum == mUserVO.phoneNumber
 
-                        momentVO.photoOrVideoUrlLink = mediaDataList
-                        momentVO.timestamp = change.document.data[MOMENT_DOCUMENT_FIELD_TIMESTAMP] as String
-                        momentVO.likedId = change.document.data[MOMENT_DOCUMENT_FIELD_LIKED_ID] as ArrayList<String>
-                        momentVO.bookMarkedId = change.document.data[MOMENT_DOCUMENT_FIELD_BOOK_MARKED_ID] as ArrayList<String>
-                        momentVO.profileUrl = change.document.data[USER_DOCUMENT_FIELD_PROFILE_URL] as String
+                            momentVO.id =  change.document.id
+                            momentVO.name = change.document.data[USER_DOCUMENT_FIELD_NAME] as String
+                            momentVO.description = change.document.data[MOMENT_DOCUMENT_FIELD_DESCRIPTION] as String
+                            momentVO.phoneNumber = change.document.data[USER_DOCUMENT_FIELD_PHONE_NUM] as String
+                            val urlData = change.document.data[MOMENT_DOCUMENT_PHOTO_VIDEO_LINK] as ArrayList<HashMap<String,String>>
+                            val mediaDataList:ArrayList<MediaDataVO> = arrayListOf()
+                            for(mediaUrlData in urlData)
+                            {
+                                mediaDataList.add(MediaDataVO(mediaUrlData[MOMENT_DOCUMENT_FIELD_MEDIA_TYPE],
+                                    mediaUrlData[MOMENT_DOCUMENT_FIELD_MEDIA_DATA_LINK]))
+                            }
 
-                        mMomentsList.add(momentVO)
+                            momentVO.photoOrVideoUrlLink = mediaDataList
+                            momentVO.timestamp = change.document.data[MOMENT_DOCUMENT_FIELD_TIMESTAMP] as String
+                            momentVO.likedId = change.document.data[MOMENT_DOCUMENT_FIELD_LIKED_ID] as ArrayList<String>
+                            momentVO.bookMarkedId = change.document.data[MOMENT_DOCUMENT_FIELD_BOOK_MARKED_ID] as ArrayList<String>
+                            momentVO.profileUrl = change.document.data[USER_DOCUMENT_FIELD_PROFILE_URL] as String
+
+                            mMomentsList.add(momentVO)
+
+
 
                     }
 

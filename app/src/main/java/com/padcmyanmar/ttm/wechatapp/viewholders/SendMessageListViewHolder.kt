@@ -2,10 +2,17 @@ package com.padcmyanmar.ttm.wechatapp.viewholders
 
 import android.util.Log
 import android.view.View
+import androidx.core.net.toUri
 
 import com.bumptech.glide.Glide
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.data.vos.ChatMessageVO
+import com.padcmyanmar.ttm.wechatapp.utils.loadBitMapFromUri
+import com.padcmyanmar.ttm.wechatapp.utils.scaleToRatio
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_chat_detail.*
 
 import kotlinx.android.synthetic.main.view_holder_sender_msg_view.view.*
 import java.text.SimpleDateFormat
@@ -31,6 +38,7 @@ class SendMessageListViewHolder(itemView: View) : BaseViewHolder<ChatMessageVO>(
        }else{
            Log.d("sendmessage","check file condition 2")
            itemView.llSenderImageMessage.visibility = View.VISIBLE
+
           Glide.with(itemView.context)
               .load(data?.file)
               .placeholder(R.drawable.error_image_bg)

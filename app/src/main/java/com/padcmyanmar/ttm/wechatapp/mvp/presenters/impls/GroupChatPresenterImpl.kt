@@ -63,7 +63,9 @@ AbstractBasePresenter<GroupChatView>(){
             membersList = membersList,
             groupPhoto = groupPhoto,
             onSuccess = {
-                mView.showError(it)
+              //  mView.createGroupSuccess(it)
+                        onSuccess(it)
+
             }, onFailure = {
                 mView.showError(it)
             }

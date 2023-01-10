@@ -50,15 +50,17 @@ tools:context=".fragments.ChatFragment">
     </androidx.appcompat.widget.Toolbar>
 
 </com.google.android.material.appbar.AppBarLayout>
-
+    <androidx.core.widget.NestedScrollView
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_marginEnd="@dimen/margin_medium_2"
         android:layout_marginStart="@dimen/margin_medium_2"
         android:orientation="vertical"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <androidx.appcompat.widget.AppCompatTextView
 
@@ -78,31 +80,36 @@ tools:context=".fragments.ChatFragment">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <androidx.recyclerview.widget.RecyclerView
 
-            tools:itemCount="2"
-            android:clipToPadding="true"
-            android:layout_marginTop="@dimen/margin_medium"
-            android:id="@+id/rvChatsList"
-            tools:listitem="@layout/view_holder_active_chat_list"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <androidx.recyclerview.widget.RecyclerView
 
-            tools:itemCount="2"
-            android:clipToPadding="true"
-            android:layout_marginTop="@dimen/margin_medium"
-            android:id="@+id/rvGroupChatsList"
-            tools:listitem="@layout/view_holder_active_chat_list"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+                <androidx.recyclerview.widget.RecyclerView
+
+                    tools:itemCount="2"
+                    android:clipToPadding="true"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:id="@+id/rvChatsList"
+                    tools:listitem="@layout/view_holder_active_chat_list"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <androidx.recyclerview.widget.RecyclerView
+
+                    tools:itemCount="2"
+                    android:clipToPadding="true"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:id="@+id/rvGroupChatsList"
+                    tools:listitem="@layout/view_holder_active_chat_list"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+
 
 
 
 
     </LinearLayout>
 
-
+    </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

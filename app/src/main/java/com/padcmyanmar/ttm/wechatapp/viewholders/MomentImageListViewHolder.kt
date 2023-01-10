@@ -46,8 +46,6 @@ class MomentImageListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
 //            Glide.with(itemView.context).load(imageUri).thumbnail(0.1f)
 //                .into(itemView.ivMomentVideo)
 
-
-
         }
         imageUri?.let { image->
             Observable.just(image)

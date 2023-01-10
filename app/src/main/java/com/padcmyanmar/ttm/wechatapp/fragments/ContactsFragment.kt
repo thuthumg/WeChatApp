@@ -62,32 +62,28 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
         setUpPresenter()
 
         setUpEmptyChatUI()
-        setUpContactAndGroupCount()
+
         setUpChatGroupAdapter()
         setUpContactsListAdapter()
         clickListener()
         context?.let { mPresenter.onUiReady(it, this) }
+
+
     }
 
-    private fun setUpContactAndGroupCount() {
+    private fun setUpContactCount() {
         if(contactCount > 1)
         {
             tvContactText.text = "Contacts"
-            tvConactCount.text = "(${contactCount})"
+            tvContactCount.text = "(${contactCount})"
 
         }
         else{
             tvContactText.text = "Contact"
-            tvConactCount.text = "(${contactCount})"
+            tvContactCount.text = "(${contactCount})"
 
         }
 
-        if(groupCount > 1)
-        {
-            tvGroupCount.text = "Groups(${groupCount})"
-        }else{
-            tvGroupCount.text = "Group(${groupCount})"
-        }
 
 
     }
@@ -121,7 +117,7 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
             context,
             LinearLayoutManager.VERTICAL, false
         )
-
+        rvContactsList.isNestedScrollingEnabled = false
     }
 
     private fun setUpChatGroupAdapter() {
@@ -132,7 +128,7 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
             context,
             LinearLayoutManager.HORIZONTAL, false
         )
-        // rvChatGroupsList.isNestedScrollingEnabled = false
+         rvChatGroupsList.isNestedScrollingEnabled = false
     }
 
     private fun qrCode() {
@@ -197,6 +193,7 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
                                     contactsArrayList.add(contactsListVO)
                                 }
                                 contactCount = contactsArrayList.size
+                                setUpContactCount()
                                 mContactItemAdapter.setNewData(contactsArrayList)
 
                             },
@@ -252,6 +249,9 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
             contactsArrayList.add(contactsListVO)
         }
         contactCount = contactsArrayList.size
+
+
+        setUpContactCount()
         mContactItemAdapter.setNewData(contactsArrayList)
 
 
@@ -282,6 +282,14 @@ class ContactsFragment : Fragment(), ContactsFragmentView {
 
     override fun showChatGroupsList(chatGroupList: ArrayList<ChatGroupVO>) {
         groupCount = chatGroupList.size
+
+        if(groupCount > 1)
+        {
+            tvGroupCount.text = "Groups(${groupCount})"
+        }else{
+            tvGroupCount.text = "Group(${groupCount})"
+        }
+
         mChatGroupsListAdapter.setNewData(chatGroupList)
     }
 

@@ -38,11 +38,30 @@ class MomentsListViewHolder(itemView: View, private var mDelegate: MomentItemDel
 
        setUpMomentImageAdapter()
        itemView.tvNameTitle.text = data.name
+
+       if(data.description?.isEmpty() == true)
+       {
+          itemView.tvDescription.visibility = View.GONE
+
+       }else{
+          itemView.tvDescription.visibility = View.VISIBLE
+          itemView.tvDescription.text = data.description
+       }
+
        itemView.tvDescription.text = data.description
 
        itemView.tvPostedTime.text =  covertTimeToText(data.timestamp)
 
-       data.photoOrVideoUrlLink?.let { mMomentImageListAdapter.setNewData(it) }
+       if(data.photoOrVideoUrlLink?.isEmpty() == true)
+       {
+          itemView.rvPhotoList.visibility = View.GONE
+       }else{
+          itemView.rvPhotoList.visibility = View.VISIBLE
+          data.photoOrVideoUrlLink?.let { mMomentImageListAdapter.setNewData(it) }
+       }
+
+
+
 
        mMomentVO.likedId.let {
              if(it?.size != 0)

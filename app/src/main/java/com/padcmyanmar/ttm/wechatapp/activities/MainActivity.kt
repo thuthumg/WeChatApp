@@ -69,14 +69,14 @@ class MainActivity : BaseActivity(), MainView {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("mainactivity","check main activity function")
         setContentView(R.layout.activity_main)
 
         setUpPresenter()
-        mPresenter.onUiReady(this, this)
         getIntentParam()
         setUpBottomNavUI()
         clickListener()
-
+        mPresenter.onUiReady(this, this)
     }
 
     private fun setUpPresenter() {

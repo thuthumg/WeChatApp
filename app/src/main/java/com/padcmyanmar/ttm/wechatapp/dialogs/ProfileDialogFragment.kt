@@ -6,15 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.padcmyanmar.ttm.wechatapp.R
 import com.padcmyanmar.ttm.wechatapp.data.vos.MomentVO
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.ProfileFragmentPresenter
+import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.MainPresenterImpl
 import com.padcmyanmar.ttm.wechatapp.mvp.presenters.impls.ProfileFragmentPresenterImpl
+import com.padcmyanmar.ttm.wechatapp.mvp.views.MainView
 import com.padcmyanmar.ttm.wechatapp.mvp.views.ProfileFragmentView
 import com.padcmyanmar.ttm.wechatapp.utils.monthsDataList
-import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.dialog_edit_profile.*
 import kotlinx.android.synthetic.main.dialog_edit_profile.edtName
 import kotlinx.android.synthetic.main.dialog_edit_profile.spDayEdit
@@ -25,10 +27,11 @@ import kotlin.collections.ArrayList
 
 class ProfileDialogFragment : DialogFragment(), ProfileFragmentView {
     lateinit var mPresenter: ProfileFragmentPresenter
-    var userName:String? = ""
-    var birthDate:String? = ""
-    var genderType:String? = ""
-    var uid:String? = ""
+    var userName:String = ""
+    var birthDate:String = ""
+    var genderType:String = ""
+    var uid:String = ""
+    var phoneNumber:String = ""
 
 
     var s = Calendar.getInstance().get(Calendar.YEAR)
@@ -48,6 +51,7 @@ class ProfileDialogFragment : DialogFragment(), ProfileFragmentView {
         const val BUNDLE_USER_NAME_EDIT = "BUNDLE_USER_NAME_EDIT"
         const val BUNDLE_DATE_OF_BIRTH_EDIT = "BUNDLE_DATE_OF_BIRTH_EDIT"
         const val BUNDLE_GENDER_TYPE_EDIT = "BUNDLE_GENDER_TYPE_EDIT"
+        const val BUNDLE_PHONE_NUMBER_EDIT = "BUNDLE_PHONE_NUMBER_EDIT"
 
         fun newFragment(): ProfileDialogFragment {
             return ProfileDialogFragment()
@@ -75,6 +79,7 @@ class ProfileDialogFragment : DialogFragment(), ProfileFragmentView {
     private fun setUpPresenter() {
         mPresenter = ViewModelProvider(this)[ProfileFragmentPresenterImpl::class.java]
         mPresenter.initPresenter(this)
+
     }
 
     private fun clickListener() {
@@ -101,8 +106,9 @@ class ProfileDialogFragment : DialogFragment(), ProfileFragmentView {
                     userName = edtName.text.toString(),
                     dateOfBirth = "$paramDate",
                     genderType = genderType?:"",
+                    edtPhoneNum.text.toString(),
                     onSuccess = {
-                        showError("$it")
+                       // showError("$it")
                     }
                 ) {
                     showError("$it")
@@ -167,6 +173,8 @@ class ProfileDialogFragment : DialogFragment(), ProfileFragmentView {
             }
         }
 
+        edtPhoneNum.setText(phoneNumber)
+
     }
 
     private fun getArgumentData() {
@@ -174,6 +182,7 @@ class ProfileDialogFragment : DialogFragment(), ProfileFragmentView {
          birthDate = arguments?.getString(BUNDLE_DATE_OF_BIRTH_EDIT).toString()
          genderType= arguments?.getString(BUNDLE_GENDER_TYPE_EDIT).toString()
          uid = arguments?.getString(BUNDLE_USER_ID).toString()
+        phoneNumber = arguments?.getString(BUNDLE_PHONE_NUMBER_EDIT).toString()
     }
 
 
@@ -321,7 +330,19 @@ class ProfileDialogFragment : DialogFragment(), ProfileFragmentView {
 
     }
 
-    override fun showError(error: String) {
+    override fun favouriteFunction(momentVO: MomentVO) {
 
+    }
+
+    override fun bookMarkFunction(momentVO: MomentVO) {
+
+    }
+
+    override fun editUserSuccess(msg: String) {
+        showError(msg)
+    }
+
+    override fun showError(error: String) {
+        Toast.makeText(context,"$error",Toast.LENGTH_SHORT).show()
     }
 }

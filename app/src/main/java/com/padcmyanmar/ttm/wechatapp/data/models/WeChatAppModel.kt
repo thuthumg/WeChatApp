@@ -73,6 +73,7 @@ interface WeChatAppModel {
         userName: String,
         dateOfBirth: String,
         genderType: String,
+        phoneNumber: String,
         onSuccess: (message: String) -> Unit,
         onFailure: (message: String) -> Unit
     )
